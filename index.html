@@ -39,17 +39,17 @@
         margin-bottom: 20px;
       }
 
+      input,
       textarea {
         width: 100%;
-        height: 80px;
         border-radius: 12px;
         border: none;
         padding: 12px;
-        font-size: 15px;
+        margin-bottom: 10px;
       }
 
       button {
-        margin-top: 15px;
+        margin-top: 10px;
         padding: 14px;
         width: 100%;
         border-radius: 12px;
@@ -94,11 +94,12 @@
   <body>
     <div class="container">
       <h1>Encontre sua resposta</h1>
-      <div class="sub">Digite o que você está vivendo</div>
+      <div class="sub">Algo precisa ser revelado para você hoje...</div>
 
+      <input id="nome" placeholder="Seu nome..." />
       <textarea
         id="input"
-        placeholder="Ex: Estou com medo do futuro..."
+        placeholder="Digite o que você está vivendo..."
       ></textarea>
 
       <button onclick="gerarResposta()">Encontrar resposta</button>
@@ -108,14 +109,14 @@
       <div class="social-proof" id="contador"></div>
 
       <div class="testimonials">
-        <div class="testimonial">“Recebi exatamente o que precisava.”</div>
-        <div class="testimonial">“Isso falou comigo...”</div>
-        <div class="testimonial">“Muito forte.”</div>
+        <div class="testimonial">“Parecia que era pra mim…”</div>
+        <div class="testimonial">“Isso me fez chorar.”</div>
+        <div class="testimonial">“Muito preciso, assustador até.”</div>
       </div>
     </div>
 
     <script>
-      // contador dinâmico
+      // contador fake
       function atualizarContador() {
         const numero = Math.floor(Math.random() * 80) + 120;
         document.getElementById("contador").innerText =
@@ -124,12 +125,15 @@
       setInterval(atualizarContador, 3000);
       atualizarContador();
 
+      let respostaIA = "";
+
       // gerar resposta
       async function gerarResposta() {
         const texto = document.getElementById("input").value;
-        const el = document.getElementById("resultado");
+        const nome = document.getElementById("nome").value || "Você";
 
-        el.innerHTML = "Analisando sua situação...";
+        const el = document.getElementById("resultado");
+        el.innerHTML = "Analisando profundamente sua situação...";
 
         try {
           const resposta = await fetch(
@@ -139,34 +143,34 @@
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ mensagem: texto }),
+              body: JSON.stringify({
+                mensagem: texto,
+                nome: nome,
+              }),
             },
           );
 
           const data = await resposta.json();
 
-          // 🔥 troca para "Resposta"
-          const respostaFinal = data.texto.replace("Conselho:", "Resposta:");
+          respostaIA = data.texto.replace("Conselho:", "Resposta:");
 
-          mostrarResposta(respostaFinal);
+          escreverTexto(respostaIA);
         } catch {
           el.innerHTML = "Erro ao gerar resposta.";
         }
       }
 
-      // mostrar com blur
-      function mostrarResposta(texto) {
+      // efeito + curiosidade
+      function escreverTexto(texto) {
         const el = document.getElementById("resultado");
 
-        const palavras = texto.split(" ");
-        const primeiraParte = palavras.slice(0, 5).join(" "); // mostra início
-        const restante = palavras.slice(5).join(" ");
+        const primeiraParte = texto.substring(0, 80);
+        const resto = texto.substring(80);
 
         el.innerHTML = `
-    <strong>${primeiraParte}</strong>
-    <span id="resto" class="blur"> ${restante}</span>
+    ${primeiraParte}<span id="resto" class="blur">${resto}</span>
     <br><br>
-    <button onclick="revelar()">Desbloquear resposta</button>
+    <button onclick="revelar()">Desbloquear resposta completa</button>
   `;
       }
 
