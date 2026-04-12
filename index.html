@@ -88,27 +88,6 @@
         border-left: 3px solid #f4c542;
         padding-left: 10px;
       }
-
-      #popup {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: none;
-        background: rgba(0, 0, 0, 0.85);
-        justify-content: center;
-        align-items: center;
-      }
-
-      .popup-box {
-        background: white;
-        color: black;
-        padding: 30px;
-        border-radius: 20px;
-        text-align: center;
-        max-width: 320px;
-      }
     </style>
   </head>
 
@@ -135,16 +114,6 @@
       </div>
     </div>
 
-    <div id="popup">
-      <div class="popup-box">
-        <h2>Sua resposta está pronta</h2>
-        <p>Desbloqueie a mensagem completa</p>
-        <button onclick="irPagamento()">Desbloquear agora</button>
-        <br /><br />
-        <button onclick="fecharPopup()">Agora não</button>
-      </div>
-    </div>
-
     <script>
       // contador dinâmico
       function atualizarContador() {
@@ -155,11 +124,11 @@
       setInterval(atualizarContador, 3000);
       atualizarContador();
 
-      // 🔥 FUNÇÃO COM IA REAL
+      // gerar resposta
       async function gerarResposta() {
         const texto = document.getElementById("input").value;
-
         const el = document.getElementById("resultado");
+
         el.innerHTML = "Analisando sua situação...";
 
         try {
@@ -176,48 +145,34 @@
 
           const data = await resposta.json();
 
-          escreverTexto(data.texto);
-        } catch (erro) {
+          // 🔥 troca para "Resposta"
+          const respostaFinal = data.texto.replace("Conselho:", "Resposta:");
+
+          mostrarResposta(respostaFinal);
+        } catch {
           el.innerHTML = "Erro ao gerar resposta.";
         }
       }
 
-      // efeito digitando
-      function escreverTexto(texto) {
-        let i = 0;
+      // mostrar com blur
+      function mostrarResposta(texto) {
         const el = document.getElementById("resultado");
-        el.innerHTML = "";
 
-        const intervalo = setInterval(() => {
-          el.innerHTML += texto.charAt(i);
-          i++;
+        const palavras = texto.split(" ");
+        const primeiraParte = palavras.slice(0, 5).join(" "); // mostra início
+        const restante = palavras.slice(5).join(" ");
 
-          if (i >= texto.length) {
-            clearInterval(intervalo);
-
-            const palavras = texto.split(" ");
-            const primeira = palavras[0];
-
-            el.innerHTML += `
-        <br><br>
-        ${primeira} <span class="blur">continuação da resposta completa...</span>
-        <br><br>
-        <button onclick="abrirPopup()">Desbloquear resposta</button>
-      `;
-          }
-        }, 20);
+        el.innerHTML = `
+    <strong>${primeiraParte}</strong>
+    <span id="resto" class="blur"> ${restante}</span>
+    <br><br>
+    <button onclick="revelar()">Desbloquear resposta</button>
+  `;
       }
 
-      function abrirPopup() {
-        document.getElementById("popup").style.display = "flex";
-      }
-
-      function fecharPopup() {
-        document.getElementById("popup").style.display = "none";
-      }
-
-      function irPagamento() {
-        window.location.href = "https://seu-link-aqui.com";
+      // revelar
+      function revelar() {
+        document.getElementById("resto").classList.remove("blur");
       }
     </script>
   </body>
