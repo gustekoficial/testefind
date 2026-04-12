@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Encontre Sua Resposta</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Georgia", serif;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)),
+          url("https://images.unsplash.com/photo-1506126613408-eca07ce68773")
+            center/cover;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 520px;
+        width: 90%;
+        background: rgba(0, 0, 0, 0.65);
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .sub {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-bottom: 20px;
+      }
+
+      textarea {
+        width: 100%;
+        height: 80px;
+        border-radius: 12px;
+        border: none;
+        padding: 12px;
+        font-size: 15px;
+      }
+
+      button {
+        margin-top: 15px;
+        padding: 14px;
+        width: 100%;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(45deg, #f4c542, #ffdd73);
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      #resultado {
+        margin-top: 20px;
+        font-size: 17px;
+        line-height: 1.6;
+        min-height: 80px;
+      }
+
+      .blur {
+        filter: blur(6px);
+      }
+
+      .social-proof {
+        margin-top: 15px;
+        font-size: 13px;
+        color: #ffd966;
+      }
+
+      .testimonials {
+        margin-top: 20px;
+        text-align: left;
+        font-size: 14px;
+      }
+
+      .testimonial {
+        margin-bottom: 10px;
+        border-left: 3px solid #f4c542;
+        padding-left: 10px;
+      }
+
+      #popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        background: rgba(0, 0, 0, 0.85);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .popup-box {
+        background: white;
+        color: black;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 320px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Encontre sua resposta</h1>
+      <div class="sub">Digite o que você está vivendo</div>
+
+      <textarea
+        id="input"
+        placeholder="Ex: Estou com medo do futuro..."
+      ></textarea>
+
+      <button onclick="gerarResposta()">Encontrar resposta</button>
+
+      <div id="resultado"></div>
+
+      <div class="social-proof" id="contador"></div>
+
+      <div class="testimonials">
+        <div class="testimonial">“Recebi exatamente o que precisava.”</div>
+        <div class="testimonial">“Isso falou comigo...”</div>
+        <div class="testimonial">“Muito forte.”</div>
+      </div>
+    </div>
+
+    <div id="popup">
+      <div class="popup-box">
+        <h2>Sua resposta está pronta</h2>
+        <p>Desbloqueie a mensagem completa</p>
+        <button onclick="irPagamento()">Desbloquear agora</button>
+        <br /><br />
+        <button onclick="fecharPopup()">Agora não</button>
+      </div>
+    </div>
+
+    <script>
+      // contador dinâmico
+      function atualizarContador() {
+        const numero = Math.floor(Math.random() * 80) + 120;
+        document.getElementById("contador").innerText =
+          `+${numero} pessoas estão encontrando respostas agora`;
+      }
+      setInterval(atualizarContador, 3000);
+      atualizarContador();
+
+      // 🔥 FUNÇÃO COM IA REAL
+      async function gerarResposta() {
+        const texto = document.getElementById("input").value;
+
+        const el = document.getElementById("resultado");
+        el.innerHTML = "Analisando sua situação...";
+
+        try {
+          const resposta = await fetch(
+            "https://backfind.vercel.app/api/responder",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ mensagem: texto }),
+            },
+          );
+
+          const data = await resposta.json();
+
+          escreverTexto(data.texto);
+        } catch (erro) {
+          el.innerHTML = "Erro ao gerar resposta.";
+        }
+      }
+
+      // efeito digitando
+      function escreverTexto(texto) {
+        let i = 0;
+        const el = document.getElementById("resultado");
+        el.innerHTML = "";
+
+        const intervalo = setInterval(() => {
+          el.innerHTML += texto.charAt(i);
+          i++;
+
+          if (i >= texto.length) {
+            clearInterval(intervalo);
+
+            const palavras = texto.split(" ");
+            const primeira = palavras[0];
+
+            el.innerHTML += `
+        <br><br>
+        ${primeira} <span class="blur">continuação da resposta completa...</span>
+        <br><br>
+        <button onclick="abrirPopup()">Desbloquear resposta</button>
+      `;
+          }
+        }, 20);
+      }
+
+      function abrirPopup() {
+        document.getElementById("popup").style.display = "flex";
+      }
+
+      function fecharPopup() {
+        document.getElementById("popup").style.display = "none";
+      }
+
+      function irPagamento() {
+        window.location.href = "https://seu-link-aqui.com";
+      }
+    </script>
+  </body>
+</html>
