@@ -39,7 +39,6 @@
         margin-bottom: 20px;
       }
 
-      input,
       textarea {
         width: 100%;
         border-radius: 12px;
@@ -65,16 +64,7 @@
         font-size: 17px;
         line-height: 1.6;
         min-height: 80px;
-      }
-
-      .blur {
-        filter: blur(6px);
-      }
-
-      .social-proof {
-        margin-top: 15px;
-        font-size: 13px;
-        color: #ffd966;
+        text-align: left;
       }
 
       .testimonials {
@@ -88,6 +78,31 @@
         border-left: 3px solid #f4c542;
         padding-left: 10px;
       }
+
+      .social-proof {
+        margin-top: 15px;
+        font-size: 13px;
+        color: #ffd966;
+      }
+
+      .blur {
+        filter: blur(6px);
+      }
+
+      .typing {
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      /* 🔥 botão escondido inicialmente */
+      #btnReveal {
+        display: none;
+      }
     </style>
   </head>
 
@@ -96,7 +111,6 @@
       <h1>Encontre sua resposta</h1>
       <div class="sub">Algo precisa ser revelado para você hoje...</div>
 
-      <input id="nome" placeholder="Seu nome..." />
       <textarea
         id="input"
         placeholder="Digite o que você está vivendo..."
@@ -105,6 +119,9 @@
       <button onclick="gerarResposta()">Encontrar resposta</button>
 
       <div id="resultado"></div>
+
+      <!-- 🔥 BOTÃO COM DELAY -->
+      <button id="btnReveal" onclick="revelar()">Revelação Completa</button>
 
       <div class="social-proof" id="contador"></div>
 
@@ -116,7 +133,7 @@
     </div>
 
     <script>
-      // contador fake
+      // contador
       function atualizarContador() {
         const numero = Math.floor(Math.random() * 80) + 120;
         document.getElementById("contador").innerText =
@@ -125,15 +142,22 @@
       setInterval(atualizarContador, 3000);
       atualizarContador();
 
-      let respostaIA = "";
-
       // gerar resposta
       async function gerarResposta() {
-        const texto = document.getElementById("input").value;
-        const nome = document.getElementById("nome").value || "Você";
+        let texto = document.getElementById("input").value;
+
+        texto = texto.slice(0, 300);
 
         const el = document.getElementById("resultado");
-        el.innerHTML = "Analisando profundamente sua situação...";
+
+        el.innerHTML = `
+    <div class="typing">
+      Analisando profundamente sua situação...
+    </div>
+  `;
+
+        // 🔥 esconder botão até nova resposta
+        document.getElementById("btnReveal").style.display = "none";
 
         try {
           const resposta = await fetch(
@@ -145,32 +169,39 @@
               },
               body: JSON.stringify({
                 mensagem: texto,
-                nome: nome,
               }),
             },
           );
 
           const data = await resposta.json();
 
-          respostaIA = data.texto.replace("Conselho:", "Resposta:");
+          escreverTexto(data.texto);
 
-          escreverTexto(respostaIA);
-        } catch {
+          // 🔥 delay para mostrar botão
+          setTimeout(() => {
+            document.getElementById("btnReveal").style.display = "block";
+          }, 3000);
+        } catch (err) {
           el.innerHTML = "Erro ao gerar resposta.";
         }
       }
 
-      // efeito + curiosidade
+      // efeito de revelação progressiva
       function escreverTexto(texto) {
         const el = document.getElementById("resultado");
 
-        const primeiraParte = texto.substring(0, 80);
-        const resto = texto.substring(80);
+        const partes = texto.split(". ");
+        const primeiraFrase = partes[0];
+        const resto = partes.slice(1).join(". ");
 
         el.innerHTML = `
-    ${primeiraParte}<span id="resto" class="blur">${resto}</span>
-    <br><br>
-    <button onclick="revelar()">Desbloquear resposta completa</button>
+    <div style="font-size:20px; font-weight:500; margin-bottom:15px;">
+      ${primeiraFrase}.
+    </div>
+
+    <div id="resto" class="blur" style="margin-bottom:15px;">
+      ${resto}
+    </div>
   `;
       }
 
