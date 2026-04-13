@@ -9,23 +9,24 @@
     <title>Encontre Sua Resposta</title>
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@1,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@1,400;1,500&display=swap"
       rel="stylesheet"
     />
 
     <style>
       :root {
-        --accent: #d4af37;
+        --accent: #d4af37; /* Dourado Nobre */
         --success: #2d5a27;
         --text-dark: #2c3e50;
         --text-light: #5a6c7d;
+        --bg-panel: rgba(255, 255, 255, 0.94);
       }
 
       body {
         margin: 0;
         font-family: "Inter", sans-serif;
         background:
-          linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)),
+          linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
           url("https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&q=80&w=2000")
             center/cover fixed;
         color: var(--text-dark);
@@ -40,13 +41,13 @@
       .container {
         width: 100%;
         max-width: 380px;
-        background: rgba(255, 255, 255, 0.94);
-        padding: 35px 25px;
+        background: var(--bg-panel);
+        padding: 40px 25px;
         border-radius: 32px;
         text-align: center;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(212, 175, 55, 0.1);
       }
 
       h1 {
@@ -54,27 +55,34 @@
         font-weight: 700;
         margin-bottom: 10px;
         color: #1a1a1a;
+        letter-spacing: -0.5px;
       }
       .sub {
         font-family: "Lora", serif;
         font-size: 15px;
         color: var(--text-light);
-        margin-bottom: 25px;
+        margin-bottom: 30px;
         font-style: italic;
       }
 
       textarea {
         width: 100%;
-        min-height: 100px;
-        border-radius: 18px;
-        border: 1.5px solid #e0e6ed;
+        min-height: 110px;
+        border-radius: 20px;
+        border: 1px solid #e0e6ed;
         background: #ffffff;
         padding: 18px;
         font-size: 16px;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         resize: none;
         outline: none;
         box-sizing: border-box;
+        transition: 0.3s;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+      }
+      textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
       }
 
       .btn-main {
@@ -82,16 +90,21 @@
         color: white;
         padding: 18px;
         width: 100%;
-        border-radius: 18px;
+        border-radius: 50px;
         border: none;
         font-weight: 600;
         cursor: pointer;
         font-size: 16px;
+        transition: 0.3s;
+      }
+      .btn-main:hover {
+        background: #333;
       }
 
       #resultado {
-        margin-top: 20px;
+        margin-top: 25px;
         text-align: left;
+        position: relative;
       }
       .loading-step {
         text-align: center;
@@ -99,11 +112,13 @@
         color: var(--accent);
         font-weight: 600;
         animation: blink 1.5s infinite;
+        font-family: "Lora", serif;
+        font-style: italic;
       }
 
-      /* Estrutura de Revelação */
+      /* Estrutura de Revelação Magnética */
       .reveal-box {
-        line-height: 1.7;
+        line-height: 1.8;
         font-size: 15px;
         position: relative;
       }
@@ -113,42 +128,85 @@
 
       .blur-wrapper {
         position: relative;
-        margin-top: -5px; /* Cola o borrão no texto visível */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0px;
       }
 
       .blur-text {
-        filter: blur(5px);
+        filter: blur(6px);
         user-select: none;
-        opacity: 0.5;
-        display: block; /* Garante que o borrão ocupe espaço para o botão centralizar */
-        mask-image: linear-gradient(to bottom, black 0%, transparent 95%);
+        opacity: 0.35;
+        display: block;
+        width: 100%;
+        mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
         -webkit-mask-image: linear-gradient(
           to bottom,
           black 0%,
-          transparent 95%
+          transparent 90%
         );
+        transition: 0.5s;
       }
 
-      /* BOTÃO ALINHADO */
+      /* BOTÃO CLEAN & ESPIRITUAL */
       #btnReveal {
         position: absolute;
-        top: 20%; /* Posiciona no início do borrão */
-        left: 50%;
-        transform: translate(-50%, 0);
+        top: 15px;
         z-index: 100;
-        background: var(--success);
-        color: white;
-        padding: 16px 24px;
-        width: 90%;
-        border-radius: 50px; /* Mais arredondado para destaque */
-        border: none;
-        font-weight: 700;
-        font-size: 13px;
+        background: rgba(255, 255, 255, 0.85); /* Translúcido Clean */
+        color: var(--accent); /* Texto em Dourado */
+        padding: 16px 28px;
+        border-radius: 50px;
+        border: 1px solid var(--accent); /* Borda fina dourada */
+        font-family: "Lora", serif; /* Fonte mais elegante */
+        font-weight: 500;
+        font-style: italic;
+        font-size: 14px;
         cursor: pointer;
-        box-shadow: 0 8px 25px rgba(45, 90, 39, 0.4);
         display: none;
+        overflow: hidden;
         white-space: nowrap;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.15);
+        transition: 0.3s;
+      }
+
+      #btnReveal:hover {
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+        transform: translateY(-2px);
+      }
+
+      /* Efeito de Brilho Suave (Shine) */
+      #btnReveal::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -60%;
+        width: 20%;
+        height: 200%;
+        background: rgba(212, 175, 55, 0.2);
+        transform: rotate(30deg);
+        animation: shine-spiritual 4s infinite;
+      }
+
+      @keyframes shine-spiritual {
+        0% {
+          left: -60%;
+          opacity: 0;
+        }
+        15% {
+          opacity: 1;
+        }
+        30% {
+          left: 120%;
+          opacity: 0;
+        }
+        100% {
+          left: 120%;
+          opacity: 0;
+        }
       }
 
       .no-blur {
@@ -160,24 +218,27 @@
       }
 
       .social-proof {
-        margin-top: 25px;
+        margin-top: 30px;
         font-size: 12px;
         color: var(--text-light);
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 6px;
+        border-top: 1px solid rgba(0, 0, 0, 0.03);
+        padding-top: 20px;
       }
       .dot {
-        height: 8px;
-        width: 8px;
+        height: 7px;
+        width: 7px;
         background: #2ecc71;
         border-radius: 50%;
         display: inline-block;
-        box-shadow: 0 0 8px #2ecc71;
-        animation: pulse 2s infinite;
+        box-shadow: 0 0 6px #2ecc71;
+        animation: pulse-dot 2.5s infinite;
       }
 
+      /* Modal Clean */
       .modal-overlay {
         display: none;
         position: fixed;
@@ -185,19 +246,31 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(4px);
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(8px);
         z-index: 1000;
         justify-content: center;
         align-items: center;
       }
       .modal-content {
         background: white;
-        padding: 30px;
-        border-radius: 28px;
+        padding: 40px 30px;
+        border-radius: 30px;
         width: 90%;
-        max-width: 350px;
+        max-width: 340px;
         text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(212, 175, 55, 0.1);
+      }
+      .btn-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        color: #ccc;
       }
 
       @keyframes blink {
@@ -205,18 +278,15 @@
           opacity: 0.5;
         }
       }
-      @keyframes pulse {
-        0% {
-          transform: scale(0.95);
-          opacity: 0.7;
+      @keyframes pulse-dot {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.8;
         }
-        70% {
+        50% {
           transform: scale(1.2);
           opacity: 1;
-        }
-        100% {
-          transform: scale(0.95);
-          opacity: 0.7;
         }
       }
     </style>
@@ -229,45 +299,75 @@
 
       <textarea
         id="input"
-        placeholder="Escreva aqui o que você está vivendo..."
+        placeholder="Escreva o que está no seu coração agora..."
       ></textarea>
       <button class="btn-main" id="btnGerar" onclick="gerarResposta()">
-        Encontrar resposta
+        Sintonizar Resposta
       </button>
 
       <div id="resultado"></div>
 
       <div class="social-proof">
         <span class="dot"></span>
-        <span id="txt-contador">Sintonizando...</span>
+        <span id="txt-contador">Conectando...</span>
       </div>
     </div>
 
     <div id="paymentModal" class="modal-overlay">
       <div class="modal-content">
-        <h2 style="font-size: 20px; margin-bottom: 10px">Acesso Bloqueado</h2>
-        <p style="font-size: 14px; color: #5a6c7d; margin-bottom: 20px">
-          O restante da sua resposta contém o passo a passo exato para sua
-          mudança.
+        <button class="btn-close" onclick="fecharModal()">✕</button>
+        <div style="font-size: 30px; margin-bottom: 15px; color: var(--accent)">
+          ✦
+        </div>
+        <h2
+          style="
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-family: &quot;Lora&quot;, serif;
+            font-style: italic;
+          "
+        >
+          Sua Jornada Merece Clareza
+        </h2>
+        <p
+          style="
+            font-size: 14px;
+            color: #5a6c7d;
+            margin-bottom: 25px;
+            line-height: 1.6;
+          "
+        >
+          A parte final contém o <b>direcionamento exato</b> para você destravar
+          essa situação. Não ignore esta mensagem do destino.
         </p>
         <div
           style="
-            background: #f4f7f6;
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            background: rgba(212, 175, 55, 0.04);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
           "
         >
-          <span style="font-size: 26px; font-weight: 800; color: var(--success)"
+          <small style="color: #7f8c8d; text-decoration: line-through"
+            >R$ 97,00</small
+          ><br />
+          <span
+            style="font-size: 32px; font-weight: 800; color: var(--text-dark)"
             >R$ 19,90</span
           >
         </div>
         <button
           class="btn-main"
-          style="background: var(--success)"
+          style="
+            background: var(--text-dark);
+            height: 60px;
+            font-family: &quot;Inter&quot;, sans-serif;
+          "
           onclick="simularPagamento()"
         >
-          LIBERAR AGORA
+          DESBLOQUEAR AGORA
         </button>
       </div>
     </div>
@@ -276,23 +376,24 @@
       function atualizarContador() {
         const numero = Math.floor(Math.random() * 45) + 232;
         document.getElementById("txt-contador").innerHTML =
-          `<strong>${numero} pessoas</strong> encontrando respostas agora`;
+          `<strong>${numero} pessoas</strong> sintonizadas agora`;
       }
       setInterval(atualizarContador, 6000);
       atualizarContador();
 
       async function gerarResposta() {
         const input = document.getElementById("input");
-        if (input.value.length < 10) return alert("Conte um pouco mais...");
+        if (input.value.length < 10)
+          return alert("Por favor, conte um pouco mais sobre sua situação.");
 
         const el = document.getElementById("resultado");
         const btn = document.getElementById("btnGerar");
 
         btn.disabled = true;
         btn.innerText = "Sintonizando...";
-        el.innerHTML = `<div class="loading-step">Analisando sua energia...</div>`;
+        el.innerHTML = `<div class="loading-step">Buscando clareza na sua situação...</div>`;
 
-        await new Promise((r) => setTimeout(r, 2500));
+        await new Promise((r) => setTimeout(r, 3000));
 
         try {
           const resposta = await fetch(
@@ -305,19 +406,34 @@
           );
           const data = await resposta.json();
           btn.style.display = "none";
-          interromperTextoAleatorio(data.texto);
+          // Nova Lógica: Interrupção no final da frase
+          interromperNoPontoFinal(data.texto);
         } catch (err) {
-          el.innerHTML = "Erro de conexão.";
+          el.innerHTML = "Erro ao sintonizar. Tente novamente.";
           btn.disabled = false;
         }
       }
 
-      function interromperTextoAleatorio(texto) {
+      function interromperNoPontoFinal(texto) {
         const el = document.getElementById("resultado");
         const tamanhoTotal = texto.length;
-        const pontoCorte = Math.floor(
-          tamanhoTotal * (Math.random() * (0.55 - 0.4) + 0.4),
-        );
+
+        // Define uma área de corte (entre 40% e 55% do texto)
+        const minCorte = Math.floor(tamanhoTotal * 0.4);
+        const maxCorte = Math.floor(tamanhoTotal * 0.55);
+
+        // Procura o ponto final mais próximo do meio do texto
+        let pontoCorte = texto.indexOf(".", minCorte);
+
+        // Se não achar ponto na área de segurança, ou o ponto tiver muito longe do final
+        // faz o corte aleatório padrão para garantir que tenha texto borrado.
+        if (pontoCorte === -1 || pontoCorte > maxCorte) {
+          pontoCorte = Math.floor(
+            tamanhoTotal * (Math.random() * (0.5 - 0.4) + 0.4),
+          );
+        } else {
+          pontoCorte += 1; // Inclui o ponto final no texto visível
+        }
 
         const textoVisivel = texto.substring(0, pontoCorte);
         const textoOculto = texto.substring(pontoCorte);
@@ -327,7 +443,7 @@
               <span class="text-visible">${textoVisivel}</span>
               <div class="blur-wrapper">
                 <button id="btnReveal" onclick="abrirPagamento()" style="display: block;">
-                    ✨ LIBERAR DIRECIONAMENTO TOTAL
+                    ✨ REVELAR O CONSELHO FINAL
                 </button>
                 <span id="targetBlur" class="blur-text">${textoOculto}</span>
               </div>
@@ -339,15 +455,18 @@
         document.getElementById("paymentModal").style.display = "flex";
       }
 
-      function simularPagamento() {
+      function fecharModal() {
         document.getElementById("paymentModal").style.display = "none";
+      }
+
+      function simularPagamento() {
+        fecharModal();
         const btn = document.getElementById("btnReveal");
         if (btn) btn.remove();
 
         const blurArea = document.getElementById("targetBlur");
         if (blurArea) {
           blurArea.classList.add("no-blur");
-          // Voltamos para inline para o texto fluir normal após a compra
           blurArea.style.display = "inline";
         }
       }
