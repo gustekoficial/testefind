@@ -302,7 +302,7 @@
         placeholder="Escreva o que está no seu coração agora..."
       ></textarea>
       <button class="btn-main" id="btnGerar" onclick="gerarResposta()">
-        Sintonizar Resposta
+        Encontrar Resposta
       </button>
 
       <div id="resultado"></div>
@@ -376,7 +376,7 @@
       function atualizarContador() {
         const numero = Math.floor(Math.random() * 45) + 232;
         document.getElementById("txt-contador").innerHTML =
-          `<strong>${numero} pessoas</strong> sintonizadas agora`;
+          `<strong>${numero} pessoas</strong> encontrando respostas agora `;
       }
       setInterval(atualizarContador, 6000);
       atualizarContador();
@@ -390,8 +390,8 @@
         const btn = document.getElementById("btnGerar");
 
         btn.disabled = true;
-        btn.innerText = "Sintonizando...";
-        el.innerHTML = `<div class="loading-step">Buscando clareza na sua situação...</div>`;
+        btn.innerText = "Aguarde...";
+        el.innerHTML = `<div class="loading-step">Preparando sua revelação...</div>`;
 
         await new Promise((r) => setTimeout(r, 3000));
 
