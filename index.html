@@ -2,95 +2,202 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Encontre Sua Resposta</title>
 
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@1,500&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
+      :root {
+        --accent: #d4af37;
+        --success: #2d5a27;
+        --text-dark: #2c3e50;
+        --text-light: #5a6c7d;
+      }
+
       body {
         margin: 0;
-        font-family: "Georgia", serif;
+        font-family: "Inter", sans-serif;
         background:
-          linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)),
-          url("https://images.unsplash.com/photo-1506126613408-eca07ce68773")
-            center/cover;
-        color: white;
+          linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)),
+          url("https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&q=80&w=2000")
+            center/cover fixed;
+        color: var(--text-dark);
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
       }
 
       .container {
-        max-width: 520px;
-        width: 90%;
-        background: rgba(0, 0, 0, 0.65);
-        padding: 30px;
-        border-radius: 20px;
+        width: 100%;
+        max-width: 380px;
+        background: rgba(255, 255, 255, 0.94);
+        padding: 35px 25px;
+        border-radius: 32px;
         text-align: center;
-        box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
       }
 
       h1 {
-        font-size: 28px;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #1a1a1a;
       }
-
       .sub {
-        font-size: 14px;
-        opacity: 0.8;
-        margin-bottom: 20px;
+        font-family: "Lora", serif;
+        font-size: 15px;
+        color: var(--text-light);
+        margin-bottom: 25px;
+        font-style: italic;
       }
 
       textarea {
         width: 100%;
-        border-radius: 12px;
-        border: none;
-        padding: 12px;
-        margin-bottom: 10px;
+        min-height: 100px;
+        border-radius: 18px;
+        border: 1.5px solid #e0e6ed;
+        background: #ffffff;
+        padding: 18px;
+        font-size: 16px;
+        margin-bottom: 15px;
+        resize: none;
+        outline: none;
+        box-sizing: border-box;
       }
 
-      button {
-        margin-top: 10px;
-        padding: 14px;
+      .btn-main {
+        background: #1a1a1a;
+        color: white;
+        padding: 18px;
         width: 100%;
-        border-radius: 12px;
+        border-radius: 18px;
         border: none;
-        background: linear-gradient(45deg, #f4c542, #ffdd73);
-        font-weight: bold;
+        font-weight: 600;
         cursor: pointer;
         font-size: 16px;
       }
 
       #resultado {
         margin-top: 20px;
-        font-size: 17px;
-        line-height: 1.6;
-        min-height: 80px;
         text-align: left;
       }
-
-      .testimonials {
-        margin-top: 20px;
-        text-align: left;
+      .loading-step {
+        text-align: center;
         font-size: 14px;
+        color: var(--accent);
+        font-weight: 600;
+        animation: blink 1.5s infinite;
       }
 
-      .testimonial {
-        margin-bottom: 10px;
-        border-left: 3px solid #f4c542;
-        padding-left: 10px;
+      /* Estrutura de Revelação */
+      .reveal-box {
+        line-height: 1.7;
+        font-size: 15px;
+        position: relative;
+      }
+      .text-visible {
+        color: var(--text-dark);
+      }
+
+      .blur-wrapper {
+        position: relative;
+        margin-top: -5px; /* Cola o borrão no texto visível */
+      }
+
+      .blur-text {
+        filter: blur(5px);
+        user-select: none;
+        opacity: 0.5;
+        display: block; /* Garante que o borrão ocupe espaço para o botão centralizar */
+        mask-image: linear-gradient(to bottom, black 0%, transparent 95%);
+        -webkit-mask-image: linear-gradient(
+          to bottom,
+          black 0%,
+          transparent 95%
+        );
+      }
+
+      /* BOTÃO ALINHADO */
+      #btnReveal {
+        position: absolute;
+        top: 20%; /* Posiciona no início do borrão */
+        left: 50%;
+        transform: translate(-50%, 0);
+        z-index: 100;
+        background: var(--success);
+        color: white;
+        padding: 16px 24px;
+        width: 90%;
+        border-radius: 50px; /* Mais arredondado para destaque */
+        border: none;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        box-shadow: 0 8px 25px rgba(45, 90, 39, 0.4);
+        display: none;
+        white-space: nowrap;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .no-blur {
+        filter: none !important;
+        opacity: 1 !important;
+        mask-image: none !important;
+        -webkit-mask-image: none !important;
+        display: inline !important;
       }
 
       .social-proof {
-        margin-top: 15px;
-        font-size: 13px;
-        color: #ffd966;
+        margin-top: 25px;
+        font-size: 12px;
+        color: var(--text-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      .dot {
+        height: 8px;
+        width: 8px;
+        background: #2ecc71;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 8px #2ecc71;
+        animation: pulse 2s infinite;
       }
 
-      .blur {
-        filter: blur(6px);
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
       }
-
-      .typing {
-        animation: blink 1s infinite;
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 28px;
+        width: 90%;
+        max-width: 350px;
+        text-align: center;
       }
 
       @keyframes blink {
@@ -98,10 +205,19 @@
           opacity: 0.5;
         }
       }
-
-      /* 🔥 botão escondido inicialmente */
-      #btnReveal {
-        display: none;
+      @keyframes pulse {
+        0% {
+          transform: scale(0.95);
+          opacity: 0.7;
+        }
+        70% {
+          transform: scale(1.2);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.95);
+          opacity: 0.7;
+        }
       }
     </style>
   </head>
@@ -113,101 +229,127 @@
 
       <textarea
         id="input"
-        placeholder="Digite o que você está vivendo..."
+        placeholder="Escreva aqui o que você está vivendo..."
       ></textarea>
-
-      <button onclick="gerarResposta()">Encontrar resposta</button>
+      <button class="btn-main" id="btnGerar" onclick="gerarResposta()">
+        Encontrar resposta
+      </button>
 
       <div id="resultado"></div>
 
-      <!-- 🔥 BOTÃO COM DELAY -->
-      <button id="btnReveal" onclick="revelar()">Revelação Completa</button>
+      <div class="social-proof">
+        <span class="dot"></span>
+        <span id="txt-contador">Sintonizando...</span>
+      </div>
+    </div>
 
-      <div class="social-proof" id="contador"></div>
-
-      <div class="testimonials">
-        <div class="testimonial">“Parecia que era pra mim…”</div>
-        <div class="testimonial">“Isso me fez chorar.”</div>
-        <div class="testimonial">“Muito preciso, assustador até.”</div>
+    <div id="paymentModal" class="modal-overlay">
+      <div class="modal-content">
+        <h2 style="font-size: 20px; margin-bottom: 10px">Acesso Bloqueado</h2>
+        <p style="font-size: 14px; color: #5a6c7d; margin-bottom: 20px">
+          O restante da sua resposta contém o passo a passo exato para sua
+          mudança.
+        </p>
+        <div
+          style="
+            background: #f4f7f6;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <span style="font-size: 26px; font-weight: 800; color: var(--success)"
+            >R$ 19,90</span
+          >
+        </div>
+        <button
+          class="btn-main"
+          style="background: var(--success)"
+          onclick="simularPagamento()"
+        >
+          LIBERAR AGORA
+        </button>
       </div>
     </div>
 
     <script>
-      // contador
       function atualizarContador() {
-        const numero = Math.floor(Math.random() * 80) + 120;
-        document.getElementById("contador").innerText =
-          `+${numero} pessoas estão encontrando respostas agora`;
+        const numero = Math.floor(Math.random() * 45) + 232;
+        document.getElementById("txt-contador").innerHTML =
+          `<strong>${numero} pessoas</strong> encontrando respostas agora`;
       }
-      setInterval(atualizarContador, 3000);
+      setInterval(atualizarContador, 6000);
       atualizarContador();
 
-      // gerar resposta
       async function gerarResposta() {
-        let texto = document.getElementById("input").value;
-
-        texto = texto.slice(0, 300);
+        const input = document.getElementById("input");
+        if (input.value.length < 10) return alert("Conte um pouco mais...");
 
         const el = document.getElementById("resultado");
+        const btn = document.getElementById("btnGerar");
 
-        el.innerHTML = `
-    <div class="typing">
-      Analisando profundamente sua situação...
-    </div>
-  `;
+        btn.disabled = true;
+        btn.innerText = "Sintonizando...";
+        el.innerHTML = `<div class="loading-step">Analisando sua energia...</div>`;
 
-        // 🔥 esconder botão até nova resposta
-        document.getElementById("btnReveal").style.display = "none";
+        await new Promise((r) => setTimeout(r, 2500));
 
         try {
           const resposta = await fetch(
             "https://backfind.vercel.app/api/responder",
             {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                mensagem: texto,
-              }),
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ mensagem: input.value }),
             },
           );
-
           const data = await resposta.json();
-
-          escreverTexto(data.texto);
-
-          // 🔥 delay para mostrar botão
-          setTimeout(() => {
-            document.getElementById("btnReveal").style.display = "block";
-          }, 3000);
+          btn.style.display = "none";
+          interromperTextoAleatorio(data.texto);
         } catch (err) {
-          el.innerHTML = "Erro ao gerar resposta.";
+          el.innerHTML = "Erro de conexão.";
+          btn.disabled = false;
         }
       }
 
-      // efeito de revelação progressiva
-      function escreverTexto(texto) {
+      function interromperTextoAleatorio(texto) {
         const el = document.getElementById("resultado");
+        const tamanhoTotal = texto.length;
+        const pontoCorte = Math.floor(
+          tamanhoTotal * (Math.random() * (0.55 - 0.4) + 0.4),
+        );
 
-        const partes = texto.split(". ");
-        const primeiraFrase = partes[0];
-        const resto = partes.slice(1).join(". ");
+        const textoVisivel = texto.substring(0, pontoCorte);
+        const textoOculto = texto.substring(pontoCorte);
 
         el.innerHTML = `
-    <div style="font-size:20px; font-weight:500; margin-bottom:15px;">
-      ${primeiraFrase}.
-    </div>
-
-    <div id="resto" class="blur" style="margin-bottom:15px;">
-      ${resto}
-    </div>
-  `;
+            <div class="reveal-box">
+              <span class="text-visible">${textoVisivel}</span>
+              <div class="blur-wrapper">
+                <button id="btnReveal" onclick="abrirPagamento()" style="display: block;">
+                    ✨ LIBERAR DIRECIONAMENTO TOTAL
+                </button>
+                <span id="targetBlur" class="blur-text">${textoOculto}</span>
+              </div>
+            </div>
+        `;
       }
 
-      // revelar
-      function revelar() {
-        document.getElementById("resto").classList.remove("blur");
+      function abrirPagamento() {
+        document.getElementById("paymentModal").style.display = "flex";
+      }
+
+      function simularPagamento() {
+        document.getElementById("paymentModal").style.display = "none";
+        const btn = document.getElementById("btnReveal");
+        if (btn) btn.remove();
+
+        const blurArea = document.getElementById("targetBlur");
+        if (blurArea) {
+          blurArea.classList.add("no-blur");
+          // Voltamos para inline para o texto fluir normal após a compra
+          blurArea.style.display = "inline";
+        }
       }
     </script>
   </body>
