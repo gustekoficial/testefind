@@ -451,25 +451,65 @@
         `;
       }
 
-      function abrirPagamento() {
-        document.getElementById("paymentModal").style.display = "flex";
-      }
+      let sessionId Global = ""; // Para rastrear a sessão do usuário
 
-      function fecharModal() {
-        document.getElementById("paymentModal").style.display = "none";
-      }
+async function abrirPagamento() {
+  const btn = document.getElementById("btnReveal");
+  btn.innerText = "Gerando acesso...";
+  btn.disabled = true;
 
-      function simularPagamento() {
-        fecharModal();
-        const btn = document.getElementById("btnReveal");
-        if (btn) btn.remove();
+  try {
+    // 1. Chama seu backend para criar a preferência de pagamento
+    const response = await fetch("https://backfind.vercel.app/api/pagamento", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ item: "Revelação Completa" }) 
+    });
+    
+    const data = await response.json();
+    sessionIdGlobal = data.sessionId; // Guarda o ID da sessão para verificar depois
 
-        const blurArea = document.getElementById("targetBlur");
-        if (blurArea) {
-          blurArea.classList.add("no-blur");
-          blurArea.style.display = "inline";
-        }
+    // 2. Abre o checkout do Mercado Pago
+    // 'init_point' é o link oficial de pagamento
+    window.open(data.init_point, '_blank');
+
+    // 3. Abre o modal informando que estamos aguardando o pagamento
+    document.getElementById("paymentModal").style.display = "flex";
+    
+    // Inicia a verificação automática de status
+    verificarStatusPagamento();
+
+  } catch (err) {
+    alert("Erro ao gerar pagamento. Tente novamente.");
+    btn.disabled = false;
+    btn.innerText = "✨ REVELAR O CONSELHO FINAL";
+  }
+}
+
+async function verificarStatusPagamento() {
+  const checkInterval = setInterval(async () => {
+    try {
+      const response = await fetch(`https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`);
+      const data = await response.json();
+
+      if (data.pago) {
+        clearInterval(checkInterval); // Para de perguntar
+        liberarConteudo(); // Revela o texto!
       }
-    </script>
-  </body>
-</html>
+    } catch (err) {
+      console.error("Erro ao verificar status");
+    }
+  }, 4000); // Verifica a cada 4 segundos
+}
+
+function liberarConteudo() {
+  fecharModal();
+  const btn = document.getElementById("btnReveal");
+  if (btn) btn.remove();
+
+  const blurArea = document.getElementById("targetBlur");
+  if (blurArea) {
+    blurArea.classList.add("no-blur");
+    blurArea.style.display = "inline";
+  }
+}
