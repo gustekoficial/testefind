@@ -369,7 +369,16 @@
     </div>
 
     <script>
+      // 1. INICIALIZA O MERCADO PAGO
+      const mp = new MercadoPago(
+        "APP_USR-43cbd05f-cdaa-462a-8209-0a3af4cbe41a",
+      );
+
+      let sessionIdGlobal = "";
+      let intervaloStatus = null;
+
       window.onload = function () {
+        // Agora as chaves estão exatamente iguais às que foram salvas
         const textoSalvo = localStorage.getItem("conselho_pendente");
         const sessionSalva = localStorage.getItem("session_id_pendente");
 
@@ -380,20 +389,12 @@
 
           // Esconde o botão gerar e o input para manter o foco na revelação
           document.getElementById("btnGerar").style.display = "none";
-          document.querySelector(".input-container").style.display = "none";
+          document.getElementById("input").style.display = "none";
 
           // Volta a verificar o status do pagamento automaticamente
           verificarStatus();
         }
       };
-
-      // 1. INICIALIZA O MERCADO PAGO (COLE SUA PUBLIC KEY AQUI ABAIXO)
-      const mp = new MercadoPago(
-        "APP_USR-43cbd05f-cdaa-462a-8209-0a3af4cbe41a",
-      );
-
-      let sessionIdGlobal = "";
-      let intervaloStatus = null;
 
       function atualizarContador() {
         const numero = Math.floor(Math.random() * 45) + 232;
@@ -434,12 +435,13 @@
 
           const data = await resposta.json();
 
-          // --- SALVAMENTO DE EMERGÊNCIA AQUI ---
-          localStorage.setItem("conselho_salvo", data.texto);
-          localStorage.setItem("session_id_salvo", sessionIdGlobal);
+          // --- SALVAMENTO PADRONIZADO ---
+          localStorage.setItem("conselho_pendente", data.texto);
+          localStorage.setItem("session_id_pendente", sessionIdGlobal);
           // -------------------------------------
 
           btn.style.display = "none";
+          input.style.display = "none";
           montarCaixaDeRevelacao(data.texto);
         } catch (err) {
           el.innerHTML = "Erro ao sintonizar. Tente novamente.";
@@ -450,10 +452,6 @@
 
       // MONTA O TEXTO BORRADO
       function montarCaixaDeRevelacao(textoVisivel) {
-        // SALVA NO NAVEGADOR PARA NÃO SUMIR SE RECARREGAR
-        localStorage.setItem("ultima_conversa", textoVisivel);
-        localStorage.setItem("ultimo_session_id", sessionIdGlobal);
-
         const el = document.getElementById("resultado");
         const textoFalso =
           "Esta é a parte final do seu conselho espiritual e prático. As palavras que estão aqui revelarão a sua direção. Não perca a oportunidade de clarear a sua mente.";
@@ -463,7 +461,7 @@
               <span class="text-visible">${textoVisivel} </span>
               <div class="blur-wrapper">
                 <button id="btnReveal" onclick="abrirModalVenda()" style="display: block;">
-                    ✨ REVELAR O CONSELHO FINAL
+                  ✨ REVELAR O CONSELHO FINAL
                 </button>
                 <span id="targetBlur" class="blur-text">${textoFalso}</span>
               </div>
@@ -501,19 +499,11 @@
           const data = await response.json();
 
           if (data.id) {
-            // Abre o checkout na mesma página
-            const bricksBuilder = mp.bricks();
-
+            // Abre o checkout Modal (Pro) corretamente
             mp.checkout({
               preference: {
                 id: data.id,
               },
-
-              render: {
-                container: ".modal-content", // Renderiza dentro do seu modal
-                label: "Pagar",
-              },
-
               autoOpen: true,
             });
 
@@ -566,6 +556,10 @@
           blurArea.classList.add("no-blur"); // Tira o borrão
           blurArea.style.display = "inline";
         }
+
+        // LIMPEZA DA MEMÓRIA: Permite que o usuário faça novas consultas no futuro
+        localStorage.removeItem("conselho_pendente");
+        localStorage.removeItem("session_id_pendente");
       }
     </script>
   </body>
