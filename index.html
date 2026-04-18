@@ -154,12 +154,12 @@
         position: absolute;
         top: 15px;
         z-index: 100;
-        background: rgba(255, 255, 255, 0.85); /* Translúcido Clean */
-        color: var(--accent); /* Texto em Dourado */
+        background: rgba(255, 255, 255, 0.85);
+        color: var(--accent);
         padding: 16px 28px;
         border-radius: 50px;
-        border: 1px solid var(--accent); /* Borda fina dourada */
-        font-family: "Lora", serif; /* Fonte mais elegante */
+        border: 1px solid var(--accent);
+        font-family: "Lora", serif;
         font-weight: 500;
         font-style: italic;
         font-size: 14px;
@@ -178,7 +178,6 @@
         transform: translateY(-2px);
       }
 
-      /* Efeito de Brilho Suave (Shine) */
       #btnReveal::after {
         content: "";
         position: absolute;
@@ -385,7 +384,7 @@
       setInterval(atualizarContador, 6000);
       atualizarContador();
 
-      // PASSO 1: Gera a resposta inicial (IA) e borra a metade
+      // PASSO 1: Gera a resposta inicial (IA) e exibe apenas a metade
       async function gerarResposta() {
         const input = document.getElementById("input");
         if (input.value.length < 10)
@@ -398,42 +397,51 @@
         btn.innerText = "Sintonizando energia...";
         el.innerHTML = `<div class="loading-step">Preparando sua revelação...</div>`;
 
+        // CRIA A SESSÃO AQUI: Assim o site e a API sabem qual é o mesmo usuário
+        sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
+
         try {
           const resposta = await fetch(
             "https://backfind.vercel.app/api/responder",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ mensagem: input.value }),
+              body: JSON.stringify({
+                mensagem: input.value,
+                sessionId: sessionIdGlobal, // Envia o ID para guardar o texto oculto
+              }),
             },
           );
 
           const data = await resposta.json();
           btn.style.display = "none";
-          interromperNoPontoFinal(data.texto);
+
+          // O backend agora devolve SÓ a parte inicial
+          montarCaixaDeRevelacao(data.texto);
         } catch (err) {
           el.innerHTML = "Erro ao sintonizar. Tente novamente.";
           btn.disabled = false;
+          btn.innerText = "Sintonizar Resposta";
         }
       }
 
-      // Função que aplica o efeito de borragem no meio do texto
-      function interromperNoPontoFinal(texto) {
+      // Função que aplica a borragem usando um texto genérico falso
+      function montarCaixaDeRevelacao(textoVisivel) {
         const el = document.getElementById("resultado");
-        const tamanhoTotal = texto.length;
-        const pontoCorte = Math.floor(tamanhoTotal * 0.5);
 
-        const textoVisivel = texto.substring(0, pontoCorte);
-        const textoOculto = texto.substring(pontoCorte);
+        // Texto falso (Lorem Ipsum) que fica borrado para dar a ilusão de volume.
+        // Ninguém consegue ler de fato pelo console.
+        const textoFalso =
+          "Esta é a parte final do seu conselho espiritual e prático. As palavras que estão aqui revelarão a sua direção. Não perca a oportunidade de clarear a sua mente.";
 
         el.innerHTML = `
             <div class="reveal-box">
-              <span class="text-visible">${textoVisivel}</span>
+              <span class="text-visible">${textoVisivel} </span>
               <div class="blur-wrapper">
                 <button id="btnReveal" onclick="abrirCheckout()" style="display: block;">
                     ✨ REVELAR O CONSELHO FINAL
                 </button>
-                <span id="targetBlur" class="blur-text">${textoOculto}</span>
+                <span id="targetBlur" class="blur-text">${textoFalso}</span>
               </div>
             </div>
         `;
@@ -445,16 +453,13 @@
         btn.innerText = "Gerando acesso...";
         btn.disabled = true;
 
-        // Gera um ID de sessão único
-        sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 10);
-
         try {
           const response = await fetch(
             "https://backfind.vercel.app/api/pagamento",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ sessionId: sessionIdGlobal }),
+              body: JSON.stringify({ sessionId: sessionIdGlobal }), // Usa o MESMO ID
             },
           );
 
@@ -486,9 +491,10 @@
             );
             const data = await res.json();
 
-            if (data.pago === true) {
+            // Se pagou, o backend manda o "data.textoRevelado"
+            if (data.pago === true && data.textoRevelado) {
               clearInterval(interval);
-              liberarConteudo();
+              liberarConteudo(data.textoRevelado); // Passa a mensagem verdadeira
             }
           } catch (e) {
             console.log("Aguardando pagamento...");
@@ -496,17 +502,19 @@
         }, 5000); // Checa a cada 5 segundos
       }
 
-      function liberarConteudo() {
+      // Recebe o texto sagrado que estava guardado na Vercel/Supabase
+      function liberarConteudo(textoReal) {
         fecharModal();
         const btn = document.getElementById("btnReveal");
         if (btn) btn.remove();
 
         const blurArea = document.getElementById("targetBlur");
         if (blurArea) {
+          // Substitui o texto falso pelo texto real
+          blurArea.innerText = textoReal;
           blurArea.classList.add("no-blur");
           blurArea.style.display = "inline";
         }
-        alert("Pagamento confirmado! Sua resposta foi revelada.");
       }
 
       function fecharModal() {
@@ -515,7 +523,6 @@
 
       // Função chamada pelo botão dentro do Modal
       function simularPagamento() {
-        // Redireciona para o checkout caso ele tenha fechado sem querer
         alert(
           "Verificando seu pagamento... Se já pagou, a resposta aparecerá em instantes.",
         );
