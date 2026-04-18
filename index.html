@@ -369,53 +369,37 @@
     </div>
 
     <script>
-      // 1. INICIALIZA O MERCADO PAGO
       const mp = new MercadoPago(
         "APP_USR-43cbd05f-cdaa-462a-8209-0a3af4cbe41a",
       );
-
       let sessionIdGlobal = "";
       let intervaloStatus = null;
 
       window.onload = function () {
-        // Agora as chaves estão exatamente iguais às que foram salvas
         const textoSalvo = localStorage.getItem("conselho_pendente");
         const sessionSalva = localStorage.getItem("session_id_pendente");
 
         if (textoSalvo && sessionSalva) {
-          // Restaura o ID da sessão e a interface
           sessionIdGlobal = sessionSalva;
           montarCaixaDeRevelacao(textoSalvo);
-
-          // Esconde o botão gerar e o input para manter o foco na revelação
           document.getElementById("btnGerar").style.display = "none";
           document.getElementById("input").style.display = "none";
 
-          // Volta a verificar o status do pagamento automaticamente
+          // LOG para você ver no F12 do navegador
+          console.log("Restaurando sessão: ", sessionIdGlobal);
           verificarStatus();
         }
       };
 
-      function atualizarContador() {
-        const numero = Math.floor(Math.random() * 45) + 232;
-        const txt = document.getElementById("txt-contador");
-        if (txt)
-          txt.innerHTML = `<strong>${numero} pessoas</strong> encontrando respostas agora `;
-      }
-      setInterval(atualizarContador, 6000);
-      atualizarContador();
-
-      // GERA A RESPOSTA INICIAL
       async function gerarResposta() {
         const input = document.getElementById("input");
-        if (input.value.length < 10)
-          return alert("Por favor, conte um pouco mais sobre sua situação.");
+        if (input.value.length < 10) return alert("Por favor, conte mais.");
 
         const el = document.getElementById("resultado");
         const btn = document.getElementById("btnGerar");
 
         btn.disabled = true;
-        btn.innerText = "Sintonizando";
+        btn.innerText = "Sintonizando...";
         el.innerHTML = `<div class="loading-step">Preparando sua revelação...</div>`;
 
         sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
@@ -434,42 +418,32 @@
           );
 
           const data = await resposta.json();
-
-          // --- SALVAMENTO PADRONIZADO ---
           localStorage.setItem("conselho_pendente", data.texto);
           localStorage.setItem("session_id_pendente", sessionIdGlobal);
-          // -------------------------------------
 
           btn.style.display = "none";
           input.style.display = "none";
           montarCaixaDeRevelacao(data.texto);
         } catch (err) {
-          el.innerHTML = "Erro ao sintonizar. Tente novamente.";
+          alert("Erro de conexão.");
           btn.disabled = false;
-          btn.innerText = "Sintonizar Resposta";
         }
       }
 
-      // MONTA O TEXTO BORRADO
       function montarCaixaDeRevelacao(textoVisivel) {
         const el = document.getElementById("resultado");
-        const textoFalso =
-          "Esta é a parte final do seu conselho espiritual e prático. As palavras que estão aqui revelarão a sua direção. Não perca a oportunidade de clarear a sua mente.";
-
         el.innerHTML = `
-            <div class="reveal-box">
-              <span class="text-visible">${textoVisivel} </span>
-              <div class="blur-wrapper">
-                <button id="btnReveal" onclick="abrirModalVenda()" style="display: block;">
-                  ✨ REVELAR O CONSELHO FINAL
-                </button>
-                <span id="targetBlur" class="blur-text">${textoFalso}</span>
-              </div>
-            </div>
-        `;
+        <div class="reveal-box">
+          <span class="text-visible">${textoVisivel} </span>
+          <div class="blur-wrapper">
+            <button id="btnReveal" onclick="abrirModalVenda()">✨ REVELAR O CONSELHO FINAL</button>
+            <p id="statusCheck" style="font-size:11px; color:gray; display:none; position:absolute; top:70px;">Verificando pagamento...</p>
+            <span id="targetBlur" class="blur-text">Esta é a parte final do seu conselho espiritual e prático...</span>
+          </div>
+        </div>
+    `;
       }
 
-      // ABRE O MODAL LOCAL DE OFERTA
       function abrirModalVenda() {
         document.getElementById("paymentModal").style.display = "flex";
       }
@@ -478,15 +452,12 @@
         document.getElementById("paymentModal").style.display = "none";
       }
 
-      // INTEGRAÇÃO COM MERCADO PAGO MODAL
       async function iniciarPagamentoMercadoPago() {
         const btn = document.getElementById("btnCheckoutModal");
-        const textoOriginal = btn.innerText;
-        btn.innerText = "Processando acesso...";
+        btn.innerText = "Gerando Pix...";
         btn.disabled = true;
 
         try {
-          // Busca o ID da preferência no seu backend
           const response = await fetch(
             "https://backfind.vercel.app/api/pagamento",
             {
@@ -499,65 +470,57 @@
           const data = await response.json();
 
           if (data.id) {
-            // Abre o checkout Modal (Pro) corretamente
             mp.checkout({
-              preference: {
-                id: data.id,
-              },
+              preference: { id: data.id },
               autoOpen: true,
             });
-
             btn.innerText = "AGUARDANDO PAGAMENTO...";
-
-            // Inicia o rastreamento invisível
             verificarStatus();
-          } else {
-            throw new Error("ID não retornado pelo backend.");
           }
         } catch (err) {
-          console.error("Erro MP:", err);
-          alert("Não foi possível gerar o pagamento. Tente novamente.");
+          alert("Erro ao gerar pagamento.");
           btn.disabled = false;
-          btn.innerText = textoOriginal;
         }
       }
 
-      // VERIFICAÇÃO EM TEMPO REAL NO FUNDO
       function verificarStatus() {
         if (intervaloStatus) clearInterval(intervaloStatus);
 
+        const statusTxt = document.getElementById("statusCheck");
+        if (statusTxt) statusTxt.style.display = "block";
+
         intervaloStatus = setInterval(async () => {
+          console.log("Checando status da sessão:", sessionIdGlobal);
           try {
             const res = await fetch(
               `https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`,
             );
             const data = await res.json();
 
-            if (data.pago === true && data.textoRevelado) {
-              clearInterval(intervaloStatus); // Para de verificar
-              liberarConteudo(data.textoRevelado); // Injeta o texto
+            // IMPORTANTE: O seu backend deve retornar exatamente { pago: true, textoRevelado: "..." }
+            if (data.pago === true) {
+              console.log("Pagamento aprovado!");
+              clearInterval(intervaloStatus);
+              liberarConteudo(data.textoRevelado);
             }
           } catch (e) {
-            // Apenas continua verificando silenciosamente
+            console.error("Erro ao checar status:", e);
           }
-        }, 4000); // Checa a cada 4 segundos
+        }, 5000); // 5 segundos é um tempo seguro
       }
 
-      // REVELA O TEXTO FINAL
       function liberarConteudo(textoReal) {
-        fecharModal(); // Fecha o modal de vendas, se estiver aberto
-
+        fecharModal();
         const btn = document.getElementById("btnReveal");
-        if (btn) btn.remove(); // Remove o botão de revelar
+        const statusTxt = document.getElementById("statusCheck");
+        if (btn) btn.remove();
+        if (statusTxt) statusTxt.remove();
 
         const blurArea = document.getElementById("targetBlur");
         if (blurArea) {
-          blurArea.innerText = textoReal; // Coloca o texto da IA
-          blurArea.classList.add("no-blur"); // Tira o borrão
-          blurArea.style.display = "inline";
+          blurArea.innerText = textoReal;
+          blurArea.classList.add("no-blur");
         }
-
-        // LIMPEZA DA MEMÓRIA: Permite que o usuário faça novas consultas no futuro
         localStorage.removeItem("conselho_pendente");
         localStorage.removeItem("session_id_pendente");
       }
