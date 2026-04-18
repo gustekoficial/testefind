@@ -369,6 +369,24 @@
     </div>
 
     <script>
+      window.onload = function () {
+        const textoSalvo = localStorage.getItem("conselho_pendente");
+        const sessionSalva = localStorage.getItem("session_id_pendente");
+
+        if (textoSalvo && sessionSalva) {
+          // Restaura o ID da sessão e a interface
+          sessionIdGlobal = sessionSalva;
+          montarCaixaDeRevelacao(textoSalvo);
+
+          // Esconde o botão gerar e o input para manter o foco na revelação
+          document.getElementById("btnGerar").style.display = "none";
+          document.querySelector(".input-container").style.display = "none";
+
+          // Volta a verificar o status do pagamento automaticamente
+          verificarStatus();
+        }
+      };
+
       // 1. INICIALIZA O MERCADO PAGO (COLE SUA PUBLIC KEY AQUI ABAIXO)
       const mp = new MercadoPago(
         "APP_USR-43cbd05f-cdaa-462a-8209-0a3af4cbe41a",
@@ -415,6 +433,12 @@
           );
 
           const data = await resposta.json();
+
+          // --- SALVAMENTO DE EMERGÊNCIA AQUI ---
+          localStorage.setItem("conselho_salvo", data.texto);
+          localStorage.setItem("session_id_salvo", sessionIdGlobal);
+          // -------------------------------------
+
           btn.style.display = "none";
           montarCaixaDeRevelacao(data.texto);
         } catch (err) {
