@@ -399,7 +399,7 @@
         const btn = document.getElementById("btnGerar");
 
         btn.disabled = true;
-        btn.innerText = "Sintonizando energia...";
+        btn.innerText = "Sintonizando";
         el.innerHTML = `<div class="loading-step">Preparando sua revelação...</div>`;
 
         sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
@@ -429,6 +429,10 @@
 
       // MONTA O TEXTO BORRADO
       function montarCaixaDeRevelacao(textoVisivel) {
+        // SALVA NO NAVEGADOR PARA NÃO SUMIR SE RECARREGAR
+        localStorage.setItem("ultima_conversa", textoVisivel);
+        localStorage.setItem("ultimo_session_id", sessionIdGlobal);
+
         const el = document.getElementById("resultado");
         const textoFalso =
           "Esta é a parte final do seu conselho espiritual e prático. As palavras que estão aqui revelarão a sua direção. Não perca a oportunidade de clarear a sua mente.";
@@ -477,10 +481,18 @@
 
           if (data.id) {
             // Abre o checkout na mesma página
+            const bricksBuilder = mp.bricks();
+
             mp.checkout({
               preference: {
                 id: data.id,
               },
+
+              render: {
+                container: ".modal-content", // Renderiza dentro do seu modal
+                label: "Pagar",
+              },
+
               autoOpen: true,
             });
 
