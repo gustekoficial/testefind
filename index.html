@@ -127,7 +127,7 @@
       .blur-text {
         filter: blur(6px);
         user-select: none;
-        opacity: 0.35;
+        opacity: 0.6;
         width: 100%;
         mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
         -webkit-mask-image: linear-gradient(
@@ -140,21 +140,110 @@
       /* CORREÇÃO: O botão agora inicia visível quando injetado */
       #btnReveal {
         position: absolute;
-        top: 20px;
+        top: 35px; /* Ajuste sutil para alinhar com o desfoque */
         z-index: 100;
-        background: rgba(255, 255, 255, 0.95);
-        color: var(--accent);
-        padding: 16px 24px;
+
+        /* Cores Neutras e Premium */
+        background: rgba(
+          255,
+          255,
+          255,
+          0.85
+        ); /* Fundo branco Translúcido e Clean */
+        color: #8e731d; /* Dourado Orgânico Suave para o texto */
+
+        /* Forma e Borda */
+        padding: 16px 36px;
         border-radius: 50px;
-        border: 1px solid var(--accent);
+        border: 1px solid rgba(212, 175, 55, 0.3); /* Borda dourada Nobre quase invisível */
+
+        /* Tipografia Elegante */
         font-family: "Lora", serif;
-        font-weight: 600;
+        font-weight: 500;
         font-style: italic;
         font-size: 13px;
+        letter-spacing: 0.8px;
+        text-transform: uppercase; /* Dá um ar mais sério e 'revelação' */
+
+        /* Efeitos de Fundo e Sombra */
         cursor: pointer;
-        backdrop-filter: blur(5px);
-        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
-        display: block; /* Alterado de none para block */
+        backdrop-filter: blur(8px); /* Desfoque de vidro atrás do botão */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Sombra suave para flutuar */
+        transition: all 0.5s ease;
+
+        /* Esconder o brilho que corre para fora do botão */
+        overflow: hidden;
+
+        /* Animações combinadas */
+        animation: spiritual-pulse 3s infinite ease-in-out;
+        display: block;
+      }
+
+      /* O Segredo do Brilho Dourado Correndo */
+      #btnReveal::after {
+        content: "";
+        position: absolute;
+        top: -150%;
+        left: -210%;
+        width: 200%;
+        height: 400%;
+
+        /* Gradiente dourado intenso mas limpo */
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0) 0%,
+          rgba(212, 175, 55, 0.05) 40%,
+          /* Início suave */ rgba(212, 175, 55, 0.5) 50%,
+          /* O pico dourado */ rgba(212, 175, 55, 0.05) 60%,
+          /* Final suave */ rgba(212, 175, 55, 0) 100%
+        );
+
+        transform: rotate(35deg);
+
+        /* Animação que faz o brilho passar pelo botão periodicamente */
+        animation: gold-shine 4s infinite ease-in-out;
+      }
+
+      /* Efeito de Clique Suave */
+      #btnReveal:hover {
+        background: rgba(255, 255, 255, 1);
+        letter-spacing: 1.2px; /* Expansão mística */
+        border-color: rgba(212, 175, 55, 0.6);
+        transform: scale(1.02);
+      }
+
+      #btnReveal:active {
+        transform: scale(0.98);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      }
+
+      /* --- Definição das Animações --- */
+
+      /* Animação do Brilho Correndo (Gold Shine) */
+      @keyframes gold-shine {
+        0% {
+          left: -210%;
+          top: -150%;
+        }
+        30% {
+          left: 120%;
+          top: 120%;
+        } /* Passa rápido pelo botão */
+        100% {
+          left: 120%;
+          top: 120%;
+        } /* Pausa longa para não cansar */
+      }
+
+      /* Animação de Aura Pulso que parece uma Aura */
+      @keyframes spiritual-pulse {
+        0%,
+        100% {
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        50% {
+          box-shadow: 0 8px 25px 2px rgba(212, 175, 55, 0.15);
+        } /* Pulso dourado suave */
       }
 
       .no-blur {
