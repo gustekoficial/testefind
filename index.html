@@ -130,7 +130,11 @@
         opacity: 0.35;
         width: 100%;
         mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
-        -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
+        -webkit-mask-image: linear-gradient(
+          to bottom,
+          black 0%,
+          transparent 90%
+        );
       }
 
       /* CORREÇÃO: O botão agora inicia visível quando injetado */
@@ -182,11 +186,15 @@
       .modal-overlay {
         display: none;
         position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(8px);
         z-index: 1000;
-        justify-content: center; align-items: center;
+        justify-content: center;
+        align-items: center;
       }
       .modal-content {
         background: white;
@@ -199,7 +207,11 @@
         position: relative;
       }
 
-      @keyframes blink { 50% { opacity: 0.5; } }
+      @keyframes blink {
+        50% {
+          opacity: 0.5;
+        }
+      }
     </style>
   </head>
 
@@ -208,8 +220,13 @@
       <h1>Encontre sua resposta</h1>
       <div class="sub">Algo precisa ser revelado para você hoje...</div>
 
-      <textarea id="input" placeholder="Escreva o que está no seu coração agora..."></textarea>
-      <button class="btn-main" id="btnGerar" onclick="gerarResposta()">Sintonizar Resposta</button>
+      <textarea
+        id="input"
+        placeholder="Escreva o que está no seu coração agora..."
+      ></textarea>
+      <button class="btn-main" id="btnGerar" onclick="gerarResposta()">
+        Sintonizar Resposta
+      </button>
 
       <div id="resultado"></div>
 
@@ -220,28 +237,144 @@
     </div>
 
     <div id="paymentModal" class="modal-overlay">
-      <div class="modal-content">
-        <button style="position:absolute; top:20px; right:20px; border:none; background:none; cursor:pointer; color:#ccc;" onclick="fecharModal()">✕</button>
-        <div style="font-size: 30px; margin-bottom: 15px; color: var(--accent)">✦</div>
-        <h2 style="font-size: 19px; font-family: 'Lora', serif; font-style: italic; margin-bottom: 10px;">Sua Jornada Merece Clareza</h2>
-        <p style="font-size: 14px; color: #5a6c7d; margin-bottom: 25px; line-height: 1.6;">
-          A parte final contém o <b>direcionamento exato</b> para você destravar essa situação.
-        </p>
-        <div style="background: rgba(212, 175, 55, 0.05); padding: 15px; border-radius: 15px; margin-bottom: 25px;">
-          <span style="font-size: 28px; font-weight: 800; color: var(--text-dark)">R$ 4,90</span>
+      <div class="modal-content" style="padding: 40px 25px">
+        <button
+          style="
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #a0aec0;
+            font-size: 18px;
+            padding: 5px;
+          "
+          onclick="fecharModal()"
+        >
+          ✕
+        </button>
+
+        <div style="font-size: 36px; margin-bottom: 15px; color: var(--accent)">
+          🕊️
         </div>
-        <button id="btnCheckoutModal" class="btn-main" onclick="iniciarPagamentoMercadoPago()">DESBLOQUEAR AGORA</button>
+
+        <h2
+          style="
+            font-size: 22px;
+            font-family: &quot;Lora&quot;, serif;
+            font-style: italic;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+          "
+        >
+          A Corrente da Gratidão
+        </h2>
+
+        <p
+          style="
+            font-size: 15px;
+            color: #5a6c7d;
+            margin-bottom: 15px;
+            line-height: 1.6;
+          "
+        >
+          Para que este canal se mantenha no ar e continue levando luz e
+          direcionamento a quem precisa, dependemos da colaboração de pessoas
+          como você.
+        </p>
+
+        <p
+          style="
+            font-size: 15px;
+            color: #5a6c7d;
+            margin-bottom: 25px;
+            line-height: 1.6;
+          "
+        >
+          Ao fazer uma <b>pequena contribuição simbólica</b> na próxima etapa,
+          você nos ajuda a manter este propósito vivo. Em profunda gratidão pela
+          sua energia, <b>o seu conselho final será revelado imediatamente</b>.
+        </p>
+
+        <div
+          style="
+            background: rgba(212, 175, 55, 0.08);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            margin-bottom: 30px;
+            text-align: left;
+          "
+        >
+          <p
+            style="
+              font-family: &quot;Lora&quot;, serif;
+              font-style: italic;
+              font-size: 14.5px;
+              color: #4a5568;
+              line-height: 1.5;
+              margin: 0;
+            "
+          >
+            "O generoso prosperará; quem dá alívio aos outros, alívio receberá."
+          </p>
+          <span
+            style="
+              display: block;
+              margin-top: 10px;
+              font-size: 12px;
+              font-weight: 700;
+              color: var(--accent);
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            "
+          >
+            — Provérbios 11:25
+          </span>
+        </div>
+
+        <button
+          id="btnCheckoutModal"
+          class="btn-main"
+          style="
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25);
+            font-size: 13.5px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 20px;
+          "
+          onclick="iniciarPagamentoMercadoPago()"
+        >
+          Fazer minha contribuição e revelar
+        </button>
+
+        <div
+          style="
+            font-size: 11px;
+            color: #a0aec0;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+          "
+        >
+          🔒 <span>Ambiente seguro e criptografado</span>
+        </div>
       </div>
     </div>
 
     <script>
-      const mp = new MercadoPago("APP_USR-43cbd05f-cdaa-462a-8209-0a3af4cbe41a");
+      const mp = new MercadoPago(
+        "APP_USR-43cbd05f-cdaa-462a-8209-0a3af4cbe41a",
+      );
       let sessionIdGlobal = "";
       let intervaloStatus = null;
 
       window.onload = function () {
-        iniciarContador(); // Inicia o contador de pessoas online
-        
+        iniciarContador();
+
         const textoSalvo = localStorage.getItem("conselho_pendente");
         const sessionSalva = localStorage.getItem("session_id_pendente");
 
@@ -264,7 +397,8 @@
 
       async function gerarResposta() {
         const input = document.getElementById("input");
-        if (input.value.length < 10) return alert("Por favor, conte um pouco mais.");
+        if (input.value.length < 10)
+          return alert("Por favor, conte um pouco mais.");
 
         const el = document.getElementById("resultado");
         const btn = document.getElementById("btnGerar");
@@ -272,25 +406,29 @@
         btn.disabled = true;
         btn.innerText = "Sintonizando...";
 
-
         sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
 
         try {
-          const resposta = await fetch("https://backfind.vercel.app/api/responder", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mensagem: input.value, sessionId: sessionIdGlobal }),
-          });
+          const resposta = await fetch(
+            "https://backfind.vercel.app/api/responder",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                mensagem: input.value,
+                sessionId: sessionIdGlobal,
+              }),
+            },
+          );
 
           const data = await resposta.json();
-          
+
           localStorage.setItem("conselho_pendente", data.texto);
           localStorage.setItem("session_id_pendente", sessionIdGlobal);
 
           btn.style.display = "none";
           input.style.display = "none";
           montarCaixaDeRevelacao(data.texto);
-          
         } catch (err) {
           alert("A conexão falhou. Tente novamente.");
           btn.disabled = false;
@@ -305,9 +443,8 @@
             <span class="text-visible">${textoVisivel} </span>
             <div class="blur-wrapper">
               <button id="btnReveal" onclick="abrirModalVenda()">✨ REVELAR O CONSELHO FINAL</button>
-              <p id="statusCheck" style="font-size:11px; color:gray; display:none; margin-top: 85px;">Aguardando confirmação do pagamento...</p>
+              <p id="statusCheck" style="font-size:11px; color:gray; display:none; margin-top: 85px;">Aguardando confirmação...</p>
               <span id="targetBlur" class="blur-text">
-                Esta é a parte final do seu conselho espiritual e prático. Aqui reside o segredo para a mudança que você busca...
                 Esta é a parte final do seu conselho espiritual e prático. Aqui reside o segredo para a mudança que você busca...
               </span>
             </div>
@@ -315,30 +452,74 @@
         `;
       }
 
-      function abrirModalVenda() { document.getElementById("paymentModal").style.display = "flex"; }
-      function fecharModal() { document.getElementById("paymentModal").style.display = "none"; }
+      function abrirModalVenda() {
+        const modal = document.getElementById("paymentModal");
+        if (modal) modal.style.display = "flex";
+      }
+
+      function fecharModal() {
+        const modal = document.getElementById("paymentModal");
+        if (modal) modal.style.display = "none";
+        resetarBotaoPagamento(); // Garante que o botão resete ao fechar
+      }
+
+      // FUNÇÃO PARA DESTRAVAR O BOTÃO
+      function resetarBotaoPagamento() {
+        const btn = document.getElementById("btnCheckoutModal");
+        if (btn) {
+          btn.innerText = "FAZER MINHA CONTRIBUIÇÃO E REVELAR";
+          btn.disabled = false;
+          btn.style.opacity = "1";
+        }
+        const retryMsg = document.getElementById("retryLink");
+        if (retryMsg) retryMsg.remove();
+      }
 
       async function iniciarPagamentoMercadoPago() {
         const btn = document.getElementById("btnCheckoutModal");
-        btn.innerText = "Gerando Pix...";
+        if (btn.disabled) return;
+
+        btn.innerText = "Gerando Ato de Fé...";
         btn.disabled = true;
+        btn.style.opacity = "0.7";
 
         try {
-          const response = await fetch("https://backfind.vercel.app/api/pagamento", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sessionId: sessionIdGlobal }),
-          });
+          const response = await fetch(
+            "https://backfind.vercel.app/api/pagamento",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ sessionId: sessionIdGlobal }),
+            },
+          );
 
           const data = await response.json();
           if (data.id) {
             mp.checkout({ preference: { id: data.id }, autoOpen: true });
-            btn.innerText = "AGUARDANDO PAGAMENTO...";
+            btn.innerText = "AGUARDANDO CONTRIBUIÇÃO...";
+
+            // Adiciona link de "Tentar Novamente" caso o popup seja bloqueado ou fechado
+            if (!document.getElementById("retryLink")) {
+              const retryHtml = `
+                    <div id="retryLink" style="margin-top: 15px; font-size: 12px;">
+                        <p style="color: #a0aec0; margin-bottom: 5px;">A tela de contribuição não abriu?</p>
+                        <a href="javascript:void(0)" onclick="resetarBotaoPagamento()" style="color: var(--accent); text-decoration: underline; font-weight: bold; cursor: pointer;">
+                            Clique aqui para tentar novamente
+                        </a>
+                    </div>
+                `;
+              btn.insertAdjacentHTML("afterend", retryHtml);
+            }
+
             verificarStatus();
+          } else {
+            throw new Error("Erro no ID");
           }
         } catch (err) {
-          alert("Erro ao gerar pagamento.");
-          btn.disabled = false;
+          alert(
+            "Houve uma pequena oscilação. Por favor, tente clicar novamente.",
+          );
+          resetarBotaoPagamento();
         }
       }
 
@@ -349,14 +530,18 @@
 
         intervaloStatus = setInterval(async () => {
           try {
-            const res = await fetch(`https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`);
+            const res = await fetch(
+              `https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`,
+            );
             const data = await res.json();
 
             if (data.pago === true) {
               clearInterval(intervaloStatus);
               liberarConteudo(data.textoRevelado);
             }
-          } catch (e) { console.log("Checando..."); }
+          } catch (e) {
+            console.log("Checando...");
+          }
         }, 5000);
       }
 
@@ -371,6 +556,8 @@
         if (blurArea) {
           blurArea.innerText = textoReal;
           blurArea.classList.add("no-blur");
+          blurArea.style.filter = "none";
+          blurArea.style.opacity = "1";
         }
         localStorage.removeItem("conselho_pendente");
         localStorage.removeItem("session_id_pendente");
