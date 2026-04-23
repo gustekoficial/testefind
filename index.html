@@ -592,6 +592,8 @@
       }
 
       function abrirModalVenda() {
+        // Avisa o Facebook que alguém teve interesse real em comprar (Iniciou Checkout)
+        fbq("track", "InitiateCheckout");
         const modal = document.getElementById("paymentModal");
         if (modal) modal.style.display = "flex";
       }
