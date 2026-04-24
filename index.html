@@ -15,7 +15,6 @@
         y.parentNode.insertBefore(t, y);
       })(window, document, "clarity", "script", "wfwlz7qo7g");
     </script>
-    <!-- Meta Pixel Code -->
     <script>
       !(function (f, b, e, v, n, t, s) {
         if (f.fbq) return;
@@ -50,7 +49,6 @@
         style="display: none"
         src="https://www.facebook.com/tr?id=930332476562735&ev=PageView&noscript=1"
     /></noscript>
-    <!-- End Meta Pixel Code -->
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -171,7 +169,7 @@
         flex-direction: column;
         align-items: center;
         margin-top: 15px;
-        min-height: 120px; /* Garante espaço para o botão */
+        min-height: 120px;
       }
 
       .blur-text {
@@ -187,49 +185,30 @@
         );
       }
 
-      /* CORREÇÃO: O botão agora inicia visível quando injetado */
       #btnReveal {
         position: absolute;
-        top: 35px; /* Ajuste sutil para alinhar com o desfoque */
+        top: 35px;
         z-index: 100;
-
-        /* Cores Neutras e Premium */
-        background: rgba(
-          255,
-          255,
-          255,
-          0.85
-        ); /* Fundo branco Translúcido e Clean */
-        color: #8e731d; /* Dourado Orgânico Suave para o texto */
-
-        /* Forma e Borda */
+        background: rgba(255, 255, 255, 0.85);
+        color: #8e731d;
         padding: 16px 36px;
         border-radius: 50px;
-        border: 1px solid rgba(212, 175, 55, 0.3); /* Borda dourada Nobre quase invisível */
-
-        /* Tipografia Elegante */
+        border: 1px solid rgba(212, 175, 55, 0.3);
         font-family: "Lora", serif;
         font-weight: 500;
         font-style: italic;
         font-size: 13px;
         letter-spacing: 0.8px;
-        text-transform: uppercase; /* Dá um ar mais sério e 'revelação' */
-
-        /* Efeitos de Fundo e Sombra */
+        text-transform: uppercase;
         cursor: pointer;
-        backdrop-filter: blur(8px); /* Desfoque de vidro atrás do botão */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Sombra suave para flutuar */
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         transition: all 0.5s ease;
-
-        /* Esconder o brilho que corre para fora do botão */
         overflow: hidden;
-
-        /* Animações combinadas */
         animation: spiritual-pulse 3s infinite ease-in-out;
         display: block;
       }
 
-      /* O Segredo do Brilho Dourado Correndo */
       #btnReveal::after {
         content: "";
         position: absolute;
@@ -237,27 +216,21 @@
         left: -210%;
         width: 200%;
         height: 400%;
-
-        /* Gradiente dourado intenso mas limpo */
         background: linear-gradient(
           135deg,
           rgba(212, 175, 55, 0) 0%,
           rgba(212, 175, 55, 0.05) 40%,
-          /* Início suave */ rgba(212, 175, 55, 0.5) 50%,
-          /* O pico dourado */ rgba(212, 175, 55, 0.05) 60%,
-          /* Final suave */ rgba(212, 175, 55, 0) 100%
+          rgba(212, 175, 55, 0.5) 50%,
+          rgba(212, 175, 55, 0.05) 60%,
+          rgba(212, 175, 55, 0) 100%
         );
-
         transform: rotate(35deg);
-
-        /* Animação que faz o brilho passar pelo botão periodicamente */
         animation: gold-shine 4s infinite ease-in-out;
       }
 
-      /* Efeito de Clique Suave */
       #btnReveal:hover {
         background: rgba(255, 255, 255, 1);
-        letter-spacing: 1.2px; /* Expansão mística */
+        letter-spacing: 1.2px;
         border-color: rgba(212, 175, 55, 0.6);
         transform: scale(1.02);
       }
@@ -267,9 +240,6 @@
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
       }
 
-      /* --- Definição das Animações --- */
-
-      /* Animação do Brilho Correndo (Gold Shine) */
       @keyframes gold-shine {
         0% {
           left: -210%;
@@ -278,14 +248,13 @@
         30% {
           left: 120%;
           top: 120%;
-        } /* Passa rápido pelo botão */
+        }
         100% {
           left: 120%;
           top: 120%;
-        } /* Pausa longa para não cansar */
+        }
       }
 
-      /* Animação de Aura Pulso que parece uma Aura */
       @keyframes spiritual-pulse {
         0%,
         100% {
@@ -293,7 +262,7 @@
         }
         50% {
           box-shadow: 0 8px 25px 2px rgba(212, 175, 55, 0.15);
-        } /* Pulso dourado suave */
+        }
       }
 
       .no-blur {
@@ -351,10 +320,104 @@
           opacity: 0.5;
         }
       }
+
+      /* === NOVO: ESTILOS DO ALERTA DE SEGURANÇA === */
+      .privacy-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(4px);
+        z-index: 2000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.5s ease,
+          visibility 0.5s ease;
+      }
+
+      .privacy-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .privacy-content {
+        background: #ffffff;
+        padding: 35px 25px 25px 25px;
+        border-radius: 24px;
+        width: 85%;
+        max-width: 320px;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(212, 175, 55, 0.15);
+        transform: translateY(20px) scale(0.95);
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .privacy-overlay.show .privacy-content {
+        transform: translateY(0) scale(1);
+      }
+
+      .privacy-icon {
+        font-size: 24px;
+        margin-bottom: 12px;
+        color: var(--accent);
+      }
+
+      .privacy-content h3 {
+        font-family: "Lora", serif;
+        font-size: 18px;
+        color: var(--text-dark);
+        margin: 0 0 10px 0;
+      }
+
+      .privacy-content p {
+        font-size: 14px;
+        color: var(--text-light);
+        line-height: 1.6;
+        margin: 0 0 25px 0;
+      }
+
+      .privacy-btn {
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid var(--accent);
+        padding: 14px 20px;
+        border-radius: 50px;
+        font-family: "Inter", sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .privacy-btn:hover {
+        background: rgba(212, 175, 55, 0.1);
+      }
+      /* =========================================== */
     </style>
   </head>
 
   <body>
+    <div id="privacyAlert" class="privacy-overlay">
+      <div class="privacy-content">
+        <div class="privacy-icon">🔒</div>
+        <h3>Segurança e Privacidade</h3>
+        <p>
+          Sua mensagem não é gravada. Assim que você gerar o conselho final e
+          receber sua resposta, sua mensagem irá desaparecer para sempre.
+        </p>
+        <button class="privacy-btn" onclick="fecharAlertaPrivacidade()">
+          Somente eu e Deus
+        </button>
+      </div>
+    </div>
     <div class="container">
       <h1>Encontre sua resposta</h1>
       <div class="sub">Algo precisa ser revelado para você hoje...</div>
@@ -523,8 +586,29 @@
           document.getElementById("input").style.display = "none";
           montarCaixaDeRevelacao(textoSalvo);
           verificarStatus();
+        } else {
+          // Só exibe o alerta se o usuário não estiver voltando de um pagamento
+          mostrarAlertaPrivacidade();
         }
       };
+
+      // === NOVO: FUNÇÕES DO ALERTA DE SEGURANÇA ===
+      function mostrarAlertaPrivacidade() {
+        // Verifica se a pessoa já viu o alerta nesta sessão para não incomodar ao atualizar a página
+        if (!sessionStorage.getItem("alertaPrivacidadeVisto")) {
+          setTimeout(() => {
+            document.getElementById("privacyAlert").classList.add("show");
+          }, 800); // Aparece suavemente 0.8s após a página carregar
+        }
+      }
+
+      function fecharAlertaPrivacidade() {
+        document.getElementById("privacyAlert").classList.remove("show");
+        sessionStorage.setItem("alertaPrivacidadeVisto", "true");
+        // Foca automaticamente no campo de texto após fechar para facilitar a vida do usuário
+        document.getElementById("input").focus();
+      }
+      // ============================================
 
       function iniciarContador() {
         const txt = document.getElementById("txt-contador");
@@ -592,7 +676,6 @@
       }
 
       function abrirModalVenda() {
-        // Avisa o Facebook que alguém teve interesse real em comprar (Iniciou Checkout)
         fbq("track", "InitiateCheckout");
         const modal = document.getElementById("paymentModal");
         if (modal) modal.style.display = "flex";
@@ -601,10 +684,9 @@
       function fecharModal() {
         const modal = document.getElementById("paymentModal");
         if (modal) modal.style.display = "none";
-        resetarBotaoPagamento(); // Garante que o botão resete ao fechar
+        resetarBotaoPagamento();
       }
 
-      // FUNÇÃO PARA DESTRAVAR O BOTÃO
       function resetarBotaoPagamento() {
         const btn = document.getElementById("btnCheckoutModal");
         if (btn) {
@@ -639,7 +721,6 @@
             mp.checkout({ preference: { id: data.id }, autoOpen: true });
             btn.innerText = "AGUARDANDO CONTRIBUIÇÃO...";
 
-            // Adiciona link de "Tentar Novamente" caso o popup seja bloqueado ou fechado
             if (!document.getElementById("retryLink")) {
               const retryHtml = `
                     <div id="retryLink" style="margin-top: 15px; font-size: 12px;">
