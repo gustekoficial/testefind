@@ -658,17 +658,6 @@
       let intervaloStatus = null;
 
       window.onload = function () {
-        // Detecta quando o usuário volta para a página (pelo botão voltar do celular)
-        window.addEventListener("pageshow", function (event) {
-          // Se ele voltou, resetamos o botão de pagamento para ele poder tentar de novo
-          resetarBotaoPagamento();
-
-          // Esconde o modal de carregamento se estiver aberto sem necessidade
-          const btn = document.getElementById("btnCheckoutModal");
-          if (btn && btn.innerText === "AGUARDANDO CONTRIBUIÇÃO...") {
-            resetarBotaoPagamento();
-          }
-        });
         iniciarContador();
 
         const textoSalvo = localStorage.getItem("conselho_pendente");
@@ -823,24 +812,12 @@
       function resetarBotaoPagamento() {
         const btn = document.getElementById("btnCheckoutModal");
         if (btn) {
-          btn.innerText = "Fazer minha contribuição e revelar";
+          btn.innerText = "FAZER MINHA CONTRIBUIÇÃO E REVELAR";
           btn.disabled = false;
           btn.style.opacity = "1";
         }
-
-        // Remove a mensagem de "tentar novamente" se ela existir
         const retryMsg = document.getElementById("retryLink");
         if (retryMsg) retryMsg.remove();
-
-        // Oculta o texto de status de verificação
-        const statusTxt = document.getElementById("statusCheck");
-        if (statusTxt) statusTxt.style.display = "none";
-
-        // Para o intervalo de verificação para não sobrecarregar o sistema
-        if (intervaloStatus) {
-          clearInterval(intervaloStatus);
-          intervaloStatus = null;
-        }
       }
 
       async function iniciarPagamentoMercadoPago() {
@@ -863,7 +840,7 @@
 
           const data = await response.json();
           if (data.id) {
-            mp.checkout({ preference: { id: data.id }, autoOpen: true });
+            window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=${data.id}`;
             btn.innerText = "AGUARDANDO CONTRIBUIÇÃO...";
 
             if (!document.getElementById("retryLink")) {
