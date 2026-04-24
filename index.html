@@ -663,11 +663,30 @@
         const textoSalvo = localStorage.getItem("conselho_pendente");
         const sessionSalva = localStorage.getItem("session_id_pendente");
 
+        // NOVO: Lê os parâmetros que o Mercado Pago joga na URL quando o usuário volta
+        const urlParams = new URLSearchParams(window.location.search);
+        const pagamentoAprovadoNaUrl =
+          urlParams.get("collection_status") === "approved" ||
+          urlParams.get("status") === "approved";
+
         if (textoSalvo && sessionSalva && sessionSalva !== "undefined") {
           sessionIdGlobal = sessionSalva;
           document.getElementById("btnGerar").style.display = "none";
           document.getElementById("input").style.display = "none";
           montarCaixaDeRevelacao(textoSalvo);
+
+          // NOVO: Se ele acabou de voltar do MP aprovado, já altera o visual para acalmar o usuário
+          if (pagamentoAprovadoNaUrl) {
+            const btnReveal = document.getElementById("btnReveal");
+            if (btnReveal) {
+              btnReveal.innerText = "LIBERANDO SUA RESPOSTA...";
+              btnReveal.style.pointerEvents = "none"; // Impede novos cliques
+              btnReveal.style.animation = "none"; // Para a animação de pulsar
+              btnReveal.style.background = "#f7f7f7";
+              btnReveal.style.color = "#a0aec0";
+            }
+          }
+
           verificarStatus();
         } else {
           mostrarAlertaPrivacidade();
@@ -703,6 +722,12 @@
       document.addEventListener("visibilitychange", function () {
         if (document.visibilityState === "visible") {
           setTimeout(desbloquearTelaTotalmente, 600);
+
+          // NOVO: Se existe uma sessão pendente e o botão ainda está na tela,
+          // força a verificação a acordar (caso o celular tenha pausado o JS)
+          if (sessionIdGlobal && document.getElementById("btnReveal")) {
+            verificarStatus();
+          }
         }
       });
       // =============================================================
@@ -928,12 +953,24 @@
         const blurArea = document.getElementById("targetBlur");
         if (blurArea) {
           blurArea.innerText = textoReal;
+          blurArea.classList.remove("blur-text"); // Remove a classe antiga
           blurArea.classList.add("no-blur");
           blurArea.style.filter = "none";
           blurArea.style.opacity = "1";
+          // Força a remoção da máscara no iOS/Safari
+          blurArea.style.maskImage = "none";
+          blurArea.style.webkitMaskImage = "none";
         }
+
         localStorage.removeItem("conselho_pendente");
         localStorage.removeItem("session_id_pendente");
+
+        // NOVO: Limpa a URL do navegador para remover os códigos feios do Mercado Pago
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname,
+        );
       }
     </script>
   </body>
