@@ -674,6 +674,39 @@
         }
       };
 
+      // === CORREÇÃO: FUNÇÃO NUCLEAR PARA DESTRAVAR TUDO AO VOLTAR ===
+      function desbloquearTelaTotalmente() {
+        // Fecha os Modais
+        const modalPagamento = document.getElementById("paymentModal");
+        if (modalPagamento) modalPagamento.style.display = "none";
+
+        const modalShare = document.getElementById("shareModal");
+        if (modalShare) modalShare.style.display = "none";
+
+        // Remove frames do Mercado Pago que podem ter ficado travados
+        const elementosMP = document.querySelectorAll(
+          'iframe[src*="mercadopago"], .mercadopago-checkout-iframe, .mp-checkout-iframe, .mercadopago-checkout-overlay, .mp-checkout-overlay',
+        );
+        elementosMP.forEach((el) => el.remove());
+
+        // Devolve o scroll e reseta o botão
+        document.body.style.overflow = "auto";
+        document.body.style.position = "static";
+        resetarBotaoPagamento();
+      }
+
+      // Vigilantes de retorno à página
+      window.addEventListener("pageshow", function (event) {
+        desbloquearTelaTotalmente();
+      });
+
+      document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible") {
+          setTimeout(desbloquearTelaTotalmente, 600);
+        }
+      });
+      // =============================================================
+
       function mostrarAlertaPrivacidade() {
         if (!sessionStorage.getItem("alertaPrivacidadeVisto")) {
           setTimeout(() => {
@@ -750,14 +783,10 @@
         `;
       }
 
-      // === NOVO: LÓGICA DE COMPARTILHAR ANTES DE PAGAR ===
       function verificarFluxoDeRevelacao() {
-        // Verifica se a pessoa já compartilhou antes
         if (!localStorage.getItem("ja_compartilhou")) {
-          // Se não compartilhou, abre a Corrente do Bem
           document.getElementById("shareModal").style.display = "flex";
         } else {
-          // Se já compartilhou, vai direto para a Corrente da Gratidão (pagamento)
           abrirModalVenda();
         }
       }
@@ -767,35 +796,28 @@
       }
 
       function compartilharNoWhatsApp() {
-        // Mensagem que será enviada. Altere se desejar!
         const mensagem =
           "Recebi uma mensagem que tocou meu coração hoje. Se você precisa de uma direção, veja qual é a resposta que está guardada para você: https://encontresuaresposta.com.br";
         const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
 
-        // Abre o WhatsApp em uma nova aba
         window.open(url, "_blank");
-
-        // Registra no navegador que o usuário já cumpriu essa etapa
         localStorage.setItem("ja_compartilhou", "true");
 
-        // O SEGREDO: Fica observando o usuário. Quando ele voltar para a aba do seu site:
         window.addEventListener(
           "focus",
           function aoVoltarProSite() {
-            fecharShareModal(); // Fecha o aviso do WhatsApp
-            abrirModalVenda(); // Abre imediatamente a tela de pagamento
-            window.removeEventListener("focus", aoVoltarProSite); // Remove o observador
+            fecharShareModal();
+            abrirModalVenda();
+            window.removeEventListener("focus", aoVoltarProSite);
           },
           { once: true },
         );
 
-        // Fallback: se o celular da pessoa for mais antigo e não detectar a volta, abre após 6 segundos
         setTimeout(() => {
           fecharShareModal();
           abrirModalVenda();
         }, 6000);
       }
-      // ==================================================
 
       function abrirModalVenda() {
         fbq("track", "InitiateCheckout");
@@ -818,6 +840,14 @@
         }
         const retryMsg = document.getElementById("retryLink");
         if (retryMsg) retryMsg.remove();
+
+        const statusTxt = document.getElementById("statusCheck");
+        if (statusTxt) statusTxt.style.display = "none";
+
+        if (intervaloStatus) {
+          clearInterval(intervaloStatus);
+          intervaloStatus = null;
+        }
       }
 
       async function iniciarPagamentoMercadoPago() {
