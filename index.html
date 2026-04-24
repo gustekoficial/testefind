@@ -913,21 +913,17 @@
 
           const data = await response.json();
           if (data.id) {
-            window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=${data.id}`;
-            btn.innerText = "AGUARDANDO CONTRIBUIÇÃO...";
+      // === A CORREÇÃO ESTÁ AQUI ===
+      // Em vez de .href, usamos .assign que é mais "suave"
+      // E garantimos que o link não tenha rastreadores extras
+      const urlLimpa = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=${data.id}`;
+      
+      btn.innerText = "REDIRECIONANDO...";
 
-            if (!document.getElementById("retryLink")) {
-              const retryHtml = `
-                    <div id="retryLink" style="margin-top: 15px; font-size: 12px;">
-                        <p style="color: #a0aec0; margin-bottom: 5px;">A tela de contribuição não abriu?</p>
-                        <a href="javascript:void(0)" onclick="resetarBotaoPagamento()" style="color: var(--accent); text-decoration: underline; font-weight: bold; cursor: pointer;">
-                            Clique aqui para tentar novamente
-                        </a>
-                    </div>
-                `;
-              btn.insertAdjacentHTML("afterend", retryHtml);
-            }
-            verificarStatus();
+      // Pequeno atraso para o navegador validar a intenção do usuário
+      setTimeout(() => {
+        window.location.assign(urlLimpa);
+      }, 100);
           } else {
             throw new Error("Erro no ID");
           }
