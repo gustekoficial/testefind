@@ -805,7 +805,7 @@
         const box = document.getElementById("boxPagamento");
         if (btn.disabled) return;
 
-        btn.innerText = "GERANDO CHAVE PIX...";
+        btn.innerText = "Gerando Ato de Fé...";
         btn.disabled = true;
         btn.style.opacity = "0.7";
 
@@ -837,11 +837,11 @@
               </div>
 
               <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#48bb78; color:white; border:none; padding:16px; border-radius:50px; margin-top:15px; font-weight:bold; cursor:pointer; font-size: 14px; text-transform: uppercase; transition: 0.3s;">
-                COPIAR CÓDIGO PIX
+                COPIAR CÓDIGO
               </button>
 
               <p style="font-size: 12px; color: #718096; margin-top: 20px;">
-                ✓ Assim que o pagamento for confirmado, sua resposta será liberada automaticamente na tela de trás.
+                ✓ Assim que a doação for confirmada, sua resposta será liberada automaticamente na tela de trás.
               </p>
             `;
 
@@ -872,7 +872,7 @@
         btn.style.background = "#2f855a";
 
         setTimeout(() => {
-          btn.innerText = "COPIAR CÓDIGO PIX";
+          btn.innerText = "COPIAR CÓDIGO AGORA";
           btn.style.background = "#48bb78";
         }, 3000);
       }
