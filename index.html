@@ -746,12 +746,24 @@
       }
 
       function verificarFluxoDeRevelacao() {
-        if (!localStorage.getItem("ja_compartilhou")) {
-          document.getElementById("shareModal").style.display = "flex";
-        } else {
-          abrirModalVenda();
-        }
-      }
+    const btnReveal = document.getElementById("btnReveal");
+    
+    if (!localStorage.getItem("ja_compartilhou")) {
+        document.getElementById("shareModal").style.display = "flex";
+        return;
+    } 
+    
+    // Abre o modal de pagamento
+    abrirModalVenda();
+    
+    // Muda o botão APENAS visualmente para indicar que está em processo
+    if (btnReveal) {
+        btnReveal.innerText = "ABRINDO OPÇÕES DE PAGAMENTO...";
+        btnReveal.style.pointerEvents = "none";        // desabilita temporariamente
+        btnReveal.style.background = "#f7f7f7";
+        btnReveal.style.color = "#a0aec0";
+    }
+}
 
       function fecharShareModal() {
         document.getElementById("shareModal").style.display = "none";
@@ -788,16 +800,23 @@
       }
 
       function fecharModal() {
-        const modal = document.getElementById("paymentModal");
-        if (modal) modal.style.display = "none";
-        
-        const btn = document.getElementById("btnCheckoutModal");
-        if (btn) {
-          btn.innerText = "FAZER MINHA CONTRIBUIÇÃO E REVELAR";
-          btn.disabled = false;
-          btn.style.opacity = "1";
-        }
-      }
+    const modal = document.getElementById("paymentModal");
+    if (modal) modal.style.display = "none";
+    
+    // RESTAURA o botão de revelar para o estado original
+    restaurarBotaoRevelar();
+}
+
+function restaurarBotaoRevelar() {
+    const btnReveal = document.getElementById("btnReveal");
+    if (!btnReveal) return;
+    
+    btnReveal.innerText = "✨ REVELAR O CONSELHO FINAL";
+    btnReveal.style.pointerEvents = "auto";
+    btnReveal.style.background = "rgba(255, 255, 255, 0.85)";
+    btnReveal.style.color = "#8e731d";
+    btnReveal.style.animation = "spiritual-pulse 3s infinite ease-in-out";
+}
 
       // === NOVA FUNÇÃO: INICIAR PAGAMENTO PIX DIRETO ===
       async function iniciarPagamentoMercadoPago() {
