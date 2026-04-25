@@ -419,6 +419,40 @@
         letter-spacing: 0.5px;
       }
 
+
+      .instrucoes-pix {
+  background: #fff9eb;
+  border: 1px solid #ffeeba;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 15px;
+  text-align: left;
+  display: none; /* Começa escondida */
+  animation: fadeIn 0.5s ease;
+}
+
+.instrucoes-pix h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #856404;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.instrucoes-pix p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #665214;
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+      
+
       .btn-whatsapp:hover {
         background: #20bd5a;
         transform: translateY(-2px);
@@ -839,7 +873,15 @@
               <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#48bb78; color:white; border:none; padding:16px; border-radius:50px; margin-top:15px; font-weight:bold; cursor:pointer; font-size: 14px; text-transform: uppercase; transition: 0.3s;">
                 COPIAR CÓDIGO
               </button>
-
+              
+              <div id="instrucoesPix" class="instrucoes-pix">
+              <h4><span style="font-size:18px;">💡</span> Como pagar agora:</h4>
+              <p><strong>1.</strong> Abra o aplicativo do seu Banco.</p>
+              <p><strong>2.</strong> Escolha a opção <strong>Pix</strong>.</p>
+              <p><strong>3.</strong> Procure por <strong>"Pix Copia e Cola"</strong>.</p>
+              <p><strong>4.</strong> Cole o código que você copiou e confirme o pagamento.</p>
+              </div>
+              
               <p style="font-size: 12px; color: #718096; margin-top: 20px;">
                 ✓ Assim que a doação for confirmada, sua resposta será liberada automaticamente na tela de trás.
               </p>
@@ -870,6 +912,13 @@
         const btn = document.getElementById("btnCopiar");
         btn.innerText = "✓ CÓDIGO COPIADO!";
         btn.style.background = "#2f855a";
+
+        if (instrucoes) {
+    instrucoes.style.display = "block";
+  }
+
+  // Opcional: Rolar o modal um pouco para baixo para mostrar as instruções no celular
+  document.getElementById("boxPagamento").scrollTop = 200;
 
         setTimeout(() => {
           btn.innerText = "COPIAR CÓDIGO AGORA";
