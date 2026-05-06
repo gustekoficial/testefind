@@ -856,9 +856,14 @@
       }
 
       function compartilharNoWhatsApp() {
-        const mensagem =
-          "Recebi uma mensagem que tocou meu coração hoje. Se você precisa de uma direção, veja qual é a resposta que está guardada para você: https://encontresuaresposta.com.br";
-        const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+       const mensagem = 
+`Algo tocou meu coração hoje e lembrei de você. ✨
+
+Se você também está buscando uma direção ou uma resposta para sua vida, veja o que está guardado pra você:
+
+👉 https://encontresuaresposta.com.br`;
+
+const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
 
         window.open(url, "_blank");
         localStorage.setItem("ja_compartilhou", "true");
