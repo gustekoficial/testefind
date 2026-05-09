@@ -584,6 +584,16 @@ textarea::placeholder {
   </head>
 
   <body>
+
+    <!-- Barra de Urgência (Fica escondida por padrão) -->
+<div id="barraUrgencia" style="display: none; background: #fff5f5; border-bottom: 1px solid #feb2b2; padding: 10px; text-align: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <p style="margin: 0; font-size: 13px; color: #c53030; font-weight: 600; font-family: 'Lora', serif;">
+        ✨ Sua resposta sagrada irá sumir para sempre em: <span id="timerRegressivo" style="font-family: monospace; background: #c53030; color: white; padding: 2px 6px; border-radius: 4px; margin-left: 5px;">00:00</span>
+    </p>
+</div>
+
+
+    
     <div id="pixInstructionsAlert" class="pix-instructions-overlay">
       <div class="pix-instructions-content">
         <div style="font-size: 35px; margin-bottom: 10px">✅</div>
@@ -831,25 +841,36 @@ textarea::placeholder {
       let intervaloStatus = null;
 
       window.onload = function () {
-    iniciarContador();
+    iniciarContador(); // Seu contador de pessoas online
     carregarDepoimentosDoDia();
     animarPlaceholder();
 
     const textoSalvo = localStorage.getItem("conselho_pendente");
     const sessionSalva = localStorage.getItem("session_id_pendente");
+    const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
 
-    // Se existir algo salvo mas o session_id for inválido ou "undefined", limpamos na hora
-    if (sessionSalva === "undefined" || sessionSalva === null || sessionSalva === "") {
-        localStorage.removeItem("conselho_pendente");
-        localStorage.removeItem("session_id_pendente");
-        mostrarAlertaPrivacidade();
-    } 
-    else if (textoSalvo && sessionSalva) {
-        sessionIdGlobal = sessionSalva;
-        document.getElementById("btnGerar").style.display = "none";
-        document.getElementById("input").style.display = "none";
-        montarCaixaDeRevelacao(textoSalvo);
-        verificarStatus();
+    if (timestampSintonizacao && textoSalvo) {
+        const agora = new Date().getTime();
+        const trintaMinutos = 30 * 60 * 1000; 
+        const tempoPassado = agora - parseInt(timestampSintonizacao);
+
+        if (tempoPassado > trintaMinutos) {
+            // Limpeza total após 30 min
+            localStorage.clear();
+            location.reload();
+            return;
+        } else {
+            // Se ainda está no prazo, mostra a barra e inicia o timer
+            document.getElementById("barraUrgencia").style.display = "block";
+            iniciarTimerRegressivo(trintaMinutos - tempoPassado);
+            
+            // Carrega a tela de pagamento
+            sessionIdGlobal = sessionSalva;
+            document.getElementById("btnGerar").style.display = "none";
+            document.getElementById("input").style.display = "none";
+            montarCaixaDeRevelacao(textoSalvo);
+            verificarStatus();
+        }
     } else {
         mostrarAlertaPrivacidade();
     }
@@ -927,6 +948,30 @@ textarea::placeholder {
             }
         }, 500); 
       }
+
+
+      function iniciarTimerRegressivo(tempoRestanteMS) {
+    const display = document.getElementById("timerRegressivo");
+    
+    const intervalo = setInterval(() => {
+        const minutos = Math.floor((tempoRestanteMS % (1000 * 60 * 60)) / (1000 * 60));
+        const segundos = Math.floor((tempoRestanteMS % (1000 * 60)) / 1000);
+
+        display.innerText = 
+            (minutos < 10 ? "0" + minutos : minutos) + ":" + 
+            (segundos < 10 ? "0" + segundos : segundos);
+
+        tempoRestanteMS -= 1000;
+
+        if (tempoRestanteMS < 0) {
+            clearInterval(intervalo);
+            localStorage.clear();
+            location.reload();
+        }
+    }, 1000);
+}
+
+      
 
       function fecharAlertaPrivacidade() {
         document.getElementById("privacyAlert").classList.remove("show");
