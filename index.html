@@ -179,28 +179,34 @@ textarea::placeholder {
       .btn-main {
     background-color: #1a1a1a;
     color: white;
-    border-radius: 32px; /* Arredondamento igual ao do textarea para harmonia visual */
-    padding: 18px 0;    /* Altura confortável sem ser exagerada */
-    font-size: 16px;    /* Tamanho de leitura clara e elegante */
+    border-radius: 18px;
+    /* Reduzimos o padding vertical para o botão ficar mais "fino" */
+    padding: 14px 0;    
+    font-size: 15px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-top: 15px;
+    margin-top: 20px;
     
-    /* Alinhamento exato com o placeholder */
-    width: 80%;        
-    box-sizing: border-box; /* Garante que o padding não aumente o tamanho final */
+    /* Largura menor que o placeholder para dar leveza */
+    width: 85%;        
+    margin-left: auto;
+    margin-right: auto;
     
+    box-sizing: border-box;
     cursor: pointer;
     border: none;
     display: block;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    /* Uma leve transparência ajuda a não "gritar" tanto na tela */
+    opacity: 0.95;
 }
 
 .btn-main:hover {
     background-color: #000;
-    transform: translateY(-1px); /* Leve subida em vez de aumento de tamanho */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    opacity: 1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .btn-main:active {
