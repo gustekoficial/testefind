@@ -1074,46 +1074,43 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
 
           if (data.qr_code) {
            box.innerHTML = `
+  <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 18px; padding: 5px;" onclick="fecharModal()">✕</button>
+  
+  <div style="font-size: 36px; margin-bottom: 10px; color: var(--accent)">🕊️</div>
+  <h2 style="font-size: 20px; font-family: 'Lora', serif; font-style: italic; margin-bottom: 10px; color: var(--text-dark);">Sua Contribuição</h2>
+  <p style="font-size: 14px; color: #5a6c7d; margin-bottom: 15px;">Use o aplicativo do seu banco para ler o QR Code ou copie a chave PIX abaixo:</p>
 
-              <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 18px; padding: 5px;" onclick="fecharModal()">✕</button>
+  <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:180px; border-radius: 10px; margin: 0 auto 15px auto; display:block; border: 1px solid #e2e8f0;">
 
-              
+  <!-- Container do Código PIX Fixo -->
+  <div style="background: #f7fafc !important; padding: 10px !important; border-radius: 5px !important; border: 1px dashed #cbd5e0 !important; width: 100% !important; box-sizing: border-box !important;">
+    <textarea id="pixCode" readonly 
+      style="
+        width: 100% !important; 
+        border: none !important; 
+        background: transparent !important; 
+        font-size: 12px !important; 
+        height: 45px !important; 
+        resize: none !important; 
+        outline: none !important; 
+        text-align: center !important; 
+        color: #4a5568 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        line-height: 1.2 !important;
+        font-family: monospace !important;
+      ">${data.qr_code}</textarea>
+  </div>
 
-              <div style="font-size: 36px; margin-bottom: 10px; color: var(--accent)">🕊️</div>
+  <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#48bb78; color:white; border:none; padding:16px; border-radius:50px; margin-top:15px; font-weight:bold; cursor:pointer; font-size: 14px; text-transform: uppercase; transition: 0.3s;">
+    COPIAR CÓDIGO
+  </button>
 
-              <h2 style="font-size: 20px; font-family: 'Lora', serif; font-style: italic; margin-bottom: 10px; color: var(--text-dark);">Sua Contribuição</h2>
-
-              <p style="font-size: 14px; color: #5a6c7d; margin-bottom: 15px;">Use o aplicativo do seu banco para ler o QR Code ou copie a chave PIX abaixo:</p>
-
-
-
-              <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:180px; border-radius: 10px; margin: 0 auto 15px auto; display:block; border: 1px solid #e2e8f0;">
-
-
-
-              <div style="background: #f7fafc; padding: 10px; border-radius: 5px; border: 1px dashed #cbd5e0;">
-
-                <textarea id="pixCode" readonly style="width:100%; border:none; background:transparent; font-size:12px; height:45px; resize:none; outline:none; text-align:center;">${data.qr_code}</textarea>
-
-              </div>
-
-
-
-              <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#48bb78; color:white; border:none; padding:16px; border-radius:50px; margin-top:15px; font-weight:bold; cursor:pointer; font-size: 14px; text-transform: uppercase; transition: 0.3s;">
-
-                COPIAR CÓDIGO
-
-              </button>
-
-
-
-              <p style="font-size: 12px; color: #718096; margin-top: 20px;">
-
-                ✓ Assim que a doação for confirmada, sua resposta será liberada automaticamente na tela de trás.
-
-              </p>
-
-            `;
+  <p style="font-size: 12px; color: #718096; margin-top: 20px;">
+    ✓ Assim que a doação for confirmada, sua resposta será liberada automaticamente na tela de trás.
+  </p>
+`;
 
             verificarStatus();
           } else {
