@@ -841,7 +841,7 @@ textarea::placeholder {
       let intervaloStatus = null;
 
       window.onload = function () {
-    iniciarContador(); // Seu contador de pessoas online
+    iniciarContador();
     carregarDepoimentosDoDia();
     animarPlaceholder();
 
@@ -855,23 +855,30 @@ textarea::placeholder {
         const tempoPassado = agora - parseInt(timestampSintonizacao);
 
         if (tempoPassado > trintaMinutos) {
-            // Limpeza total após 30 min
+            // Tempo esgotou: Limpa e reseta
             localStorage.clear();
             location.reload();
-            return;
         } else {
-            // Se ainda está no prazo, mostra a barra e inicia o timer
+            // Tempo ainda disponível: Restaura a interface
             document.getElementById("barraUrgencia").style.display = "block";
-            iniciarTimerRegressivo(trintaMinutos - tempoPassado);
             
-            // Carrega a tela de pagamento
+            // Calcula quanto tempo ainda resta dos 30 minutos originais
+            const tempoRestante = trintaMinutos - tempoPassado;
+            iniciarTimerRegressivo(tempoRestante);
+            
             sessionIdGlobal = sessionSalva;
             document.getElementById("btnGerar").style.display = "none";
             document.getElementById("input").style.display = "none";
-            montarCaixaDeRevelacao(textoSalvo);
+            
+            // Verifica se o elemento 'resultado' existe antes de montar
+            const elResultado = document.getElementById("resultado");
+            if(elResultado) {
+                montarCaixaDeRevelacao(textoSalvo);
+            }
             verificarStatus();
         }
     } else {
+        // Se não tem nada salvo, fluxo normal de primeira visita
         mostrarAlertaPrivacidade();
     }
 };
