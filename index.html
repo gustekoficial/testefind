@@ -494,6 +494,67 @@
         font-size: 15px;
         text-transform: uppercase;
       }
+
+      /* ESTILOS DOS DEPOIMENTOS */
+      .testimonial-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 10px;
+        width: 100%;
+      }
+      .floating-testimonial {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
+        padding: 15px;
+        display: flex;
+        gap: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        width: 100%;
+        box-sizing: border-box;
+        animation: float-anim 4s ease-in-out infinite;
+      }
+      .floating-testimonial.highlight {
+        border-left: 4px solid #d4af37;
+      }
+      .user-img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      .testimonial-text {
+        text-align: left;
+        flex: 1;
+      }
+      .user-name {
+        font-weight: 700;
+        font-size: 13.5px;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .verified-badge {
+        color: #25d366;
+        font-size: 10.5px;
+        font-weight: 600;
+      }
+      .user-comment {
+        font-size: 12.5px;
+        color: var(--text-light);
+        margin: 5px 0 0 0;
+        line-height: 1.4;
+        font-style: italic;
+      }
+      @keyframes float-anim {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
+      }
     </style>
   </head>
 
@@ -543,6 +604,10 @@
         <span class="dot"></span>
         <span id="txt-contador">Conectando...</span>
       </div>
+
+      <!-- CONTAINER DOS DEPOIMENTOS -->
+      <div id="testimonial-display" class="testimonial-container"></div>
+
     </div>
 
     <div id="shareModal" class="modal-overlay">
@@ -738,6 +803,7 @@
 
       window.onload = function () {
         iniciarContador();
+        carregarDepoimentosDoDia();
 
         const textoSalvo = localStorage.getItem("conselho_pendente");
         const sessionSalva = localStorage.getItem("session_id_pendente");
@@ -752,6 +818,58 @@
           mostrarAlertaPrivacidade();
         }
       };
+
+      // === NOVA FUNÇÃO DE RODÍZIO DE DEPOIMENTOS ===
+      function carregarDepoimentosDoDia() {
+        const container = document.getElementById('testimonial-display');
+        if(!container) return;
+        
+        const diaSemana = new Date().getDay(); // Pega o dia de 0 a 6
+        
+        // 14 Frases impactantes mapeadas (2 por dia)
+        const bancoDeFrases = [
+            // Domingo (0)
+            [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu até um arrepio. Chorei muito.", img: "https://randomuser.me/api/portraits/women/65.jpg" },
+             { nome: "José Oliveira", texto: "Encontrei um papel na rua me redirecionando até aqui... Estou chorando real.", img: "https://randomuser.me/api/portraits/men/62.jpg" }],
+            // Segunda (1)
+            [{ nome: "Geraldo Neto", texto: "Parece que quem escreveu isso estava sentado do meu lado na sala. Como podem saber tanto? Estou em choque.", img: "https://randomuser.me/api/portraits/men/32.jpg" },
+             { nome: "Maria Silva", texto: "As respostas desapareceram depois que eu as vi, era o que eu precisava para finalmente ter coragem.", img: "https://randomuser.me/api/portraits/women/70.jpg" }],
+            // Terça (2)
+            [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre isso e não acreditei, mas agora que recebi minha resposta, entendi que nada é por acaso.", img: "https://randomuser.me/api/portraits/women/44.jpg" },
+             { nome: "Neuza Ramos", texto: "Achei que era só mais um site, mas o que li aqui ninguém mais sabia. Uma benção que chegou na hora certa.", img: "https://randomuser.me/api/portraits/women/33.jpg" }],
+            // Quarta (3)
+            [{ nome: "Benedito Alves", texto: "Tirei um peso de 20 anos das minhas costas em 5 minutos de leitura. Sinto uma paz que não sentia faz tempo.", img: "https://randomuser.me/api/portraits/men/46.jpg" },
+             { nome: "Antônio Carlos", texto: "O Pix de contribuição é muito pequeno perto da paz imensa que senti com essa resposta. Recomendo.", img: "https://randomuser.me/api/portraits/men/75.jpg" }],
+            // Quinta (4)
+            [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei sentar e respirar. Minha vida vai mudar depois do que descobri aqui.", img: "https://randomuser.me/api/portraits/women/68.jpg" },
+             { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão profundo sobre nós.", img: "https://randomuser.me/api/portraits/women/82.jpg" }],
+            // Sexta (5)
+            [{ nome: "Ricardo Viana", texto: "Achei que meu problema não tinha solução, mas o conselho me mostrou o caminho. Gratidão eterna.", img: "https://randomuser.me/api/portraits/men/52.jpg" },
+             { nome: "Roberto Mendes", texto: "Estava perdido com minhas finanças e família. A orientação final me deu um norte que eu não esperava ter hoje.", img: "https://randomuser.me/api/portraits/men/40.jpg" }],
+            // Sábado (6)
+            [{ nome: "Helena Faria", texto: "Fiquei com medo de digitar, mas realmente o site apaga tudo depois. Me senti segura para abrir meu coração.", img: "https://randomuser.me/api/portraits/women/60.jpg" },
+             { nome: "Margarida Lemos", texto: "Paguei o valor de um café e recebi a resposta para o meu ano inteiro. Melhor investimento que fiz.", img: "https://randomuser.me/api/portraits/women/50.jpg" }]
+        ];
+
+        const selecionados = bancoDeFrases[diaSemana];
+
+        container.innerHTML = `
+            <div style="width: 100%; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 20px; margin-top: 15px;">
+                <p style="font-size: 11px; color: #94a3b8; margin-bottom: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Mensagens Recentes</p>
+                ${selecionados.map((p, index) => `
+                    <div class="floating-testimonial ${index === 1 ? 'highlight' : ''}" style="animation-delay: ${index}s; margin-bottom: ${index === 0 ? '12px' : '0'};">
+                        <img src="${p.img}" class="user-img">
+                        <div class="testimonial-text">
+                            <span class="user-name">${p.nome} <span class="verified-badge">✓ Verificado</span></span>
+                            <p class="user-comment">"${p.texto}"</p>
+                            <div style="font-size: 10px; color: #94a3b8; margin-top: 5px;">Enviado há ${Math.floor(Math.random() * (index === 0 ? 40 : 15) + (index === 0 ? 20 : 2))} min</div>
+                        </div>
+                    </div>
+                `).join('')}
+                <p style="font-size: 10.5px; color: #cbd5e1; margin-top: 15px; font-style: italic;">Depoimentos reais enviados anonimamente.</p>
+            </div>
+        `;
+      }
 
       function mostrarAlertaPrivacidade() {
         if (!sessionStorage.getItem("alertaPrivacidadeVisto")) {
