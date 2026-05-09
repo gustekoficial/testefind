@@ -936,14 +936,17 @@ textarea::placeholder {
         }, 3000);
       }
 
-      async function gerarResposta() {
+    async function gerarResposta() {
         const input = document.getElementById("input");
+        const btn = document.getElementById("btnGerar");
+        
         if (input.value.length < 10)
           return alert("Por favor, conte um pouco mais.");
 
-        const btn = document.getElementById("btnGerar");
+        // Esconde o input e mostra o estado de carregamento
         btn.disabled = true;
         btn.innerText = "Sintonizando...";
+        input.style.opacity = "0.5";
 
         sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
 
@@ -960,6 +963,8 @@ textarea::placeholder {
             },
           );
 
+          if (!resposta.ok) throw new Error("Falha na resposta do servidor");
+
           const data = await resposta.json();
           localStorage.setItem("conselho_pendente", data.texto);
           localStorage.setItem("session_id_pendente", sessionIdGlobal);
@@ -967,10 +972,40 @@ textarea::placeholder {
           btn.style.display = "none";
           input.style.display = "none";
           montarCaixaDeRevelacao(data.texto);
+          
         } catch (err) {
-          alert("A conexão falhou. Tente novamente.");
-          btn.disabled = false;
-          btn.innerText = "Sintonizar Resposta";
+          console.error("Erro na API:", err);
+          
+          // Em caso de erro, substitui o botão por um de "Tentar Novamente"
+          const containerBtn = btn.parentElement;
+          btn.style.display = "none";
+          input.style.display = "none";
+          
+          const retryBtn = document.createElement("button");
+          retryBtn.innerText = "🔄 TENTAR NOVAMENTE";
+          retryBtn.style.cssText = `
+            width: 100%;
+            padding: 18px;
+            background: #4a5568;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+          `;
+          
+          retryBtn.onclick = () => window.location.reload();
+          
+          // Adiciona uma mensagem de erro amigável acima do botão
+          const errorMsg = document.createElement("p");
+          errorMsg.innerText = "Houve uma oscilação na sintonização. Por favor, tente novamente.";
+          errorMsg.style.cssText = "font-size: 14px; color: #718096; margin-bottom: 15px; font-style: italic;";
+          
+          const resultadoDiv = document.getElementById("resultado");
+          resultadoDiv.innerHTML = ""; // Limpa qualquer resíduo
+          resultadoDiv.appendChild(errorMsg);
+          resultadoDiv.appendChild(retryBtn);
         }
       }
 
