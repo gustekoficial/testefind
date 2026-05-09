@@ -264,7 +264,7 @@ textarea::placeholder {
         border-radius: 50px;
         border: 1px solid rgba(212, 175, 55, 0.3);
         font-family: "Lora", serif;
-        font-weight: 500;
+        font-weight: 600;
         font-style: italic;
         font-size: 13px;
         letter-spacing: 0.8px;
@@ -272,54 +272,62 @@ textarea::placeholder {
         cursor: pointer;
         backdrop-filter: blur(8px);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        transition: all 0.5s ease;
+        transition: all 0.3s ease;
         overflow: hidden;
-        animation: spiritual-pulse 3s infinite ease-in-out;
+        animation: spiritual-pulse 2.5s infinite ease-in-out;
         display: block;
       }
 
       #btnReveal::after {
-        content: "";
-        position: absolute;
-        top: -150%;
-        left: -210%;
-        width: 200%;
-        height: 400%;
-        background: linear-gradient(
-          135deg,
-          rgba(212, 175, 55, 0) 0%,
-          rgba(212, 175, 55, 0.05) 40%,
-          rgba(212, 175, 55, 0.5) 50%,
-          rgba(212, 175, 55, 0.05) 60%,
-          rgba(212, 175, 55, 0) 100%
-        );
-        transform: rotate(35deg);
-        animation: gold-shine 4s infinite ease-in-out;
-      }
+  content: "";
+  position: absolute;
+  top: -150%;
+  left: -210%;
+  width: 200%;
+  height: 400%;
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0) 0%,
+    rgba(212, 175, 55, 0.1) 40%,
+    rgba(212, 175, 55, 0.8) 50%, /* Aumentado para 0.8 para um feixe mais forte */
+    rgba(212, 175, 55, 0.1) 60%,
+    rgba(212, 175, 55, 0) 100%
+  );
+  transform: rotate(35deg);
+  animation: gold-shine 3.5s infinite ease-in-out; /* Um pouco mais rápido para atrair o olho */
+}
 
-      #btnReveal:hover {
-        background: rgba(255, 255, 255, 1);
-        letter-spacing: 1.2px;
-        border-color: rgba(212, 175, 55, 0.6);
-        transform: scale(1.02);
-      }
+#btnReveal:hover {
+  background: #fafafa;
+  letter-spacing: 1.2px;
+  border-color: rgba(212, 175, 55, 0.8);
+  transform: scale(1.02) translateY(-2px); /* Efeito de elevação ao passar o mouse */
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+}
 
-      #btnReveal:active {
-        transform: scale(0.98);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-      }
+#btnReveal:active {
+  transform: scale(0.98) translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
 
-      @keyframes gold-shine {
-        0% { left: -210%; top: -150%; }
-        30% { left: 120%; top: 120%; }
-        100% { left: 120%; top: 120%; }
-      }
+@keyframes gold-shine {
+  0% { left: -210%; top: -150%; }
+  30% { left: 120%; top: 120%; }
+  100% { left: 120%; top: 120%; }
+}
 
-      @keyframes spiritual-pulse {
-        0%, 100% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
-        50% { box-shadow: 0 8px 25px 2px rgba(212, 175, 55, 0.15); }
-      }
-
+@keyframes spiritual-pulse {
+  0%, 100% { 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+    transform: scale(1);
+  }
+  50% { 
+    /* Efeito de respiração: o botão cresce 1.5% e emite um glow dourado maior */
+    box-shadow: 0 8px 30px 4px rgba(212, 175, 55, 0.3); 
+    transform: scale(1.015);
+    border-color: rgba(212, 175, 55, 0.6);
+  }
+}
       .no-blur {
         filter: none !important;
         opacity: 1 !important;
@@ -372,84 +380,6 @@ textarea::placeholder {
 
       @keyframes blink {
         50% { opacity: 0.5; }
-      }
-
-      /* Estilos do Alerta de Privacidade */
-      .privacy-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(4px);
-        z-index: 2000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.5s ease, visibility 0.5s ease;
-      }
-
-      .privacy-overlay.show {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .privacy-content {
-        background: #ffffff;
-        padding: 35px 25px 25px 25px;
-        border-radius: 24px;
-        width: 85%;
-        max-width: 320px;
-        text-align: center;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(212, 175, 55, 0.15);
-        transform: translateY(20px) scale(0.95);
-        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
-
-      .privacy-overlay.show .privacy-content {
-        transform: translateY(0) scale(1);
-      }
-
-      .privacy-icon {
-        font-size: 24px;
-        margin-bottom: 12px;
-        color: var(--accent);
-      }
-
-      .privacy-content h3 {
-        font-family: "Lora", serif;
-        font-size: 18px;
-        color: var(--text-dark);
-        margin: 0 0 10px 0;
-      }
-
-      .privacy-content p {
-        font-size: 14px;
-        color: var(--text-light);
-        line-height: 1.6;
-        margin: 0 0 25px 0;
-      }
-
-      .privacy-btn {
-        background: transparent;
-        color: var(--accent);
-        border: 1px solid var(--accent);
-        padding: 14px 20px;
-        border-radius: 50px;
-        font-family: "Inter", sans-serif;
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        width: 100%;
-      }
-
-      .privacy-btn:hover {
-        background: rgba(212, 175, 55, 0.1);
       }
 
       .btn-whatsapp {
