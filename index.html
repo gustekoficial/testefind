@@ -1024,7 +1024,7 @@ textarea::placeholder {
       // 3. Atualiza a interface
       btn.style.display = "none";
       input.style.display = "none";
-      montarCaixaDeRevelacao(data.texto);
+      CaixaDeRevelacao(data.texto);
 
     } catch (err) {
       console.error("Erro na sintonização:", err);
@@ -1072,7 +1072,7 @@ textarea::placeholder {
         </button>
 
         <p id="statusCheck" style="display: none; font-size: 11px; color: gray; font-style: italic; margin: 0 0 15px 0;">
-          Aguardando confirmação da sintonização...
+          Aguardando confirmação...
         </p>
 
         <div id="targetBlur" class="blur-text" style="
