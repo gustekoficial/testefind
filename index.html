@@ -127,28 +127,38 @@
       }
 
     
-/* Garante que o texto digitado e o placeholder sejam em negrito */
 textarea {
     width: 100%;
-    height: 220px;
+    height: 200px;
     box-sizing: border-box;
-    border: 3px solid #1a1a1a;
-    border-radius: 12px;
-    padding: 20px;
-    font-family: 'Inter', sans-serif;
-    font-size: 20px;
-    font-weight: bold; /* Texto em negrito */
-    line-height: 1.4;
+    /* Borda fina e elegante */
+    border: 1px solid #e2e8f0; 
+    border-radius: 16px;
+    padding: 25px;
+    font-family: 'Lora', serif; /* Voltamos para a Lora para um ar mais humano */
+    font-size: 18px;
+    font-weight: 600; /* Negrito médio: legível mas não bruto */
+    line-height: 1.6;
     outline: none;
     resize: none;
     display: block;
     background-color: #ffffff;
+    transition: all 0.4s ease;
+    /* Sombra interna leve para indicar profundidade */
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
 
-/* Estilo específico para o Placeholder em negrito */
+/* Quando o usuário clica, a caixa "abre" suavemente */
+textarea:focus {
+    border-color: #1a1a1a;
+    background-color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
 textarea::placeholder {
-    font-weight: bold;
-    color: #1a1a1a; /* Cor forte para facilitar a leitura */
+    font-weight: 600;
+    color: #94a3b8; /* Cor mais suave para o minimalismo */
+    font-style: italic;
 }
       .btn-main {
     background-color: #1a1a1a;
