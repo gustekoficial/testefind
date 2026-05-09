@@ -968,9 +968,14 @@ textarea::placeholder {
           input.style.display = "none";
           montarCaixaDeRevelacao(data.texto);
         } catch (err) {
-          alert("A conexão falhou. Tente novamente.");
+          // CORREÇÃO: PROTEÇÃO CONTRA FALHAS E RECARREGAMENTO DA PÁGINA
+          btn.innerText = "⚠️ CONEXÃO OSCILOU. TENTAR NOVAMENTE";
+          btn.style.background = "#b91c1c"; // Alerta vermelho suave
+          btn.style.color = "#ffffff";
           btn.disabled = false;
-          btn.innerText = "Sintonizar Resposta";
+          btn.onclick = function() {
+              location.reload(); 
+          };
         }
       }
 
@@ -1073,7 +1078,7 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
           const data = await response.json();
 
           if (data.qr_code) {
-           box.innerHTML = `
+            box.innerHTML = `
   <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 18px; padding: 5px;" onclick="fecharModal()">✕</button>
   
   <div style="font-size: 36px; margin-bottom: 10px; color: var(--accent)">🕊️</div>
@@ -1082,7 +1087,7 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
 
   <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:180px; border-radius: 10px; margin: 0 auto 15px auto; display:block; border: 1px solid #e2e8f0;">
 
-  <!-- Container do Código PIX Fixo -->
+  <!-- Container do Código PIX Fixo CORRIGIDO -->
   <div style="background: #f7fafc !important; padding: 10px !important; border-radius: 5px !important; border: 1px dashed #cbd5e0 !important; width: 100% !important; box-sizing: border-box !important;">
     <textarea id="pixCode" readonly 
       style="
@@ -1090,7 +1095,7 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
         border: none !important; 
         background: transparent !important; 
         font-size: 12px !important; 
-        height: 45px !important; 
+        height: 85px !important; /* CORREÇÃO: Altura aumentada para caber toda a chave */
         resize: none !important; 
         outline: none !important; 
         text-align: center !important; 
@@ -1098,8 +1103,9 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
         margin: 0 !important;
         padding: 0 !important;
         display: block !important;
-        line-height: 1.2 !important;
+        line-height: 1.4 !important; /* CORREÇÃO: Melhor espaçamento entre linhas */
         font-family: monospace !important;
+        word-break: break-all !important; /* CORREÇÃO: Quebra o texto longo sem vazar da caixa */
       ">${data.qr_code}</textarea>
   </div>
 
