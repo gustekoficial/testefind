@@ -794,28 +794,28 @@
         const diaSemana = new Date().getDay();
         
         const bancoDeFrases = [
-            // Domingo (0)
-            [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu até um arrepio. Chorei muito.", img: "https://randomuser.me/api/portraits/women/65.jpg" },
-             { nome: "José Oliveira", texto: "Encontrei um papel na rua me redirecionando até aqui... Estou chorando real.", img: "https://randomuser.me/api/portraits/men/62.jpg" }],
-            // Segunda (1)
-            [{ nome: "Geraldo Neto", texto: "Parece que quem escreveu isso estava sentado do meu lado na sala. Como podem saber tanto? Estou em choque.", img: "https://randomuser.me/api/portraits/men/32.jpg" },
-             { nome: "Maria Silva", texto: "As respostas desapareceram depois que eu as vi, era o que eu precisava para finalmente ter coragem.", img: "https://randomuser.me/api/portraits/women/70.jpg" }],
-            // Terça (2)
-            [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre isso e não acreditei, mas agora que recebi minha resposta, entendi que nada é por acaso.", img: "https://randomuser.me/api/portraits/women/44.jpg" },
-             { nome: "Neuza Ramos", texto: "Achei que era só mais um site, mas o que li aqui ninguém mais sabia. Uma benção que chegou na hora certa.", img: "https://randomuser.me/api/portraits/women/33.jpg" }],
-            // Quarta (3)
-            [{ nome: "Benedito Alves", texto: "Tirei um peso de 20 anos das minhas costas em 5 minutos de leitura. Sinto uma paz que não sentia faz tempo.", img: "https://randomuser.me/api/portraits/men/46.jpg" },
-             { nome: "Antônio Carlos", texto: "O Pix de contribuição é muito pequeno perto da paz imensa que senti com essa resposta. Recomendo.", img: "https://randomuser.me/api/portraits/men/75.jpg" }],
-            // Quinta (4)
-            [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei sentar e respirar. Minha vida vai mudar depois do que descobri aqui.", img: "https://randomuser.me/api/portraits/women/68.jpg" },
-             { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão profundo sobre nós.", img: "https://randomuser.me/api/portraits/women/82.jpg" }],
-            // Sexta (5)
-            [{ nome: "Ricardo Viana", texto: "Achei que meu problema não tinha solução, mas o conselho me mostrou o caminho. Gratidão eterna.", img: "https://randomuser.me/api/portraits/men/52.jpg" },
-             { nome: "Roberto Mendes", texto: "Estava perdido com minhas finanças e família. A orientação final me deu um norte que eu não esperava ter hoje.", img: "https://randomuser.me/api/portraits/men/40.jpg" }],
-            // Sábado (6)
-            [{ nome: "Helena Faria", texto: "Fiquei com medo de digitar, mas realmente o site apaga tudo depois. Me senti segura para abrir meu coração.", img: "https://randomuser.me/api/portraits/women/60.jpg" },
-             { nome: "Margarida Lemos", texto: "Paguei o valor de um café e recebi a resposta para o meu ano inteiro. Melhor investimento que fiz.", img: "https://randomuser.me/api/portraits/women/50.jpg" }]
-        ];
+    // Domingo (0)
+    [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio.", img: "https://randomuser.me/api/portraits/women/65.jpg" },
+     { nome: "José Oliveira", texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado.", img: "https://randomuser.me/api/portraits/men/62.jpg" }],
+    // Segunda (1)
+    [{ nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz.", img: "https://randomuser.me/api/portraits/men/32.jpg" },
+     { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente.", img: "https://randomuser.me/api/portraits/women/70.jpg" }],
+    // Terça (2)
+    [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso.", img: "https://randomuser.me/api/portraits/women/44.jpg" },
+     { nome: "Neuza Ramos", texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão.", img: "https://randomuser.me/api/portraits/women/33.jpg" }],
+    // Quarta (3)
+    [{ nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo.", img: "https://randomuser.me/api/portraits/men/46.jpg" },
+     { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje.", img: "https://randomuser.me/api/portraits/men/75.jpg" }],
+    // Quinta (4)
+    [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora.", img: "https://randomuser.me/api/portraits/women/68.jpg" },
+     { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma.", img: "https://randomuser.me/api/portraits/women/82.jpg" }],
+    // Sexta (5)
+    [{ nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas o conselho me abriu os olhos para um novo caminho, nada é por acaso.", img: "https://randomuser.me/api/portraits/men/52.jpg" },
+     { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos", img: "https://randomuser.me/api/portraits/men/40.jpg" }],
+    // Sábado (6)
+    [{ nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade.", img: "https://randomuser.me/api/portraits/women/60.jpg" },
+     { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida.", img: "https://randomuser.me/api/portraits/women/50.jpg" }]
+];
 
         const selecionados = bancoDeFrases[diaSemana];
 
