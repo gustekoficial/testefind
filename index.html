@@ -937,77 +937,67 @@ textarea::placeholder {
       }
 
     async function gerarResposta() {
-        const input = document.getElementById("input");
-        const btn = document.getElementById("btnGerar");
-        
-        if (input.value.length < 10)
-          return alert("Por favor, conte um pouco mais.");
+    const input = document.getElementById("input");
+    const btn = document.getElementById("btnGerar");
+    const resultadoDiv = document.getElementById("resultado");
+    
+    if (input.value.length < 10)
+        return alert("Por favor, conte um pouco mais.");
 
-        // Esconde o input e mostra o estado de carregamento
-        btn.disabled = true;
-        btn.innerText = "Sintonizando...";
-        input.style.opacity = "0.5";
+    btn.disabled = true;
+    btn.innerText = "Sintonizando...";
+    input.style.opacity = "0.5";
 
-        sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
+    sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
 
-        try {
-          const resposta = await fetch(
+    try {
+        const resposta = await fetch(
             "https://backfind.vercel.app/api/responder",
             {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                mensagem: input.value,
-                sessionId: sessionIdGlobal,
-              }),
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    mensagem: input.value,
+                    sessionId: sessionIdGlobal,
+                }),
             },
-          );
+        );
 
-          if (!resposta.ok) throw new Error("Falha na resposta do servidor");
+        if (!resposta.ok) throw new Error("Falha na resposta");
 
-          const data = await resposta.json();
-          localStorage.setItem("conselho_pendente", data.texto);
-          localStorage.setItem("session_id_pendente", sessionIdGlobal);
+        const data = await resposta.json();
 
-          btn.style.display = "none";
-          input.style.display = "none";
-          montarCaixaDeRevelacao(data.texto);
-          
-        } catch (err) {
-          console.error("Erro na API:", err);
-          
-          // Em caso de erro, substitui o botão por um de "Tentar Novamente"
-          const containerBtn = btn.parentElement;
-          btn.style.display = "none";
-          input.style.display = "none";
-          
-          const retryBtn = document.createElement("button");
-          retryBtn.innerText = "🔄 TENTAR NOVAMENTE";
-          retryBtn.style.cssText = `
-            width: 100%;
-            padding: 18px;
-            background: #4a5568;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-          `;
-          
-          retryBtn.onclick = () => window.location.reload();
-          
-          // Adiciona uma mensagem de erro amigável acima do botão
-          const errorMsg = document.createElement("p");
-          errorMsg.innerText = "Houve uma oscilação na sintonização. Por favor, tente novamente.";
-          errorMsg.style.cssText = "font-size: 14px; color: #718096; margin-bottom: 15px; font-style: italic;";
-          
-          const resultadoDiv = document.getElementById("resultado");
-          resultadoDiv.innerHTML = ""; // Limpa qualquer resíduo
-          resultadoDiv.appendChild(errorMsg);
-          resultadoDiv.appendChild(retryBtn);
-        }
-      }
+        // SÓ SALVA NO NAVEGADOR SE TUDO DEU CERTO
+        localStorage.setItem("conselho_pendente", data.texto);
+        localStorage.setItem("session_id_pendente", sessionIdGlobal);
+
+        btn.style.display = "none";
+        input.style.display = "none";
+        montarCaixaDeRevelacao(data.texto);
+        
+    } catch (err) {
+        console.error("Erro na sintonização:", err);
+        
+        // LIMPA O LIXO PARA NÃO TRAVAR O CELULAR
+        localStorage.removeItem("conselho_pendente");
+        localStorage.removeItem("session_id_pendente");
+
+        btn.style.display = "none";
+        input.style.display = "none";
+
+        // Interface de Erro (Estilizada e segura)
+        resultadoDiv.innerHTML = `
+            <div style="text-align:center; padding: 20px;">
+                <p style="font-size: 14px; color: #718096; margin-bottom: 15px; font-style: italic;">
+                    Houve uma oscilação na sintonização. Por favor, tente novamente.
+                </p>
+                <button onclick="window.location.reload()" style="width: 100%; padding: 18px; background: #4a5568; color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    🔄 TENTAR NOVAMENTE
+                </button>
+            </div>
+        `;
+    }
+}
 
       function montarCaixaDeRevelacao(textoVisivel) {
         const el = document.getElementById("resultado");
