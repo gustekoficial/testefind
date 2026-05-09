@@ -164,32 +164,32 @@ textarea::placeholder {
       .btn-main {
     background-color: #1a1a1a;
     color: white;
-    border-radius: 60px; /* Arredondamento levemente maior para acompanhar o tamanho */
-    padding: 22px 48px;  /* Aumentado para dar mais área de clique e presença */
-    font-size: 18px;     /* Fonte maior para facilitar a leitura */
-    font-weight: 800;    /* Peso extra para passar mais autoridade */
-    text-transform: uppercase; /* Mantém o tom de impacto e clareza */
-    letter-spacing: 1.5px;
-    margin-top: 25px;
-    width: 90%;          /* Quase largura total no mobile, melhor para o polegar */
-    max-width: 420px;    /* Limite para não ficar exagerado em telas maiores */
+    border-radius: 12px; /* Arredondamento igual ao do textarea para harmonia visual */
+    padding: 18px 0;    /* Altura confortável sem ser exagerada */
+    font-size: 16px;    /* Tamanho de leitura clara e elegante */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 15px;
+    
+    /* Alinhamento exato com o placeholder */
+    width: 100%;        
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho final */
+    
     cursor: pointer;
     border: none;
-    display: block;      /* Garante o alinhamento central */
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* Sombra suave para destacar do fundo */
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transição mais fluida */
+    display: block;
+    transition: all 0.2s ease;
 }
 
 .btn-main:hover {
-    transform: scale(1.03); 
     background-color: #000;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    transform: translateY(-1px); /* Leve subida em vez de aumento de tamanho */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .btn-main:active {
-    transform: scale(0.98); /* Feedback tátil de clique real */
+    transform: translateY(0);
 }
       #resultado {
         margin-top: 25px;
