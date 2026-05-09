@@ -98,17 +98,17 @@
 }
 
       .container {
-        width: 100%;
-        max-width: 380px;
-        background: var(--bg-panel);
-        padding: 40px 25px;
-        border-radius: 32px;
-        text-align: center;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(212, 175, 55, 0.1);
-        box-sizing: border-box;
-      }
+    width: 100%;
+    max-width: 380px;
+    background: var(--bg-panel);
+    padding: 60px 25px; /* Aumentado de 40px para 60px no topo/base */
+    border-radius: 32px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    box-sizing: border-box;
+}
 
       h1 {
         font-size: 22px;
@@ -126,27 +126,30 @@
         font-style: italic;
       }
 
-      /* Ajuste corrigido para o campo não vazar */
+    
 textarea {
     width: 100%;
-    box-sizing: border-box; /* CRITICAL: Faz o padding e a borda ficarem dentro dos 100% */
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 20px;
+    height: 180px; /* Definida altura fixa maior */
+    box-sizing: border-box; 
+    border: 2px solid #cbd5e1; /* Cor da borda levemente mais forte para chamar atenção */
+    border-radius: 16px;
+    padding: 25px; /* Mais preenchimento interno */
     font-family: 'Lora', serif;
-    font-size: 16px;
+    font-size: 18px; /* Fonte maior para o desabafo */
     line-height: 1.6;
     background-color: #fcfcfc;
     transition: all 0.3s ease;
     outline: none;
     resize: none;
-    display: block; /* Garante que ele se comporte como um bloco independente */
+    display: block;
 }
 
+/* Destaque máximo ao clicar */
 textarea:focus {
     border-color: #1a1a1a;
     background-color: #ffffff;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08); /* Sombra mais profunda */
+    transform: scale(1.01); /* Leve expansão para atrair o olhar */
 }
       .btn-main {
     background-color: #1a1a1a;
