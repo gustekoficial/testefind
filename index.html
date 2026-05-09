@@ -131,24 +131,25 @@ textarea {
     width: 100%;
     height: 200px;
     box-sizing: border-box;
-    /* Borda fina e elegante */
     border: 1px solid #e2e8f0; 
     border-radius: 16px;
     padding: 25px;
-    font-family: 'Lora', serif; /* Voltamos para a Lora para um ar mais humano */
+    font-family: 'Lora', serif;
     font-size: 18px;
-    font-weight: 600; /* Negrito médio: legível mas não bruto */
+    font-weight: 600;
     line-height: 1.6;
     outline: none;
     resize: none;
     display: block;
-    background-color: #ffffff;
+    
+    /* Tom mais escuro que o fundo branco para destacar */
+    background-color: #f1f5f9; 
+    
     transition: all 0.4s ease;
-    /* Sombra interna leve para indicar profundidade */
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
 }
 
-/* Quando o usuário clica, a caixa "abre" suavemente */
+/* Quando clicar, ela clareia para dar a sensação de "luz acesa" para escrever */
 textarea:focus {
     border-color: #1a1a1a;
     background-color: #ffffff;
@@ -157,7 +158,7 @@ textarea:focus {
 
 textarea::placeholder {
     font-weight: 600;
-    color: #94a3b8; /* Cor mais suave para o minimalismo */
+    color: #64748b; /* Placeholder um pouco mais escuro para melhor leitura */
     font-style: italic;
 }
       .btn-main {
