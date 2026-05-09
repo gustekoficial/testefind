@@ -127,29 +127,28 @@
       }
 
     
+/* Garante que o texto digitado e o placeholder sejam em negrito */
 textarea {
     width: 100%;
-    height: 180px; /* Definida altura fixa maior */
-    box-sizing: border-box; 
-    border: 2px solid #cbd5e1; /* Cor da borda levemente mais forte para chamar atenção */
-    border-radius: 16px;
-    padding: 25px; /* Mais preenchimento interno */
-    font-family: 'Lora', serif;
-    font-size: 18px; /* Fonte maior para o desabafo */
-    line-height: 1.6;
-    background-color: #fcfcfc;
-    transition: all 0.3s ease;
+    height: 220px;
+    box-sizing: border-box;
+    border: 3px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: bold; /* Texto em negrito */
+    line-height: 1.4;
     outline: none;
     resize: none;
     display: block;
+    background-color: #ffffff;
 }
 
-/* Destaque máximo ao clicar */
-textarea:focus {
-    border-color: #1a1a1a;
-    background-color: #ffffff;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08); /* Sombra mais profunda */
-    transform: scale(1.01); /* Leve expansão para atrair o olhar */
+/* Estilo específico para o Placeholder em negrito */
+textarea::placeholder {
+    font-weight: bold;
+    color: #1a1a1a; /* Cor forte para facilitar a leitura */
 }
       .btn-main {
     background-color: #1a1a1a;
@@ -574,7 +573,7 @@ textarea:focus {
 
       <textarea
         id="input"
-        placeholder="O que está pesando no seu coração hoje? Desabafe aqui..."
+        placeholder="Desabafe aqui..."
       ></textarea>
       <button class="btn-main" id="btnGerar" onclick="gerarResposta()">
         REVELAR MINHA RESPOSTA
@@ -864,13 +863,25 @@ textarea:focus {
 // Chamar a função
 carregarDepoimentosDoDia();
 
-      function mostrarAlertaPrivacidade() {
-        if (!sessionStorage.getItem("alertaPrivacidadeVisto")) {
-          setTimeout(() => {
-            document.getElementById("privacyAlert").classList.add("show");
-          }, 800);
+      function animarPlaceholder() {
+    const input = document.getElementById('input');
+    const estados = ["Desabafe aqui", "Desabafe aqui.", "Desabafe aqui..", "Desabafe aqui..."];
+    let i = 0;
+
+    setInterval(() => {
+        // Só anima se o campo estiver vazio (para não atrapalhar quem está digitando)
+        if (input.value === "") {
+            input.placeholder = estados[i];
+            i = (i + 1) % estados.length;
         }
-      }
+    }, 500); // Velocidade da piscada (500ms)
+}
+
+// Chame a função dentro do window.onload que já existe no seu código
+window.onload = function() {
+    carregarDepoimentosDoDia(); // Sua função de depoimentos
+    animarPlaceholder();        // Inicia a animação dos pontos
+};
 
       function fecharAlertaPrivacidade() {
         document.getElementById("privacyAlert").classList.remove("show");
