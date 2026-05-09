@@ -849,6 +849,7 @@ textarea::placeholder {
         }
       };
 
+      // === FUNÇÃO ATUALIZADA: DEPOIMENTOS MAIS SUTIS ===
       function carregarDepoimentosDoDia() {
         const container = document.getElementById('testimonial-display');
         if (!container) return;
@@ -857,21 +858,29 @@ textarea::placeholder {
         const diaSemana = dataAtual.getDay(); 
         const diaDoMes = dataAtual.getDate(); 
         const mesAtual = dataAtual.getMonth();
+
         const sementeDia = diaDoMes + mesAtual;
 
         const bancoDeFrases = [
+          // Domingo (0)
           [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio." },
            { nome: "José Oliveira", texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado." }],
+          // Segunda (1)
           [{ nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz." },
            { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente." }],
+          // Terça (2)
           [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso." },
            { nome: "Neuza Ramos", texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão." }],
+          // Quarta (3)
           [{ nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo." },
            { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje." }],
+          // Quinta (4)
           [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora." },
            { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma." }],
+          // Sexta (5)
           [{ nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um novo caminho, nada é por acaso." },
            { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida." }],
+          // Sábado (6)
           [{ nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade." },
            { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos" }]
         ];
@@ -884,6 +893,7 @@ textarea::placeholder {
             </div>
             ${selecionados.map((p, index) => {
                 const tempoFixo = ((sementeDia + (index * 23)) % 50) + 5;
+
                 return `
                     <div class="testimonial-card" style="padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05);">
                         <div class="testimonial-text">
@@ -903,6 +913,7 @@ textarea::placeholder {
         const input = document.getElementById('input');
         const estados = ["Desabafe aqui", "Desabafe aqui.", "Desabafe aqui..", "Desabafe aqui..."];
         let i = 0;
+
         setInterval(() => {
             if (input && input.value === "") {
                 input.placeholder = estados[i];
@@ -927,13 +938,12 @@ textarea::placeholder {
 
       async function gerarResposta() {
         const input = document.getElementById("input");
-        if (input.value.length < 10) return alert("Por favor, conte um pouco mais.");
+        if (input.value.length < 10)
+          return alert("Por favor, conte um pouco mais.");
 
         const btn = document.getElementById("btnGerar");
-        const containerAcoes = btn.parentElement; // Container onde o botão está
-
-        btn.innerText = "Sintonizando...";
         btn.disabled = true;
+        btn.innerText = "Sintonizando...";
 
         sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
 
@@ -950,8 +960,6 @@ textarea::placeholder {
             },
           );
 
-          if (!resposta.ok) throw new Error();
-
           const data = await resposta.json();
           localStorage.setItem("conselho_pendente", data.texto);
           localStorage.setItem("session_id_pendente", sessionIdGlobal);
@@ -960,15 +968,9 @@ textarea::placeholder {
           input.style.display = "none";
           montarCaixaDeRevelacao(data.texto);
         } catch (err) {
-          // CORREÇÃO: Remove o botão de gerar e coloca o de reiniciar
-          btn.remove(); 
-          const reloadBtn = document.createElement("button");
-          reloadBtn.innerHTML = "⚠️ CONEXÃO OSCILOU. CLIQUE PARA REINICIAR";
-          reloadBtn.style = "width:100%; padding:20px; border-radius:50px; border:none; background:#e53e3e; color:white; font-weight:bold; cursor:pointer;";
-          reloadBtn.onclick = () => location.reload();
-          containerAcoes.appendChild(reloadBtn);
-          
-          document.getElementById("resultado").innerHTML = "<p style='color:#718096; font-size:14px; text-align:center; margin-top:10px;'>Houve uma instabilidade na conexão espiritual. Por favor, tente novamente.</p>";
+          alert("A conexão falhou. Tente novamente.");
+          btn.disabled = false;
+          btn.innerText = "Sintonizar Resposta";
         }
       }
 
@@ -996,41 +998,77 @@ textarea::placeholder {
         }
       }
 
+      function fecharShareModal() {
+        document.getElementById("shareModal").style.display = "none";
+      }
+
       function compartilharNoWhatsApp() {
-        const mensagem = `Algo tocou meu coração hoje e lembrei de você. ✨\n\nSe você também está buscando uma direção ou uma resposta para sua vida, veja o que está guardado pra você:\n\n👉 https://encontresuaresposta.com.br`;
+       const mensagem = 
+`Algo tocou meu coração hoje e lembrei de você. ✨
+
+Se você também está buscando uma direção ou uma resposta para sua vida, veja o que está guardado pra você:
+
+👉 https://encontresuaresposta.com.br`;
+
         const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
 
         window.open(url, "_blank");
         localStorage.setItem("ja_compartilhou", "true");
 
+        window.addEventListener(
+          "focus",
+          function aoVoltarProSite() {
+            fecharShareModal();
+            abrirModalVenda();
+            window.removeEventListener("focus", aoVoltarProSite);
+          },
+          { once: true },
+        );
+
         setTimeout(() => {
-          document.getElementById("shareModal").style.display = "none";
+          fecharShareModal();
           abrirModalVenda();
-        }, 3000);
+        }, 6000);
       }
 
       function abrirModalVenda() {
+        if (typeof fbq === 'function') {
+            fbq("track", "InitiateCheckout");
+        }
         const modal = document.getElementById("paymentModal");
         if (modal) modal.style.display = "flex";
       }
 
       function fecharModal() {
-        document.getElementById("paymentModal").style.display = "none";
+        const modal = document.getElementById("paymentModal");
+        if (modal) modal.style.display = "none";
+
+        const btn = document.getElementById("btnCheckoutModal");
+        if (btn) {
+          btn.innerText = "FAZER MINHA CONTRIBUIÇÃO E REVELAR";
+          btn.disabled = false;
+          btn.style.opacity = "1";
+        }
       }
 
       async function iniciarPagamentoMercadoPago() {
         const btn = document.getElementById("btnCheckoutModal");
         const box = document.getElementById("boxPagamento");
-        
+        if (btn.disabled) return;
+
         btn.innerText = "Gerando Ato de Fé...";
         btn.disabled = true;
+        btn.style.opacity = "0.7";
 
         try {
-          const response = await fetch("https://backfind.vercel.app/api/pagamento", {
+          const response = await fetch(
+            "https://backfind.vercel.app/api/pagamento",
+            {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ sessionId: sessionIdGlobal }),
-            });
+            },
+          );
 
           const data = await response.json();
 
@@ -1070,71 +1108,81 @@ textarea::placeholder {
         >${data.qr_code}</textarea>
     </div>
 
-    <!-- Botão de Ação -->
-    <button onclick="copiarPix()" id="btnCopiar" 
-        style="width: 100%; 
-               background: #1a1a1a; 
-               color: white; 
-               border: none; 
-               padding: 18px; 
-               border-radius: 12px; 
-               font-weight: 700; 
-               cursor: pointer; 
-               font-size: 14px; 
-               text-transform: uppercase; 
-               letter-spacing: 1px; 
-               transition: all 0.3s ease;
-               box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-        COPIAR CÓDIGO PIX
-    </button>
+    <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#48bb78; color:white; border:none; padding:16px; border-radius:50px; margin-top:15px; font-weight:bold; cursor:pointer; font-size: 14px; text-transform: uppercase; transition: 0.3s;">
+                COPIAR CÓDIGO
+              </button>
 
     <!-- Rodapé Informativo -->
     <div style="margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;">
         <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block; animation: pulse 2s infinite;"></span>
-        <p style="font-size: 12px; color: #94a3b8; margin: 0;">Aguardando confirmação automática...</p>
+        <p style="font-size: 12px; color: #94a3b8; margin: 0;">Assim que a doação for confirmada, sua resposta final será liberada automaticamente na tela de trás.</p>
     </div>
 `;
+
             verificarStatus();
+          } else {
+            throw new Error("Erro ao gerar PIX");
           }
         } catch (err) {
+          alert(
+            "Houve uma pequena oscilação na rede. Por favor, tente clicar novamente.",
+          );
           btn.innerText = "TENTAR NOVAMENTE";
           btn.disabled = false;
+          btn.style.opacity = "1";
         }
       }
 
       function copiarPix() {
         const text = document.getElementById("pixCode");
+        text.select();
+        text.setSelectionRange(0, 99999);
         navigator.clipboard.writeText(text.value);
 
         const btn = document.getElementById("btnCopiar");
-        btn.innerText = "✓ COPIADO! COLE NO SEU BANCO";
-        btn.style.background = "#16a34a";
+        btn.innerText = "✓ CÓDIGO COPIADO!";
+        btn.style.background = "#2f855a";
+
+        const pixAlert = document.getElementById("pixInstructionsAlert");
+        if (pixAlert) pixAlert.style.display = "flex";
 
         setTimeout(() => {
-          btn.innerText = "COPIAR CÓDIGO PIX";
-          btn.style.background = "#22c55e";
+          btn.innerText = "COPIAR CÓDIGO AGORA";
+          btn.style.background = "#48bb78";
         }, 3000);
+      }
+
+      function fecharAlertaPix() {
+        const pixAlert = document.getElementById("pixInstructionsAlert");
+        if (pixAlert) pixAlert.style.display = "none";
       }
 
       function verificarStatus() {
         if (intervaloStatus) clearInterval(intervaloStatus);
+
         const statusTxt = document.getElementById("statusCheck");
         if (statusTxt) statusTxt.style.display = "block";
 
         intervaloStatus = setInterval(async () => {
           try {
-            const res = await fetch(`https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`);
+            const res = await fetch(
+              `https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`,
+            );
             const data = await res.json();
+
             if (data.pago === true) {
               clearInterval(intervaloStatus);
               liberarConteudo(data.textoRevelado);
             }
-          } catch (e) {}
+          } catch (e) {
+            console.log("Checando status da sua contribuição...");
+          }
         }, 3000);
       }
 
       function liberarConteudo(textoReal) {
         fecharModal();
+
         const btn = document.getElementById("btnReveal");
         const statusTxt = document.getElementById("statusCheck");
         if (btn) btn.remove();
@@ -1144,9 +1192,13 @@ textarea::placeholder {
         if (blurArea) {
           blurArea.innerText = textoReal;
           blurArea.classList.remove("blur-text");
+          blurArea.classList.add("no-blur");
           blurArea.style.filter = "none";
           blurArea.style.opacity = "1";
+          blurArea.style.maskImage = "none";
+          blurArea.style.webkitMaskImage = "none";
         }
+
         localStorage.removeItem("conselho_pendente");
         localStorage.removeItem("session_id_pendente");
       }
