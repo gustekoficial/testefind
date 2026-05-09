@@ -125,27 +125,28 @@
         font-style: italic;
       }
 
-      textarea {
+      /* Ajuste corrigido para o campo não vazar */
+textarea {
     width: 100%;
-    border: 2px solid #e2e8f0; /* Borda um pouco mais visível */
+    box-sizing: border-box; /* CRITICAL: Faz o padding e a borda ficarem dentro dos 100% */
+    border: 2px solid #e2e8f0;
     border-radius: 12px;
     padding: 20px;
-    font-family: 'Lora', serif; /* Fonte que você já usa nos relatos */
+    font-family: 'Lora', serif;
     font-size: 16px;
     line-height: 1.6;
-    background-color: #fcfcfc; /* Um branco quase imperceptível para dar profundidade */
+    background-color: #fcfcfc;
     transition: all 0.3s ease;
     outline: none;
     resize: none;
+    display: block; /* Garante que ele se comporte como um bloco independente */
 }
 
-/* O "pulo do gato": quando o usuário clica para escrever */
 textarea:focus {
-    border-color: #1a1a1a; /* A borda fica preta, acompanhando o botão */
+    border-color: #1a1a1a;
     background-color: #ffffff;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); /* Sombra suave para "flutuar" */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
-
       .btn-main {
     background-color: #1a1a1a;
     color: white;
