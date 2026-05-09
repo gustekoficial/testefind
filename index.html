@@ -849,7 +849,6 @@ textarea::placeholder {
         }
       };
 
-      // === FUNÇÃO ATUALIZADA: DEPOIMENTOS MAIS SUTIS ===
       function carregarDepoimentosDoDia() {
         const container = document.getElementById('testimonial-display');
         if (!container) return;
@@ -858,29 +857,21 @@ textarea::placeholder {
         const diaSemana = dataAtual.getDay(); 
         const diaDoMes = dataAtual.getDate(); 
         const mesAtual = dataAtual.getMonth();
-
         const sementeDia = diaDoMes + mesAtual;
 
         const bancoDeFrases = [
-          // Domingo (0)
           [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio." },
            { nome: "José Oliveira", texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado." }],
-          // Segunda (1)
           [{ nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz." },
            { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente." }],
-          // Terça (2)
           [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso." },
            { nome: "Neuza Ramos", texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão." }],
-          // Quarta (3)
           [{ nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo." },
            { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje." }],
-          // Quinta (4)
           [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora." },
            { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma." }],
-          // Sexta (5)
           [{ nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um novo caminho, nada é por acaso." },
            { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida." }],
-          // Sábado (6)
           [{ nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade." },
            { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos" }]
         ];
@@ -893,7 +884,6 @@ textarea::placeholder {
             </div>
             ${selecionados.map((p, index) => {
                 const tempoFixo = ((sementeDia + (index * 23)) % 50) + 5;
-
                 return `
                     <div class="testimonial-card" style="padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05);">
                         <div class="testimonial-text">
@@ -913,7 +903,6 @@ textarea::placeholder {
         const input = document.getElementById('input');
         const estados = ["Desabafe aqui", "Desabafe aqui.", "Desabafe aqui..", "Desabafe aqui..."];
         let i = 0;
-
         setInterval(() => {
             if (input && input.value === "") {
                 input.placeholder = estados[i];
@@ -938,12 +927,13 @@ textarea::placeholder {
 
       async function gerarResposta() {
         const input = document.getElementById("input");
-        if (input.value.length < 10)
-          return alert("Por favor, conte um pouco mais.");
+        if (input.value.length < 10) return alert("Por favor, conte um pouco mais.");
 
         const btn = document.getElementById("btnGerar");
-        btn.disabled = true;
+        const containerAcoes = btn.parentElement; // Container onde o botão está
+
         btn.innerText = "Sintonizando...";
+        btn.disabled = true;
 
         sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
 
@@ -960,6 +950,8 @@ textarea::placeholder {
             },
           );
 
+          if (!resposta.ok) throw new Error();
+
           const data = await resposta.json();
           localStorage.setItem("conselho_pendente", data.texto);
           localStorage.setItem("session_id_pendente", sessionIdGlobal);
@@ -968,14 +960,15 @@ textarea::placeholder {
           input.style.display = "none";
           montarCaixaDeRevelacao(data.texto);
         } catch (err) {
-          // CORREÇÃO: PROTEÇÃO CONTRA FALHAS E RECARREGAMENTO DA PÁGINA
-          btn.innerText = "⚠️ CONEXÃO OSCILOU. TENTAR NOVAMENTE";
-          btn.style.background = "#b91c1c"; // Alerta vermelho suave
-          btn.style.color = "#ffffff";
-          btn.disabled = false;
-          btn.onclick = function() {
-              location.reload(); 
-          };
+          // CORREÇÃO: Remove o botão de gerar e coloca o de reiniciar
+          btn.remove(); 
+          const reloadBtn = document.createElement("button");
+          reloadBtn.innerHTML = "⚠️ CONEXÃO OSCILOU. CLIQUE PARA REINICIAR";
+          reloadBtn.style = "width:100%; padding:20px; border-radius:50px; border:none; background:#e53e3e; color:white; font-weight:bold; cursor:pointer;";
+          reloadBtn.onclick = () => location.reload();
+          containerAcoes.appendChild(reloadBtn);
+          
+          document.getElementById("resultado").innerHTML = "<p style='color:#718096; font-size:14px; text-align:center; margin-top:10px;'>Houve uma instabilidade na conexão espiritual. Por favor, tente novamente.</p>";
         }
       }
 
@@ -1003,185 +996,103 @@ textarea::placeholder {
         }
       }
 
-      function fecharShareModal() {
-        document.getElementById("shareModal").style.display = "none";
-      }
-
       function compartilharNoWhatsApp() {
-       const mensagem = 
-`Algo tocou meu coração hoje e lembrei de você. ✨
-
-Se você também está buscando uma direção ou uma resposta para sua vida, veja o que está guardado pra você:
-
-👉 https://encontresuaresposta.com.br`;
-
+        const mensagem = `Algo tocou meu coração hoje e lembrei de você. ✨\n\nSe você também está buscando uma direção ou uma resposta para sua vida, veja o que está guardado pra você:\n\n👉 https://encontresuaresposta.com.br`;
         const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
 
         window.open(url, "_blank");
         localStorage.setItem("ja_compartilhou", "true");
 
-        window.addEventListener(
-          "focus",
-          function aoVoltarProSite() {
-            fecharShareModal();
-            abrirModalVenda();
-            window.removeEventListener("focus", aoVoltarProSite);
-          },
-          { once: true },
-        );
-
         setTimeout(() => {
-          fecharShareModal();
+          document.getElementById("shareModal").style.display = "none";
           abrirModalVenda();
-        }, 6000);
+        }, 3000);
       }
 
       function abrirModalVenda() {
-        if (typeof fbq === 'function') {
-            fbq("track", "InitiateCheckout");
-        }
         const modal = document.getElementById("paymentModal");
         if (modal) modal.style.display = "flex";
       }
 
       function fecharModal() {
-        const modal = document.getElementById("paymentModal");
-        if (modal) modal.style.display = "none";
-
-        const btn = document.getElementById("btnCheckoutModal");
-        if (btn) {
-          btn.innerText = "FAZER MINHA CONTRIBUIÇÃO E REVELAR";
-          btn.disabled = false;
-          btn.style.opacity = "1";
-        }
+        document.getElementById("paymentModal").style.display = "none";
       }
 
       async function iniciarPagamentoMercadoPago() {
         const btn = document.getElementById("btnCheckoutModal");
         const box = document.getElementById("boxPagamento");
-        if (btn.disabled) return;
-
+        
         btn.innerText = "Gerando Ato de Fé...";
         btn.disabled = true;
-        btn.style.opacity = "0.7";
 
         try {
-          const response = await fetch(
-            "https://backfind.vercel.app/api/pagamento",
-            {
+          const response = await fetch("https://backfind.vercel.app/api/pagamento", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ sessionId: sessionIdGlobal }),
-            },
-          );
+            });
 
           const data = await response.json();
 
           if (data.qr_code) {
             box.innerHTML = `
-  <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 18px; padding: 5px;" onclick="fecharModal()">✕</button>
-  
-  <div style="font-size: 36px; margin-bottom: 10px; color: var(--accent)">🕊️</div>
-  <h2 style="font-size: 20px; font-family: 'Lora', serif; font-style: italic; margin-bottom: 10px; color: var(--text-dark);">Sua Contribuição</h2>
-  <p style="font-size: 14px; color: #5a6c7d; margin-bottom: 15px;">Use o aplicativo do seu banco para ler o QR Code ou copie a chave PIX abaixo:</p>
+              <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 18px;" onclick="fecharModal()">✕</button>
+              <div style="font-size: 32px; margin-bottom: 10px;">🕊️</div>
+              <h2 style="font-size: 19px; font-family: 'Lora', serif; margin-bottom: 8px;">Sua Contribuição</h2>
+              <p style="font-size: 13px; color: #5a6c7d; margin-bottom: 15px; padding: 0 10px;">Toque no código abaixo para copiar e pague no app do seu banco:</p>
 
-  <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:180px; border-radius: 10px; margin: 0 auto 15px auto; display:block; border: 1px solid #e2e8f0;">
+              <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:160px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #edf2f7;">
 
-  <!-- Container do Código PIX Fixo CORRIGIDO -->
-  <div style="background: #f7fafc !important; padding: 10px !important; border-radius: 5px !important; border: 1px dashed #cbd5e0 !important; width: 100% !important; box-sizing: border-box !important;">
-    <textarea id="pixCode" readonly 
-      style="
-        width: 100% !important; 
-        border: none !important; 
-        background: transparent !important; 
-        font-size: 12px !important; 
-        height: 85px !important; /* CORREÇÃO: Altura aumentada para caber toda a chave */
-        resize: none !important; 
-        outline: none !important; 
-        text-align: center !important; 
-        color: #4a5568 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: block !important;
-        line-height: 1.4 !important; /* CORREÇÃO: Melhor espaçamento entre linhas */
-        font-family: monospace !important;
-        word-break: break-all !important; /* CORREÇÃO: Quebra o texto longo sem vazar da caixa */
-      ">${data.qr_code}</textarea>
-  </div>
+              <div onclick="copiarPix()" style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer; margin-bottom: 15px;">
+                <textarea id="pixCode" readonly style="width:100%; border:none; background:transparent; font-size:11px; height:60px; resize:none; outline:none; text-align:center; color:#4a5568; pointer-events:none; font-family:monospace; word-break:break-all;">${data.qr_code}</textarea>
+                <div style="font-size:10px; color:#3182ce; font-weight:bold; margin-top:5px;">CLIQUE PARA COPIAR O CÓDIGO</div>
+              </div>
 
-  <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#48bb78; color:white; border:none; padding:16px; border-radius:50px; margin-top:15px; font-weight:bold; cursor:pointer; font-size: 14px; text-transform: uppercase; transition: 0.3s;">
-    COPIAR CÓDIGO
-  </button>
-
-  <p style="font-size: 12px; color: #718096; margin-top: 20px;">
-    ✓ Assim que a doação for confirmada, sua resposta será liberada automaticamente na tela de trás.
-  </p>
-`;
-
+              <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#22c55e; color:white; border:none; padding:16px; border-radius:50px; font-weight:bold; cursor:pointer; font-size:14px;">
+                COPIAR CÓDIGO PIX
+              </button>
+            `;
             verificarStatus();
-          } else {
-            throw new Error("Erro ao gerar PIX");
           }
         } catch (err) {
-          alert(
-            "Houve uma pequena oscilação na rede. Por favor, tente clicar novamente.",
-          );
           btn.innerText = "TENTAR NOVAMENTE";
           btn.disabled = false;
-          btn.style.opacity = "1";
         }
       }
 
       function copiarPix() {
         const text = document.getElementById("pixCode");
-        text.select();
-        text.setSelectionRange(0, 99999);
         navigator.clipboard.writeText(text.value);
 
         const btn = document.getElementById("btnCopiar");
-        btn.innerText = "✓ CÓDIGO COPIADO!";
-        btn.style.background = "#2f855a";
-
-        const pixAlert = document.getElementById("pixInstructionsAlert");
-        if (pixAlert) pixAlert.style.display = "flex";
+        btn.innerText = "✓ COPIADO! COLE NO SEU BANCO";
+        btn.style.background = "#16a34a";
 
         setTimeout(() => {
-          btn.innerText = "COPIAR CÓDIGO AGORA";
-          btn.style.background = "#48bb78";
+          btn.innerText = "COPIAR CÓDIGO PIX";
+          btn.style.background = "#22c55e";
         }, 3000);
-      }
-
-      function fecharAlertaPix() {
-        const pixAlert = document.getElementById("pixInstructionsAlert");
-        if (pixAlert) pixAlert.style.display = "none";
       }
 
       function verificarStatus() {
         if (intervaloStatus) clearInterval(intervaloStatus);
-
         const statusTxt = document.getElementById("statusCheck");
         if (statusTxt) statusTxt.style.display = "block";
 
         intervaloStatus = setInterval(async () => {
           try {
-            const res = await fetch(
-              `https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`,
-            );
+            const res = await fetch(`https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`);
             const data = await res.json();
-
             if (data.pago === true) {
               clearInterval(intervaloStatus);
               liberarConteudo(data.textoRevelado);
             }
-          } catch (e) {
-            console.log("Checando status da sua contribuição...");
-          }
+          } catch (e) {}
         }, 3000);
       }
 
       function liberarConteudo(textoReal) {
         fecharModal();
-
         const btn = document.getElementById("btnReveal");
         const statusTxt = document.getElementById("statusCheck");
         if (btn) btn.remove();
@@ -1191,13 +1102,9 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
         if (blurArea) {
           blurArea.innerText = textoReal;
           blurArea.classList.remove("blur-text");
-          blurArea.classList.add("no-blur");
           blurArea.style.filter = "none";
           blurArea.style.opacity = "1";
-          blurArea.style.maskImage = "none";
-          blurArea.style.webkitMaskImage = "none";
         }
-
         localStorage.removeItem("conselho_pendente");
         localStorage.removeItem("session_id_pendente");
       }
