@@ -788,53 +788,54 @@
 
       // === FUNÇÃO ATUALIZADA: DEPOIMENTOS MAIS SUTIS ===
       function carregarDepoimentosDoDia() {
-        const container = document.getElementById('testimonial-display');
-        if(!container) return;
-        
-        const diaSemana = new Date().getDay();
-        
-        const bancoDeFrases = [
+  const container = document.getElementById('testimonial-display');
+  if(!container) return;
+  
+  const diaSemana = new Date().getDay();
+  
+  const bancoDeFrases = [
     // Domingo (0)
-    [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio.", img: "https://randomuser.me/api/portraits/women/65.jpg" },
-     { nome: "José Oliveira", texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado.", img: "https://randomuser.me/api/portraits/men/62.jpg" }],
+    [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio." },
+     { nome: "José Oliveira", texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado." }],
     // Segunda (1)
-    [{ nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz.", img: "https://randomuser.me/api/portraits/men/32.jpg" },
-     { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente.", img: "https://randomuser.me/api/portraits/women/70.jpg" }],
+    [{ nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz." },
+     { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente." }],
     // Terça (2)
-    [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso.", img: "https://randomuser.me/api/portraits/women/44.jpg" },
-     { nome: "Neuza Ramos", texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão.", img: "https://randomuser.me/api/portraits/women/33.jpg" }],
+    [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso." },
+     { nome: "Neuza Ramos", texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão." }],
     // Quarta (3)
-    [{ nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo.", img: "https://randomuser.me/api/portraits/men/46.jpg" },
-     { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje.", img: "https://randomuser.me/api/portraits/men/75.jpg" }],
+    [{ nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo." },
+     { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje." }],
     // Quinta (4)
-    [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora.", img: "https://randomuser.me/api/portraits/women/68.jpg" },
-     { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma.", img: "https://randomuser.me/api/portraits/women/82.jpg" }],
+    [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora." },
+     { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma." }],
     // Sexta (5)
-    [{ nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas o conselho me abriu os olhos para um novo caminho, nada é por acaso.", img: "https://randomuser.me/api/portraits/men/52.jpg" },
-     { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos", img: "https://randomuser.me/api/portraits/men/40.jpg" }],
+    [{ nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas o conselho me abriu os olhos para um novo caminho, nada é por acaso." },
+     { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos" }],
     // Sábado (6)
-    [{ nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade.", img: "https://randomuser.me/api/portraits/women/60.jpg" },
-     { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida.", img: "https://randomuser.me/api/portraits/women/50.jpg" }]
+    [{ nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade." },
+     { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida." }]
 ];
 
-        const selecionados = bancoDeFrases[diaSemana];
+  const selecionados = bancoDeFrases[diaSemana];
 
-        container.innerHTML = `
-            <div style="text-align: center; margin-bottom: 6px;">
-                <span style="font-size: 12px; color: #4a5568; background: rgba(255,255,255,0.6); padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(5px); font-weight: 500;">Pessoas que passaram por aqui hoje:</span>
-            </div>
-            ${selecionados.map((p, index) => `
-                <div class="testimonial-card">
-                    <img src="${p.img}" class="user-img">
-                    <div class="testimonial-text">
-                        <span class="user-name">${p.nome}</span>
-                        <p class="user-comment">"${p.texto}"</p>
-                        <div style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Enviado há ${Math.floor(Math.random() * (index === 0 ? 40 : 15) + (index === 0 ? 20 : 2))} min</div>
-                    </div>
-                </div>
-            `).join('')}
-        `;
-      }
+  container.innerHTML = `
+      <div style="text-align: center; margin-bottom: 8px;">
+          <span style="font-size: 11px; color: #64748b; background: rgba(255,255,255,0.5); padding: 5px 12px; border-radius: 20px; font-weight: 500; letter-spacing: 0.02em;">RELATOS DE HOJE</span>
+      </div>
+      ${selecionados.map((p, index) => `
+          <div class="testimonial-card" style="padding: 20px;">
+              <div class="testimonial-text">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                      <span class="user-name" style="font-family: 'Lora', serif; font-style: italic; color: #1a1a1a;">${p.nome}</span>
+                      <span style="font-size: 10px; color: #94a3b8;">há ${Math.floor(Math.random() * 40 + 5)} min</span>
+                  </div>
+                  <p class="user-comment" style="font-size: 14px; line-height: 1.6; color: #4a5568; font-style: normal; margin: 0;">"${p.texto}"</p>
+              </div>
+          </div>
+      `).join('')}
+  `;
+}
 
       function mostrarAlertaPrivacidade() {
         if (!sessionStorage.getItem("alertaPrivacidadeVisto")) {
