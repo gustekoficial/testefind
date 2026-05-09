@@ -792,11 +792,10 @@
   if (!container) return;
 
   const dataAtual = new Date();
-  const diaSemana = dataAtual.getDay(); // Pega o dia da semana (0-6)
+  const diaSemana = dataAtual.getDay(); 
   const diaDoMes = dataAtual.getDate(); 
   const mesAtual = dataAtual.getMonth();
 
-  // Criamos uma semente fixa para o dia atual para que o tempo não mude no refresh
   const sementeDia = diaDoMes + mesAtual;
 
   const bancoDeFrases = [
@@ -817,10 +816,10 @@
      { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma." }],
     // Sexta (5)
     [{ nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um novo caminho, nada é por acaso." },
-     { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida." }]
+     { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida." }], // <-- Adicionei a vírgula aqui
     // Sábado (6)
     [{ nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade." },
-     { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos" }],
+     { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos" }]
   ];
 
   const selecionados = bancoDeFrases[diaSemana];
@@ -830,8 +829,6 @@
           <span style="font-size: 11px; color: #64748b; background: rgba(255,255,255,0.5); padding: 5px 12px; border-radius: 20px; font-weight: 500; letter-spacing: 0.02em;">RELATOS DE HOJE</span>
       </div>
       ${selecionados.map((p, index) => {
-          // Cálculo matemático para gerar um tempo que parece aleatório mas é fixo pelo dia
-          // O tempo ficará entre 5 e 55 minutos
           const tempoFixo = ((sementeDia + (index * 23)) % 50) + 5;
 
           return `
@@ -849,7 +846,7 @@
   `;
 }
 
-// Não esqueça de chamar a função
+// Chamar a função
 carregarDepoimentosDoDia();
 
       function mostrarAlertaPrivacidade() {
