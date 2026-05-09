@@ -81,22 +81,21 @@
       }
 
       body {
-        margin: 0;
-        font-family: "Inter", sans-serif;
-        background:
-          linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
-          url("https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&q=80&w=2000")
-            center/cover fixed;
-        color: var(--text-dark);
-        display: flex;
-        flex-direction: column; /* Permite empilhar elementos na tela */
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        padding: 40px 20px;
-        box-sizing: border-box;
-        gap: 24px; /* Espaçamento limpo entre o bloco principal e depoimentos */
-      }
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    /* Altera o gradiente para ser mais sutil e aponta para o arquivo local/github */
+    background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
+                url("fundo.png") center/cover fixed;
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    gap: 24px;
+}
 
       .container {
         width: 100%;
@@ -108,6 +107,7 @@
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(212, 175, 55, 0.1);
+        box-sizing: border-box;
       }
 
       h1 {
@@ -116,6 +116,7 @@
         margin-bottom: 10px;
         color: #1a1a1a;
         letter-spacing: -0.5px;
+        margin-top: 0;
       }
       .sub {
         font-family: "Lora", serif;
@@ -161,6 +162,7 @@ textarea:focus {
 
 .btn-main:hover {
     transform: scale(1.02); /* Efeito visceral de resposta ao toque */
+    background-color: #000;
 }
 
       #resultado {
