@@ -1019,12 +1019,19 @@ textarea::placeholder {
         const data = await resposta.json();
 
         // SÓ SALVA NO NAVEGADOR SE TUDO DEU CERTO
-        localStorage.setItem("conselho_pendente", data.texto);
-        localStorage.setItem("session_id_pendente", sessionIdGlobal);
+        cconst agora = new Date().getTime(); 
+localStorage.setItem("conselho_pendente", data.texto);
+localStorage.setItem("session_id_pendente", sessionIdGlobal);
+localStorage.setItem("data_sintonizacao", agora); // O "pulo do gato" está aqui
 
-        btn.style.display = "none";
-        input.style.display = "none";
-        montarCaixaDeRevelacao(data.texto);
+// Mostrar a barra de urgência IMEDIATAMENTE após gerar
+document.getElementById("barraUrgencia").style.display = "block";
+iniciarTimerRegressivo(30 * 60 * 1000); // Inicia com 30 min cheios
+// ----------------------
+
+btn.style.display = "none";
+input.style.display = "none";
+montarCaixaDeRevelacao(data.texto);
         
     } catch (err) {
         console.error("Erro na sintonização:", err);
@@ -1104,7 +1111,7 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
         setTimeout(() => {
           fecharShareModal();
           abrirModalVenda();
-        }, 6000);
+        }, 2000);
       }
 
       function abrirModalVenda() {
