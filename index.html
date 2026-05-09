@@ -1049,21 +1049,52 @@ textarea::placeholder {
   }
 
   function montarCaixaDeRevelacao(textoVisivel) {
-    const el = document.getElementById("resultado");
-    if (!el) return;
-    el.innerHTML = `
-          <div class="reveal-box">
-            <span class="text-visible">${textoVisivel} </span>
-            <div class="blur-wrapper">
-              <button id="btnReveal" onclick="verificarFluxoDeRevelacao()">✨ REVELAR O CONSELHO FINAL</button>
-              <p id="statusCheck" style="font-size:11px; color:gray; display:none; margin-top: 95px;">Aguardando confirmação...</p>
-              <span id="targetBlur" class="blur-text">
-                Esta é a parte final do seu conselho espiritual e prático. Aqui reside o segredo para a mudança que você busca...
-              </span>
-            </div>
-          </div>
-        `;
-  }
+        const el = document.getElementById("resultado");
+        if (!el) return;
+
+        const fraseDeImpacto =
+          " O que impede sua evolução e o sinal que você buscou sobre o seu futuro é que...";
+
+        el.innerHTML = `
+    <div class="reveal-box" style="text-align: left; background: transparent;">
+      
+      <!-- Texto Principal -->
+      <div style="font-size: 18px; line-height: 1.6; color: #4a5568; font-family: sans-serif;">
+        <span>${textoVisivel}</span>
+        <span style="color: #4a5568;">${fraseDeImpacto}</span>
+      </div>
+
+      <div class="blur-wrapper" style="margin-top: 10px; text-align: center;">
+        
+        <!-- Borrão Superior -->
+        <div style="text-align: left; margin-bottom: 5px;">
+          <span class="text" style="user-select: none; font-size: 18px; color: #475569; opacity: 0.5; filter: blur(5px); line-height: 1.2; font-family: sans-serif;">
+            existe uma barreira energética e emocional que tem drenado suas forças e impedido que...
+          </span>
+        </div>
+
+        <!-- Botão de Ação -->
+        <button id="btnReveal" onclick="verificarFluxoDeRevelacao()" style="margin-bottom: 5px;">
+          ✨ REVELAR MEU CONSELHO AGORA
+        </button>
+
+        <!-- Status Ajustado: Agora ele tem um espaço reservado para não criar o buraco branco -->
+        <div style="height: 20px; margin-bottom: 10px;">
+          <p id="statusCheck" style="display: none; font-size: 11px; color: #94a3b8; font-style: italic; margin: 0;">
+            Aguardando confirmação...
+          </p>
+        </div>
+        
+        <!-- Borrão Inferior: Colado logo após o espaço do status -->
+        <div style="text-align: left;">
+          <span class="text" style="user-select: none; font-size: 18px; color: #475569; opacity: 0.4; filter: blur(6px); line-height: 1.5; font-family: sans-serif;">
+            reside exatamente em um detalhe que você tem ignorado sistematicamente. Este é o momento da sua virada definitiva e a chave para manifestar seus desejos está prestes a ser entregue. O universo não falha em enviar sinais para quem está pronto e sintonizado com a verdade.
+          </span>
+        </div>
+      </div>
+    </div>
+  `;
+      }
 
   // --- Funções de Modal e Compartilhamento (Mantidas) ---
 
