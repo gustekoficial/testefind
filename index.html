@@ -831,23 +831,29 @@ textarea::placeholder {
       let intervaloStatus = null;
 
       window.onload = function () {
-        iniciarContador();
-        carregarDepoimentosDoDia();
-        animarPlaceholder();
+    iniciarContador();
+    carregarDepoimentosDoDia();
+    animarPlaceholder();
 
-        const textoSalvo = localStorage.getItem("conselho_pendente");
-        const sessionSalva = localStorage.getItem("session_id_pendente");
+    const textoSalvo = localStorage.getItem("conselho_pendente");
+    const sessionSalva = localStorage.getItem("session_id_pendente");
 
-        if (textoSalvo && sessionSalva && sessionSalva !== "undefined") {
-          sessionIdGlobal = sessionSalva;
-          document.getElementById("btnGerar").style.display = "none";
-          document.getElementById("input").style.display = "none";
-          montarCaixaDeRevelacao(textoSalvo);
-          verificarStatus();
-        } else {
-          mostrarAlertaPrivacidade();
-        }
-      };
+    // Se existir algo salvo mas o session_id for inválido ou "undefined", limpamos na hora
+    if (sessionSalva === "undefined" || sessionSalva === null || sessionSalva === "") {
+        localStorage.removeItem("conselho_pendente");
+        localStorage.removeItem("session_id_pendente");
+        mostrarAlertaPrivacidade();
+    } 
+    else if (textoSalvo && sessionSalva) {
+        sessionIdGlobal = sessionSalva;
+        document.getElementById("btnGerar").style.display = "none";
+        document.getElementById("input").style.display = "none";
+        montarCaixaDeRevelacao(textoSalvo);
+        verificarStatus();
+    } else {
+        mostrarAlertaPrivacidade();
+    }
+};
 
       // === FUNÇÃO ATUALIZADA: DEPOIMENTOS MAIS SUTIS ===
       function carregarDepoimentosDoDia() {
