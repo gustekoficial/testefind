@@ -837,97 +837,141 @@ textarea::placeholder {
     </div>
 
     <script>
-      let sessionIdGlobal = "";
-      let intervaloStatus = null;
+  let sessionIdGlobal = "";
+  let intervaloStatus = null;
 
-      window.onload = function () {
+  window.onload = function () {
+    // 1. Inicia funções visuais básicas
     iniciarContador();
     carregarDepoimentosDoDia();
     animarPlaceholder();
 
+    // 2. Tenta recuperar estado anterior do localStorage
     const textoSalvo = localStorage.getItem("conselho_pendente");
     const sessionSalva = localStorage.getItem("session_id_pendente");
     const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
 
+    // LÓGICA DE VERIFICAÇÃO DE TEMPO (30 MINUTOS)
     if (timestampSintonizacao && textoSalvo) {
-        const agora = new Date().getTime();
-        const trintaMinutos = 30 * 60 * 1000; 
-        const tempoPassado = agora - parseInt(timestampSintonizacao);
+      const agora = new Date().getTime();
+      const trintaMinutos = 30 * 60 * 1000; // Milissegundos em 30 min
+      const tempoPassado = agora - parseInt(timestampSintonizacao);
 
-        if (tempoPassado > trintaMinutos) {
-            // Tempo esgotou: Limpa e reseta
-            localStorage.clear();
-            location.reload();
-        } else {
-            // Tempo ainda disponível: Restaura a interface
-            document.getElementById("barraUrgencia").style.display = "block";
-            
-            // Calcula quanto tempo ainda resta dos 30 minutos originais
-            const tempoRestante = trintaMinutos - tempoPassado;
-            iniciarTimerRegressivo(tempoRestante);
-            
-            sessionIdGlobal = sessionSalva;
-            document.getElementById("btnGerar").style.display = "none";
-            document.getElementById("input").style.display = "none";
-            
-            // Verifica se o elemento 'resultado' existe antes de montar
-            const elResultado = document.getElementById("resultado");
-            if(elResultado) {
-                montarCaixaDeRevelacao(textoSalvo);
-            }
-            verificarStatus();
+      if (tempoPassado > trintaMinutos) {
+        // CASO A: O tempo ACABOU.
+        console.log("Tempo expirado. Resetando sintonização.");
+        localStorage.clear(); // Limpa tudo
+        mostrarAlertaPrivacidade(); // Mostra alerta inicial
+      } else {
+        // CASO B: Ainda está dentro do tempo. Restaura a resposta.
+        console.log("Sintonização ativa encontrada. Restaurando...");
+
+        // A. Mostra a barra de urgência
+        const barra = document.getElementById("barraUrgencia");
+        if (barra) barra.style.display = "block";
+
+        // B. Calcula tempo restante e inicia o cronômetro visual
+        const tempoRestante = trintaMinutos - tempoPassado;
+        iniciarTimerRegressivo(tempoRestante);
+
+        // C. Configura interface para o estado de pagamento
+        sessionIdGlobal = sessionSalva;
+        document.getElementById("btnGerar").style.display = "none";
+        document.getElementById("input").style.display = "none";
+
+        // D. Tenta montar a caixa de revelação se o elemento existir
+        const elResultado = document.getElementById("resultado");
+        if (elResultado) {
+          montarCaixaDeRevelacao(textoSalvo);
         }
+        // E. Reativa a verificação de status do pagamento
+        verificarStatus();
+      }
     } else {
-        // Se não tem nada salvo, fluxo normal de primeira visita
-        mostrarAlertaPrivacidade();
+      // CASO C: Primeira visita ou nada salvo.
+      mostrarAlertaPrivacidade();
     }
-};
+  };
 
-      // === FUNÇÃO ATUALIZADA: DEPOIMENTOS MAIS SUTIS ===
-      function carregarDepoimentosDoDia() {
-        const container = document.getElementById('testimonial-display');
-        if (!container) return;
+  // === FUNÇÕES VISUAIS E DEPOIMENTOS ===
 
-        const dataAtual = new Date();
-        const diaSemana = dataAtual.getDay(); 
-        const diaDoMes = dataAtual.getDate(); 
-        const mesAtual = dataAtual.getMonth();
+  function carregarDepoimentosDoDia() {
+    const container = document.getElementById('testimonial-display');
+    if (!container) return;
 
-        const sementeDia = diaDoMes + mesAtual;
+    const dataAtual = new Date();
+    const diaSemana = dataAtual.getDay();
+    const diaDoMes = dataAtual.getDate();
+    const mesAtual = dataAtual.getMonth();
+    const sementeDia = diaDoMes + mesAtual;
 
-        const bancoDeFrases = [
-          // Domingo (0)
-          [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio." },
-           { nome: "José Oliveira", texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado." }],
-          // Segunda (1)
-          [{ nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz." },
-           { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente." }],
-          // Terça (2)
-          [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso." },
-           { nome: "Neuza Ramos", texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão." }],
-          // Quarta (3)
-          [{ nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo." },
-           { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje." }],
-          // Quinta (4)
-          [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora." },
-           { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma." }],
-          // Sexta (5)
-          [{ nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um novo caminho, nada é por acaso." },
-           { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida." }],
-          // Sábado (6)
-          [{ nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade." },
-           { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos" }]
-        ];
+    const bancoDeFrases = [
+      // Domingo (0)
+      [{
+        nome: "Clarice Rocha",
+        texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio."
+      }, {
+        nome: "José Oliveira",
+        texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado."
+      }],
+      // Segunda (1)
+      [{
+        nome: "Geraldo Neto",
+        texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz."
+      }, {
+        nome: "Maria Silva",
+        texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente."
+      }],
+      // Terça (2)
+      [{
+        nome: "Sônia Magalhães",
+        texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso."
+      }, {
+        nome: "Neuza Ramos",
+        texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão."
+      }],
+      // Quarta (3)
+      [{
+        nome: "Benedito Alves",
+        texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo."
+      }, {
+        nome: "Antônio Carlos",
+        texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje."
+      }],
+      // Quinta (4)
+      [{
+        nome: "Tânia Soares",
+        texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora."
+      }, {
+        nome: "Dona Izabel",
+        texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma."
+      }],
+      // Sexta (5)
+      [{
+        nome: "Ricardo Viana",
+        texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um novo caminho, nada é por acaso."
+      }, {
+        nome: "Margarida Lemos",
+        texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida."
+      }],
+      // Sábado (6)
+      [{
+        nome: "Helena Faria",
+        texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade."
+      }, {
+        nome: "Roberto Mendes",
+        texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos"
+      }]
+    ];
 
-        const selecionados = bancoDeFrases[diaSemana];
+    const selecionados = bancoDeFrases[diaSemana];
 
-        container.innerHTML = `
+    container.innerHTML = `
             <div style="text-align: center; margin-bottom: 8px;">
                 <span style="font-size: 11px; color: #64748b; background: rgba(255,255,255,0.5); padding: 5px 12px; border-radius: 20px; font-weight: 500; letter-spacing: 0.02em;">RELATOS DE HOJE</span>
             </div>
             ${selecionados.map((p, index) => {
                 const tempoFixo = ((sementeDia + (index * 23)) % 50) + 5;
-
                 return `
                     <div class="testimonial-card" style="padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05);">
                         <div class="testimonial-text">
@@ -941,66 +985,74 @@ textarea::placeholder {
                 `;
             }).join('')}
         `;
+  }
+
+  function animarPlaceholder() {
+    const input = document.getElementById('input');
+    if (!input) return;
+    const estados = ["Desabafe aqui", "Desabafe aqui.", "Desabafe aqui..", "Desabafe aqui..."];
+    let i = 0;
+
+    setInterval(() => {
+      if (input.value === "") {
+        input.placeholder = estados[i];
+        i = (i + 1) % estados.length;
       }
+    }, 500);
+  }
 
-      function animarPlaceholder() {
-        const input = document.getElementById('input');
-        const estados = ["Desabafe aqui", "Desabafe aqui.", "Desabafe aqui..", "Desabafe aqui..."];
-        let i = 0;
+  function iniciarContador() {
+    const txt = document.getElementById("txt-contador");
+    if (!txt) return;
+    setInterval(() => {
+      const pessoas = Math.floor(Math.random() * (160 - 110 + 1)) + 110;
+      txt.innerHTML = `<strong>${pessoas} pessoas</strong> sintonizadas agora.`;
+    }, 3000);
+  }
 
-        setInterval(() => {
-            if (input && input.value === "") {
-                input.placeholder = estados[i];
-                i = (i + 1) % estados.length;
-            }
-        }, 500); 
-      }
+  // === LÓGICA DO CRONÔMETRO ===
 
-
-      function iniciarTimerRegressivo(tempoRestanteMS) {
+  function iniciarTimerRegressivo(tempoRestanteMS) {
     const display = document.getElementById("timerRegressivo");
-    
-    const intervalo = setInterval(() => {
-        const minutos = Math.floor((tempoRestanteMS % (1000 * 60 * 60)) / (1000 * 60));
-        const segundos = Math.floor((tempoRestanteMS % (1000 * 60)) / 1000);
+    if (!display) return;
 
-        display.innerText = 
-            (minutos < 10 ? "0" + minutos : minutos) + ":" + 
-            (segundos < 10 ? "0" + segundos : segundos);
+    // Cancela intervalo anterior se houver para evitar múltiplos timers
+    if (window.intervaloUrgencia) clearInterval(window.intervaloUrgencia);
 
-        tempoRestanteMS -= 1000;
-
-        if (tempoRestanteMS < 0) {
-            clearInterval(intervalo);
-            localStorage.clear();
-            location.reload();
-        }
-    }, 1000);
-}
-
-      
-
-      function fecharAlertaPrivacidade() {
-        document.getElementById("privacyAlert").classList.remove("show");
-        sessionStorage.setItem("alertaPrivacidadeVisto", "true");
-        document.getElementById("input").focus();
+    function atualizarDisplay() {
+      if (tempoRestanteMS <= 0) {
+        clearInterval(window.intervaloUrgencia);
+        console.log("Tempo esgotado no timer.");
+        localStorage.clear();
+        location.reload();
+        return;
       }
 
-      function iniciarContador() {
-        const txt = document.getElementById("txt-contador");
-        setInterval(() => {
-          const pessoas = Math.floor(Math.random() * (160 - 110 + 1)) + 110;
-          if(txt) txt.innerHTML = `<strong>${pessoas} pessoas</strong> sintonizadas agora.`;
-        }, 3000);
-      }
+      const minutos = Math.floor((tempoRestanteMS / 1000 / 60));
+      const segundos = Math.floor((tempoRestanteMS / 1000) % 60);
 
-    async function gerarResposta() {
+      display.innerText =
+        (minutos < 10 ? "0" + minutos : minutos) + ":" +
+        (segundos < 10 ? "0" + segundos : segundos);
+
+      tempoRestanteMS -= 1000;
+    }
+
+    atualizarDisplay(); // Executa imediato para não esperar 1s
+    window.intervaloUrgencia = setInterval(atualizarDisplay, 1000);
+  }
+
+  // === LÓGICA CORE (GERAR RESPOSTA E PAGAMENTO) ===
+
+  async function gerarResposta() {
     const input = document.getElementById("input");
     const btn = document.getElementById("btnGerar");
     const resultadoDiv = document.getElementById("resultado");
-    
+
+    if (!input || !btn || !resultadoDiv) return;
+
     if (input.value.length < 10)
-        return alert("Por favor, conte um pouco mais.");
+      return alert("Por favor, conte um pouco mais.");
 
     btn.disabled = true;
     btn.innerText = "Sintonizando...";
@@ -1009,64 +1061,67 @@ textarea::placeholder {
     sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
 
     try {
-        const resposta = await fetch(
-            "https://backfind.vercel.app/api/responder",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    mensagem: input.value,
-                    sessionId: sessionIdGlobal,
-                }),
-            },
-        );
+      const resposta = await fetch(
+        "https://backfind.vercel.app/api/responder", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            mensagem: input.value,
+            sessionId: sessionIdGlobal,
+          }),
+        },
+      );
 
-        if (!resposta.ok) throw new Error("Falha na resposta");
+      if (!resposta.ok) throw new Error("Falha na resposta");
 
-        const data = await resposta.json();
+      const data = await resposta.json();
 
-        // SÓ SALVA NO NAVEGADOR SE TUDO DEU CERTO
-        cconst agora = new Date().getTime(); 
-localStorage.setItem("conselho_pendente", data.texto);
-localStorage.setItem("session_id_pendente", sessionIdGlobal);
-localStorage.setItem("data_sintonizacao", agora); // O "pulo do gato" está aqui
+      // === SALVAMENTO CORRETO DO ESTADO (CORRIGIDO E ATUALIZADO) ===
+      const agora = new Date().getTime(); // Timestamp atual
 
-// Mostrar a barra de urgência IMEDIATAMENTE após gerar
-document.getElementById("barraUrgencia").style.display = "block";
-iniciarTimerRegressivo(30 * 60 * 1000); // Inicia com 30 min cheios
-// ----------------------
+      // 1. Salva os dados da sintonização
+      localStorage.setItem("conselho_pendente", data.texto);
+      localStorage.setItem("session_id_pendente", sessionIdGlobal);
+      localStorage.setItem("data_sintonizacao", agora); // Salva o horário de início
 
-btn.style.display = "none";
-input.style.display = "none";
-montarCaixaDeRevelacao(data.texto);
-        
+      // 2. Ativa a barra de urgência IMEDIATAMENTE
+      const barra = document.getElementById("barraUrgencia");
+      if (barra) barra.style.display = "block";
+      iniciarTimerRegressivo(30 * 60 * 1000); // Inicia 30 min cheios
+
+      // 3. Atualiza a interface
+      btn.style.display = "none";
+      input.style.display = "none";
+      montarCaixaDeRevelacao(data.texto);
+
     } catch (err) {
-        console.error("Erro na sintonização:", err);
-        
-        // LIMPA O LIXO PARA NÃO TRAVAR O CELULAR
-        localStorage.removeItem("conselho_pendente");
-        localStorage.removeItem("session_id_pendente");
+      console.error("Erro na sintonização:", err);
 
-        btn.style.display = "none";
-        input.style.display = "none";
+      // Limpa para não travar
+      localStorage.removeItem("conselho_pendente");
+      localStorage.removeItem("session_id_pendente");
+      localStorage.removeItem("data_sintonizacao");
 
-        // Interface de Erro (Estilizada e segura)
-        resultadoDiv.innerHTML = `
+      btn.disabled = false;
+      btn.innerText = "REVELAR MINHA RESPOSTA";
+      input.style.opacity = "1";
+
+      resultadoDiv.innerHTML = `
             <div style="text-align:center; padding: 20px;">
                 <p style="font-size: 14px; color: #718096; margin-bottom: 15px; font-style: italic;">
-                    Houve uma oscilação na sintonização. Por favor, tente novamente.
+                    Houve uma oscilação na sintonização. Por favor, tente clicar no botão novamente.
                 </p>
-                <button onclick="window.location.reload()" style="width: 100%; padding: 18px; background: #4a5568; color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                    🔄 TENTAR NOVAMENTE
-                </button>
             </div>
         `;
     }
-}
+  }
 
-      function montarCaixaDeRevelacao(textoVisivel) {
-        const el = document.getElementById("resultado");
-        el.innerHTML = `
+  function montarCaixaDeRevelacao(textoVisivel) {
+    const el = document.getElementById("resultado");
+    if (!el) return;
+    el.innerHTML = `
           <div class="reveal-box">
             <span class="text-visible">${textoVisivel} </span>
             <div class="blur-wrapper">
@@ -1078,92 +1133,98 @@ montarCaixaDeRevelacao(data.texto);
             </div>
           </div>
         `;
-      }
+  }
 
-      function verificarFluxoDeRevelacao() {
-        if (!localStorage.getItem("ja_compartilhou")) {
-          document.getElementById("shareModal").style.display = "flex";
-        } else {
-          abrirModalVenda();
-        }
-      }
+  // --- Funções de Modal e Compartilhamento (Mantidas) ---
 
-      function fecharShareModal() {
-        document.getElementById("shareModal").style.display = "none";
-      }
+  function verificarFluxoDeRevelacao() {
+    if (!localStorage.getItem("ja_compartilhou")) {
+      document.getElementById("shareModal").style.display = "flex";
+    } else {
+      abrirModalVenda();
+    }
+  }
 
-      function compartilharNoWhatsApp() {
-       const mensagem = 
-`Algo tocou meu coração hoje e lembrei de você. ✨
+  function fecharShareModal() {
+    document.getElementById("shareModal").style.display = "none";
+  }
+
+  function compartilharNoWhatsApp() {
+    const mensagem =
+      `Algo tocou meu coração hoje e lembrei de você. ✨
 
 Se você também está buscando uma direção ou uma resposta para sua vida, veja o que está guardado pra você:
 
 👉 https://encontresuaresposta.com.br`;
 
-        const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, "_blank");
+    localStorage.setItem("ja_compartilhou", "true");
 
-        window.open(url, "_blank");
-        localStorage.setItem("ja_compartilhou", "true");
+    // Lógica para abrir modal após voltar
+    window.addEventListener("focus", function aoVoltarProSite() {
+      fecharShareModal();
+      abrirModalVenda();
+      window.removeEventListener("focus", aoVoltarProSite);
+    }, {
+      once: true
+    }, );
 
-        window.addEventListener(
-          "focus",
-          function aoVoltarProSite() {
-            fecharShareModal();
-            abrirModalVenda();
-            window.removeEventListener("focus", aoVoltarProSite);
+    setTimeout(() => {
+      fecharShareModal();
+      abrirModalVenda();
+    }, 2000);
+  }
+
+  function abrirModalVenda() {
+    // Verificação do Pixel do Facebook
+    if (typeof fbq === 'function') {
+      fbq("track", "InitiateCheckout");
+    }
+    const modal = document.getElementById("paymentModal");
+    if (modal) modal.style.display = "flex";
+  }
+
+  function fecharModal() {
+    const modal = document.getElementById("paymentModal");
+    if (modal) modal.style.display = "none";
+
+    const btn = document.getElementById("btnCheckoutModal");
+    if (btn) {
+      btn.innerText = "FAZER MINHA CONTRIBUIÇÃO E REVELAR";
+      btn.disabled = false;
+      btn.style.opacity = "1";
+    }
+  }
+
+  // --- Lógica de Pagamento e Status (Mantidas e Corrigidas) ---
+
+  async function iniciarPagamentoMercadoPago() {
+    const btn = document.getElementById("btnCheckoutModal");
+    const box = document.getElementById("boxPagamento");
+    if (!btn || !box || btn.disabled) return;
+
+    btn.innerText = "Gerando Ato de Fé...";
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
+
+    try {
+      const response = await fetch(
+        "https://backfind.vercel.app/api/pagamento", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
           },
-          { once: true },
-        );
+          body: JSON.stringify({
+            sessionId: sessionIdGlobal
+          }),
+        },
+      );
 
-        setTimeout(() => {
-          fecharShareModal();
-          abrirModalVenda();
-        }, 2000);
-      }
+      const data = await response.json();
 
-      function abrirModalVenda() {
-        if (typeof fbq === 'function') {
-            fbq("track", "InitiateCheckout");
-        }
-        const modal = document.getElementById("paymentModal");
-        if (modal) modal.style.display = "flex";
-      }
-
-      function fecharModal() {
-        const modal = document.getElementById("paymentModal");
-        if (modal) modal.style.display = "none";
-
-        const btn = document.getElementById("btnCheckoutModal");
-        if (btn) {
-          btn.innerText = "FAZER MINHA CONTRIBUIÇÃO E REVELAR";
-          btn.disabled = false;
-          btn.style.opacity = "1";
-        }
-      }
-
-      async function iniciarPagamentoMercadoPago() {
-        const btn = document.getElementById("btnCheckoutModal");
-        const box = document.getElementById("boxPagamento");
-        if (btn.disabled) return;
-
-        btn.innerText = "Gerando Ato de Fé...";
-        btn.disabled = true;
-        btn.style.opacity = "0.7";
-
-        try {
-          const response = await fetch(
-            "https://backfind.vercel.app/api/pagamento",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ sessionId: sessionIdGlobal }),
-            },
-          );
-
-          const data = await response.json();
-
-          if (data.qr_code) {
-            box.innerHTML = `
+      if (data.qr_code) {
+        box.innerHTML = `
     <!-- Botão Fechar -->
     <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 20px; padding: 5px; z-index: 10;" onclick="fecharModal()">✕</button>
     
@@ -1204,93 +1265,103 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
     </button>
 
     <p style="font-size: 12px; color: #718096; margin-top: 20px;">
-                ✓ Assim que a doação for confirmada, sua resposta será liberada automaticamente na tela de trás.
-              </p>
+        ✓ Assim que a doação for confirmada, sua resposta será liberada automaticamente na tela de trás.
+    </p>
 `;
+        verificarStatus();
+      } else {
+        throw new Error("Erro ao gerar PIX");
+      }
+    } catch (err) {
+      alert("Houve uma pequena oscilação na rede. Por favor, tente clicar novamente.");
+      btn.innerText = "TENTAR NOVAMENTE";
+      btn.disabled = false;
+      btn.style.opacity = "1";
+    }
+  }
 
-            verificarStatus();
-          } else {
-            throw new Error("Erro ao gerar PIX");
-          }
-        } catch (err) {
-          alert(
-            "Houve uma pequena oscilação na rede. Por favor, tente clicar novamente.",
-          );
-          btn.innerText = "TENTAR NOVAMENTE";
-          btn.disabled = false;
-          btn.style.opacity = "1";
+  function copiarPix() {
+    const text = document.getElementById("pixCode");
+    if (!text) return;
+    text.select();
+    text.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(text.value);
+
+    const btn = document.getElementById("btnCopiar");
+    if (btn) {
+      btn.innerText = "✓ CÓDIGO COPIADO!";
+      btn.style.background = "#2f855a";
+    }
+
+    const pixAlert = document.getElementById("pixInstructionsAlert");
+    if (pixAlert) pixAlert.style.display = "flex";
+
+    setTimeout(() => {
+      if (btn) {
+        btn.innerText = "COPIAR CÓDIGO AGORA";
+        btn.style.background = "#48bb78";
+      }
+    }, 3000);
+  }
+
+  function fecharAlertaPix() {
+    const pixAlert = document.getElementById("pixInstructionsAlert");
+    if (pixAlert) pixAlert.style.display = "none";
+  }
+
+  function verificarStatus() {
+    if (intervaloStatus) clearInterval(intervaloStatus);
+
+    const statusCheckHtml = document.getElementById("statusCheck");
+    if (statusCheckHtml) statusCheckHtml.style.display = "block";
+
+    intervaloStatus = setInterval(async () => {
+      try {
+        const res = await fetch(
+          `https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`,
+        );
+        const data = await res.json();
+
+        if (data.pago === true) {
+          clearInterval(intervaloStatus);
+          liberarConteudo(data.textoRevelado);
         }
+      } catch (e) {
+        console.log("Checando status da sua contribuição...");
       }
+    }, 3000);
+  }
 
-      function copiarPix() {
-        const text = document.getElementById("pixCode");
-        text.select();
-        text.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(text.value);
+  function liberarConteudo(textoReal) {
+    fecharModal();
 
-        const btn = document.getElementById("btnCopiar");
-        btn.innerText = "✓ CÓDIGO COPIADO!";
-        btn.style.background = "#2f855a";
+    const btn = document.getElementById("btnReveal");
+    const statusTxt = document.getElementById("statusCheck");
+    if (btn) btn.remove();
+    if (statusTxt) statusTxt.remove();
 
-        const pixAlert = document.getElementById("pixInstructionsAlert");
-        if (pixAlert) pixAlert.style.display = "flex";
+    const blurArea = document.getElementById("targetBlur");
+    if (blurArea) {
+      blurArea.innerText = textoReal;
+      blurArea.classList.remove("blur-text");
+      blurArea.classList.add("no-blur");
+      blurArea.style.filter = "none";
+      blurArea.style.opacity = "1";
+      blurArea.style.maskImage = "none";
+      blurArea.style.webkitMaskImage = "none";
+    }
 
-        setTimeout(() => {
-          btn.innerText = "COPIAR CÓDIGO AGORA";
-          btn.style.background = "#48bb78";
-        }, 3000);
-      }
+    // Limpa o localStorage para permitir nova sintonização
+    localStorage.removeItem("conselho_pendente");
+    localStorage.removeItem("session_id_pendente");
+    localStorage.removeItem("data_sintonizacao");
+  }
 
-      function fecharAlertaPix() {
-        const pixAlert = document.getElementById("pixInstructionsAlert");
-        if (pixAlert) pixAlert.style.display = "none";
-      }
-
-      function verificarStatus() {
-        if (intervaloStatus) clearInterval(intervaloStatus);
-
-        const statusTxt = document.getElementById("statusCheck");
-        if (statusTxt) statusTxt.style.display = "block";
-
-        intervaloStatus = setInterval(async () => {
-          try {
-            const res = await fetch(
-              `https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`,
-            );
-            const data = await res.json();
-
-            if (data.pago === true) {
-              clearInterval(intervaloStatus);
-              liberarConteudo(data.textoRevelado);
-            }
-          } catch (e) {
-            console.log("Checando status da sua contribuição...");
-          }
-        }, 3000);
-      }
-
-      function liberarConteudo(textoReal) {
-        fecharModal();
-
-        const btn = document.getElementById("btnReveal");
-        const statusTxt = document.getElementById("statusCheck");
-        if (btn) btn.remove();
-        if (statusTxt) statusTxt.remove();
-
-        const blurArea = document.getElementById("targetBlur");
-        if (blurArea) {
-          blurArea.innerText = textoReal;
-          blurArea.classList.remove("blur-text");
-          blurArea.classList.add("no-blur");
-          blurArea.style.filter = "none";
-          blurArea.style.opacity = "1";
-          blurArea.style.maskImage = "none";
-          blurArea.style.webkitMaskImage = "none";
-        }
-
-        localStorage.removeItem("conselho_pendente");
-        localStorage.removeItem("session_id_pendente");
-      }
+  // --- Função Placeholder (Faltava no seu envio) ---
+  function mostrarAlertaPrivacidade() {
+    const alert = document.getElementById("privacyAlert");
+    if (alert) alert.classList.add("show");
+  }
 </script>
   </body>
 </html>
