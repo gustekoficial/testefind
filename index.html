@@ -796,6 +796,7 @@ textarea::placeholder {
       window.onload = function () {
         iniciarContador();
         carregarDepoimentosDoDia();
+        animarPlaceholder();
 
         const textoSalvo = localStorage.getItem("conselho_pendente");
         const sessionSalva = localStorage.getItem("session_id_pendente");
@@ -813,86 +814,76 @@ textarea::placeholder {
 
       // === FUNÇÃO ATUALIZADA: DEPOIMENTOS MAIS SUTIS ===
       function carregarDepoimentosDoDia() {
-  const container = document.getElementById('testimonial-display');
-  if (!container) return;
+        const container = document.getElementById('testimonial-display');
+        if (!container) return;
 
-  const dataAtual = new Date();
-  const diaSemana = dataAtual.getDay(); 
-  const diaDoMes = dataAtual.getDate(); 
-  const mesAtual = dataAtual.getMonth();
+        const dataAtual = new Date();
+        const diaSemana = dataAtual.getDay(); 
+        const diaDoMes = dataAtual.getDate(); 
+        const mesAtual = dataAtual.getMonth();
 
-  const sementeDia = diaDoMes + mesAtual;
+        const sementeDia = diaDoMes + mesAtual;
 
-  const bancoDeFrases = [
-    // Domingo (0)
-    [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio." },
-     { nome: "José Oliveira", texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado." }],
-    // Segunda (1)
-    [{ nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz." },
-     { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente." }],
-    // Terça (2)
-    [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso." },
-     { nome: "Neuza Ramos", texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão." }],
-    // Quarta (3)
-    [{ nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo." },
-     { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje." }],
-    // Quinta (4)
-    [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora." },
-     { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma." }],
-    // Sexta (5)
-    [{ nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um novo caminho, nada é por acaso." },
-     { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida." }], // <-- Adicionei a vírgula aqui
-    // Sábado (6)
-    [{ nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade." },
-     { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos" }]
-  ];
+        const bancoDeFrases = [
+          // Domingo (0)
+          [{ nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio." },
+           { nome: "José Oliveira", texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado." }],
+          // Segunda (1)
+          [{ nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz." },
+           { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente." }],
+          // Terça (2)
+          [{ nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso." },
+           { nome: "Neuza Ramos", texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão." }],
+          // Quarta (3)
+          [{ nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo." },
+           { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje." }],
+          // Quinta (4)
+          [{ nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora." },
+           { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma." }],
+          // Sexta (5)
+          [{ nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um novo caminho, nada é por acaso." },
+           { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida." }],
+          // Sábado (6)
+          [{ nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade." },
+           { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos" }]
+        ];
 
-  const selecionados = bancoDeFrases[diaSemana];
+        const selecionados = bancoDeFrases[diaSemana];
 
-  container.innerHTML = `
-      <div style="text-align: center; margin-bottom: 8px;">
-          <span style="font-size: 11px; color: #64748b; background: rgba(255,255,255,0.5); padding: 5px 12px; border-radius: 20px; font-weight: 500; letter-spacing: 0.02em;">RELATOS DE HOJE</span>
-      </div>
-      ${selecionados.map((p, index) => {
-          const tempoFixo = ((sementeDia + (index * 23)) % 50) + 5;
+        container.innerHTML = `
+            <div style="text-align: center; margin-bottom: 8px;">
+                <span style="font-size: 11px; color: #64748b; background: rgba(255,255,255,0.5); padding: 5px 12px; border-radius: 20px; font-weight: 500; letter-spacing: 0.02em;">RELATOS DE HOJE</span>
+            </div>
+            ${selecionados.map((p, index) => {
+                const tempoFixo = ((sementeDia + (index * 23)) % 50) + 5;
 
-          return `
-              <div class="testimonial-card" style="padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05);">
-                  <div class="testimonial-text">
-                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                          <span class="user-name" style="font-family: 'Lora', serif; font-style: italic; color: #1a1a1a; font-weight: 600;">${p.nome}</span>
-                          <span style="font-size: 10px; color: #94a3b8;">há ${tempoFixo} min</span>
-                      </div>
-                      <p class="user-comment" style="font-size: 14px; line-height: 1.6; color: #4a5568; font-style: normal; margin: 0;">"${p.texto}"</p>
-                  </div>
-              </div>
-          `;
-      }).join('')}
-  `;
-}
-
-// Chamar a função
-carregarDepoimentosDoDia();
+                return `
+                    <div class="testimonial-card" style="padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div class="testimonial-text">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <span class="user-name" style="font-family: 'Lora', serif; font-style: italic; color: #1a1a1a; font-weight: 600;">${p.nome}</span>
+                                <span style="font-size: 10px; color: #94a3b8;">há ${tempoFixo} min</span>
+                            </div>
+                            <p class="user-comment" style="font-size: 14px; line-height: 1.6; color: #4a5568; font-style: normal; margin: 0;">"${p.texto}"</p>
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+        `;
+      }
 
       function animarPlaceholder() {
-    const input = document.getElementById('input');
-    const estados = ["Desabafe aqui", "Desabafe aqui.", "Desabafe aqui..", "Desabafe aqui..."];
-    let i = 0;
+        const input = document.getElementById('input');
+        const estados = ["Desabafe aqui", "Desabafe aqui.", "Desabafe aqui..", "Desabafe aqui..."];
+        let i = 0;
 
-    setInterval(() => {
-        // Só anima se o campo estiver vazio (para não atrapalhar quem está digitando)
-        if (input.value === "") {
-            input.placeholder = estados[i];
-            i = (i + 1) % estados.length;
-        }
-    }, 500); // Velocidade da piscada (500ms)
-}
-
-// Chame a função dentro do window.onload que já existe no seu código
-window.onload = function() {
-    carregarDepoimentosDoDia(); // Sua função de depoimentos
-    animarPlaceholder();        // Inicia a animação dos pontos
-};
+        setInterval(() => {
+            if (input && input.value === "") {
+                input.placeholder = estados[i];
+                i = (i + 1) % estados.length;
+            }
+        }, 500); 
+      }
 
       function fecharAlertaPrivacidade() {
         document.getElementById("privacyAlert").classList.remove("show");
@@ -904,7 +895,7 @@ window.onload = function() {
         const txt = document.getElementById("txt-contador");
         setInterval(() => {
           const pessoas = Math.floor(Math.random() * (160 - 110 + 1)) + 110;
-          txt.innerHTML = `<strong>${pessoas} pessoas</strong> sintonizadas agora.`;
+          if(txt) txt.innerHTML = `<strong>${pessoas} pessoas</strong> sintonizadas agora.`;
         }, 3000);
       }
 
@@ -982,7 +973,7 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
 
 👉 https://encontresuaresposta.com.br`;
 
-const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+        const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
 
         window.open(url, "_blank");
         localStorage.setItem("ja_compartilhou", "true");
@@ -1004,7 +995,9 @@ const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`
       }
 
       function abrirModalVenda() {
-        fbq("track", "InitiateCheckout");
+        if (typeof fbq === 'function') {
+            fbq("track", "InitiateCheckout");
+        }
         const modal = document.getElementById("paymentModal");
         if (modal) modal.style.display = "flex";
       }
@@ -1089,7 +1082,8 @@ const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`
         btn.innerText = "✓ CÓDIGO COPIADO!";
         btn.style.background = "#2f855a";
 
-        document.getElementById("pixInstructionsAlert").style.display = "flex";
+        const pixAlert = document.getElementById("pixInstructionsAlert");
+        if (pixAlert) pixAlert.style.display = "flex";
 
         setTimeout(() => {
           btn.innerText = "COPIAR CÓDIGO AGORA";
@@ -1098,7 +1092,8 @@ const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`
       }
 
       function fecharAlertaPix() {
-        document.getElementById("pixInstructionsAlert").style.display = "none";
+        const pixAlert = document.getElementById("pixInstructionsAlert");
+        if (pixAlert) pixAlert.style.display = "none";
       }
 
       function verificarStatus() {
@@ -1146,6 +1141,6 @@ const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`
         localStorage.removeItem("conselho_pendente");
         localStorage.removeItem("session_id_pendente");
       }
-    </script>
+</script>
   </body>
 </html>
