@@ -1131,35 +1131,45 @@
         }
       }
 
-      function montarCaixaDeRevelacao(textoVisivel) {
-        const el = document.getElementById("resultado");
-        if (!el) return;
+      function montarCaixaDeRevelacao(textoVindoDaIA) {
+  const el = document.getElementById("resultado");
+  if (!el) return;
 
-        const fraseIndutora =
-          "Muitos sinais passaram despercebidos, mas este é o único que você não pode ignorar; a razão espiritual de você estar aqui agora e o que o seu futuro exige que você saiba é que...";
+  const fraseIndutora = " Muitos sinais passaram despercebidos, mas este é o único que você não pode ignorar; a razão espiritual de você estar aqui agora e o que o seu futuro exige que você saiba é que...";
+  const separador = "..."; 
+  const partes = textoVindoDaIA.split(separador);
 
-        el.innerHTML = `
-    <div class="reveal-box" style="position: relative; display: flex; flex-direction: column;">
+  const textoVisivel = partes[0].trim();
+  const textoEscondido = partes[1] ? partes[1].trim() : "O seu caminho está sendo iluminado agora.";
+
+  el.innerHTML = `
+    <div class="reveal-box" style="
+      position: relative; 
+      display: flex; 
+      flex-direction: column; 
+      min-height: 250px; /* Garante um tamanho mínimo */
+      padding-bottom: 40px; /* Espaço de segurança para o status no rodapé */
+    ">
       
-      <span class="text-visible" style="line-height: 1.6; display: block;">
+      <span class="text-visible" style="line-height: 1.6; display: block; margin-bottom: 10px;">
         ${textoVisivel}${fraseIndutora}
       </span>
 
-      <div style="position: relative; margin-top: 0px;">
-        
+      <div style="position: relative; flex-grow: 1;">
         <span id="targetBlur" class="blur-text" style="
           display: block; 
           filter: blur(3px); 
           opacity: 0.7; 
           user-select: none; 
           line-height: 1.6;
+          padding-bottom: 20px;
         ">
-          Esta é a parte final do seu conselho espiritual e prático. Aqui reside o segredo para a mudança que você busca e os passos exatos que você deve tomar para encontrar e compreenderá por que certos caminhos se fecharam e como abrir as portas que realmente importam para o seu destino agora mesmo...
+          ${textoEscondido}
         </span>
 
         <div class="blur-wrapper" style="
           position: absolute; 
-          top: -15px; 
+          top: -10px; 
           left: 0; 
           width: 100%; 
           display: flex; 
@@ -1170,8 +1180,7 @@
           <button id="btnReveal" onclick="verificarFluxoDeRevelacao()" style="
             cursor: pointer; 
             pointer-events: auto; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
-            white-space: nowrap;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
           ">
             ✨ REVELAR O CONSELHO FINAL
           </button>
@@ -1183,18 +1192,21 @@
         font-size: 11px; 
         color: #718096; 
         text-align: center; 
-        margin-top: auto; /* Empurra para o fim do container */
-        padding-top: 20px; /* Espaço entre o texto e a linha */
-        margin-bottom: -10px; /* Puxa para mais perto da linha divisória */
-        font-style: italic;
+        position: absolute;
+        bottom: 0;
+        left: 0;
         width: 100%;
+        margin: 0;
+        padding: 5px 0;
+        font-style: italic;
+        background: transparent;
       ">
         Aguardando confirmação...
       </p>
 
     </div>
   `;
-      }
+}
 
       // --- Funções de Modal e Compartilhamento (Mantidas) ---
 
