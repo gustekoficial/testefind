@@ -1131,7 +1131,6 @@
         }
       }
 
-      function montarCaixaDeRevelacao(textoVisivel) {
         const el = document.getElementById("resultado");
         if (!el) return;
 
@@ -1139,7 +1138,7 @@
           " O sinal e a solução que você buscou sobre o seu futuro é que...";
 
         el.innerHTML = `
-    <div class="reveal-box" style="position: relative; display: block;">
+    <div class="reveal-box" style="position: relative; display: flex; flex-direction: column;">
       
       <span class="text-visible" style="line-height: 1.6; display: block;">
         ${textoVisivel}${fraseIndutora}
@@ -1149,8 +1148,8 @@
         
         <span id="targetBlur" class="blur-text" style="
           display: block; 
-          filter: blur(3px); /* Reduzido para mostrar mais as letras */
-          opacity: 0.7;    /* Aumentado para o texto ter mais 'cor' */
+          filter: blur(3px); 
+          opacity: 0.7; 
           user-select: none; 
           line-height: 1.6;
         ">
@@ -1176,12 +1175,25 @@
             ✨ REVELAR O CONSELHO FINAL
           </button>
         </div>
-
       </div>
+
+      <p id="statusCheck" style="
+        display: none; 
+        font-size: 11px; 
+        color: #718096; 
+        text-align: center; 
+        margin-top: auto; /* Empurra para o fim do container */
+        padding-top: 20px; /* Espaço entre o texto e a linha */
+        margin-bottom: -10px; /* Puxa para mais perto da linha divisória */
+        font-style: italic;
+        width: 100%;
+      ">
+        Aguardando confirmação...
+      </p>
+
     </div>
   `;
       }
-
       // --- Funções de Modal e Compartilhamento (Mantidas) ---
 
       function verificarFluxoDeRevelacao() {
