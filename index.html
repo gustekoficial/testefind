@@ -821,13 +821,13 @@
         const sessionSalva = localStorage.getItem("session_id_pendente");
         const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
 
-        // LÓGICA DE VERIFICAÇÃO DE TEMPO (30 MINUTOS)
+        // LÓGICA DE VERIFICAÇÃO DE TEMPO (ALTERADO PARA 10 MINUTOS)
         if (timestampSintonizacao && textoSalvo) {
           const agora = new Date().getTime();
-          const trintaMinutos = 30 * 60 * 1000; // Milissegundos em 30 min
+          const dezMinutos = 10 * 60 * 1000; // Milissegundos em 10 min
           const tempoPassado = agora - parseInt(timestampSintonizacao);
 
-          if (tempoPassado > trintaMinutos) {
+          if (tempoPassado > dezMinutos) {
             // CASO A: O tempo ACABOU.
             console.log("Tempo expirado. Resetando sintonização.");
             localStorage.clear(); // Limpa tudo
@@ -841,7 +841,7 @@
             if (barra) barra.style.display = "block";
 
             // B. Calcula tempo restante e inicia o cronômetro visual
-            const tempoRestante = trintaMinutos - tempoPassado;
+            const tempoRestante = dezMinutos - tempoPassado;
             iniciarTimerRegressivo(tempoRestante);
 
             // C. Configura interface para o estado de pagamento
@@ -854,8 +854,23 @@
             if (elResultado) {
               montarCaixaDeRevelacao(textoSalvo);
             }
-            // E. Reativa a verificação de status do pagamento
-            verificarStatus();
+            
+            // E. Verifica se já pagou para manter revelado, senão reativa verificação
+            if (localStorage.getItem("pagamento_confirmado") === "sim") {
+               setTimeout(() => {
+                   const blurArea = document.getElementById("targetBlur");
+                   if (blurArea) {
+                       blurArea.innerText = localStorage.getItem("conselho_secreto");
+                       blurArea.style.filter = "none";
+                   }
+                   const btnReveal = document.getElementById("btnReveal");
+                   if (btnReveal) btnReveal.style.display = "none";
+                   const statusTxt = document.getElementById("statusCheck");
+                   if (statusTxt) statusTxt.style.display = "none";
+               }, 100);
+            } else {
+               verificarStatus();
+            }
           }
         } else {
           // CASO C: Primeira visita ou nada salvo.
@@ -1035,6 +1050,7 @@
           if (tempoRestanteMS <= 0) {
             clearInterval(window.intervaloUrgencia);
             console.log("Tempo esgotado no timer.");
+            // ESTE É O ÚNICO MOMENTO EM QUE TUDO É APAGADO
             localStorage.clear();
             location.reload();
             return;
@@ -1092,18 +1108,19 @@
 
           const data = await resposta.json();
 
-          // === SALVAMENTO CORRETO DO ESTADO (CORRIGIDO E ATUALIZADO) ===
+          // === SALVAMENTO CORRETO DO ESTADO ===
           const agora = new Date().getTime(); // Timestamp atual
 
           // 1. Salva os dados da sintonização
           localStorage.setItem("conselho_pendente", data.texto);
           localStorage.setItem("session_id_pendente", sessionIdGlobal);
           localStorage.setItem("data_sintonizacao", agora); // Salva o horário de início
+          localStorage.removeItem("pagamento_confirmado"); // Reseta estado de pagamento anterior
 
-          // 2. Ativa a barra de urgência IMEDIATAMENTE
+          // 2. Ativa a barra de urgência IMEDIATAMENTE (ALTERADO PARA 10 MINUTOS)
           const barra = document.getElementById("barraUrgencia");
           if (barra) barra.style.display = "block";
-          iniciarTimerRegressivo(30 * 60 * 1000); // Inicia 30 min cheios
+          iniciarTimerRegressivo(10 * 60 * 1000); // Inicia 10 min cheios
 
           // 3. Atualiza a interface
           btn.style.display = "none";
@@ -1132,81 +1149,63 @@
       }
 
       function montarCaixaDeRevelacao(textoVindoDaIA) {
-  const el = document.getElementById("resultado");
-  if (!el) return;
+        const el = document.getElementById("resultado");
+        if (!el) return;
 
-  const fraseIndutora = " Muitos sinais passaram despercebidos, mas este é o único que você não pode ignorar; a razão espiritual de você estar aqui agora e o que o seu futuro exige que você saiba é que...";
-  const separador = "..."; 
-  const partes = textoVindoDaIA.split(separador);
+        const fraseIndutora =
+          " Muitos sinais passaram despercebidos, mas este é o único que você não pode ignorar; a razão espiritual de você estar aqui agora e o que o seu futuro exige que você saiba é que...";
 
-  const textoVisivel = partes[0].trim();
-  const textoEscondido = partes[1] ? partes[1].trim() : "O seu caminho está sendo iluminado agora.";
+        // Dividimos o texto
+        const partes = textoVindoDaIA.split("...");
+        const textoVisivel = partes[0].trim();
 
-  el.innerHTML = `
-    <div class="reveal-box" style="
-      position: relative; 
-      display: flex; 
-      flex-direction: column; 
-      min-height: 250px; /* Garante um tamanho mínimo */
-      padding-bottom: 40px; /* Espaço de segurança para o status no rodapé */
-    ">
+        // Pegamos o que vem depois. Se a IA falhou e veio vazio, usamos um texto reserva forte
+        let textoEscondido = partes.slice(1).join("...").trim();
+
+        if (textoEscondido.length < 5) {
+          textoEscondido =
+            "A clareza que você busca está em desapegar do que não pode mudar e focar na construção do seu novo propósito. O universo já preparou o caminho que se abre diante de você, basta dar o primeiro passo com fé e determinação, pois a abundância que você procura já está a caminho.";
+        }
+
+        // Salvamos no localStorage para que o texto nunca suma, mesmo atualizando
+        localStorage.setItem("conselho_secreto", textoEscondido);
+
+        el.innerHTML = `
+    <div class="reveal-box" style="position: relative; display: flex; flex-direction: column; padding-bottom: 50px;">
       
-      <span class="text-visible" style="line-height: 1.6; display: block; margin-bottom: 10px;">
+      <span class="text-visible" style="line-height: 1.6; display: block;">
         ${textoVisivel}${fraseIndutora}
       </span>
 
-      <div style="position: relative; flex-grow: 1;">
+      <div style="position: relative; margin-top: 15px;">
         <span id="targetBlur" class="blur-text" style="
           display: block; 
-          filter: blur(3px); 
+          filter: blur(5px); 
           opacity: 0.7; 
           user-select: none; 
           line-height: 1.6;
-          padding-bottom: 20px;
         ">
           ${textoEscondido}
         </span>
 
         <div class="blur-wrapper" style="
           position: absolute; 
-          top: -10px; 
-          left: 0; 
-          width: 100%; 
-          display: flex; 
-          justify-content: center; 
+          top: 0; left: 0; width: 100%; height: 100%;
+          display: flex; justify-content: center; align-items: center;
           z-index: 10;
-          pointer-events: none;
         ">
-          <button id="btnReveal" onclick="verificarFluxoDeRevelacao()" style="
-            cursor: pointer; 
-            pointer-events: auto; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-          ">
+          <button id="btnReveal" onclick="verificarFluxoDeRevelacao()" style="cursor: pointer;">
             ✨ REVELAR O CONSELHO FINAL
           </button>
         </div>
       </div>
 
-      <p id="statusCheck" style="
-        display: none; 
-        font-size: 11px; 
-        color: #718096; 
-        text-align: center; 
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        margin: 0;
-        padding: 5px 0;
-        font-style: italic;
-        background: transparent;
-      ">
+      <p id="statusCheck" style="display: none; font-size: 11px; color: #718096; text-align: center; position: absolute; bottom: 5px; width: 100%; font-style: italic;">
         Aguardando confirmação...
       </p>
-
     </div>
   `;
-}
+      }
 
       // --- Funções de Modal e Compartilhamento (Mantidas) ---
 
@@ -1302,20 +1301,16 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
 
           if (data.qr_code) {
             box.innerHTML = `
-    <!-- Botão Fechar -->
     <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 20px; padding: 5px; z-index: 10;" onclick="fecharModal()">✕</button>
     
-    <!-- Ícone e Título -->
     <div style="font-size: 40px; margin-bottom: 10px; color: #1a1a1a;">🕊️</div>
     <h2 style="font-size: 22px; font-family: 'Lora', serif; font-style: italic; margin: 0 0 10px 0; color: #1a1a1a; font-weight: 600;">Seu Ato de Fé</h2>
     <p style="font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.4; padding: 0 15px;">Para liberar sua resposta, utilize o QR Code ou copie o código PIX abaixo.</p>
 
-    <!-- QR Code Centralizado -->
     <div style="background: white; padding: 12px; display: inline-block; border-radius: 16px; border: 1px solid #f1f5f9; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);">
         <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:160px; height:160px; display:block; border-radius: 4px;">
     </div>
 
-    <!-- Container do Código PIX (Fixo e Clicável) -->
     <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin: 0 10px 15px 10px; cursor: pointer;" onclick="copiarPix()">
         <textarea id="pixCode" readonly 
             style="width: 100%; 
@@ -1413,6 +1408,9 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
 
       function liberarConteudo(textoReal) {
         fecharModal();
+        
+        // MARCA COMO PAGO PARA SOBREVIVER AO REFRESH DA PÁGINA
+        localStorage.setItem("pagamento_confirmado", "sim");
 
         const btn = document.getElementById("btnReveal");
         const statusTxt = document.getElementById("statusCheck");
@@ -1421,7 +1419,8 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
 
         const blurArea = document.getElementById("targetBlur");
         if (blurArea) {
-          blurArea.innerText = textoReal;
+          // Usa o texto da API ou o salvo no sistema local para garantir que NÃO FICARÁ VAZIO
+          blurArea.innerText = textoReal || localStorage.getItem("conselho_secreto");
           blurArea.classList.remove("blur-text");
           blurArea.classList.add("no-blur");
           blurArea.style.filter = "none";
@@ -1430,10 +1429,8 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
           blurArea.style.webkitMaskImage = "none";
         }
 
-        // Limpa o localStorage para permitir nova sintonização
-        localStorage.removeItem("conselho_pendente");
-        localStorage.removeItem("session_id_pendente");
-        localStorage.removeItem("data_sintonizacao");
+        // REMOVIDO DAQUI: localStorage.removeItem("conselho_pendente")
+        // Agora, se a página atualizar, os dados continuam lá até o contador zerar!
       }
 
       // --- Função Placeholder (Faltava no seu envio) ---
@@ -1441,6 +1438,6 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
         const alert = document.getElementById("privacyAlert");
         if (alert) alert.classList.add("show");
       }
-    </script>
+</script>
   </body>
 </html>
