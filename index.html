@@ -856,13 +856,17 @@
             }
             
             // E. Verifica se já pagou para manter revelado, senão reativa verificação
-            if (localStorage.getItem("pagamento_confirmado") === "sim") {
-               setTimeout(() => {
-                   const blurArea = document.getElementById("targetBlur");
-                   if (blurArea) {
-                       blurArea.innerText = localStorage.getItem("conselho_secreto");
-                       blurArea.style.filter = "none";
-                   }
+           if (localStorage.getItem("pagamento_confirmado") === "sim") {
+   setTimeout(() => {
+       const blurArea = document.getElementById("targetBlur");
+       if (blurArea) {
+           blurArea.innerText = localStorage.getItem("conselho_secreto");
+           blurArea.style.filter = "none";
+           blurArea.style.opacity = "1";
+           blurArea.style.maskImage = "none";
+           blurArea.style.webkitMaskImage = "none";
+           blurArea.classList.remove("blur-text"); // Remove a classe que pode ter o degradê no CSS
+       }
                    const btnReveal = document.getElementById("btnReveal");
                    if (btnReveal) btnReveal.style.display = "none";
                    const statusTxt = document.getElementById("statusCheck");
@@ -1178,12 +1182,14 @@
 
       <div style="position: relative; margin-top: 15px;">
         <span id="targetBlur" class="blur-text" style="
-          display: block; 
-          filter: ${jaPago ? 'none' : 'blur(8px)'}; 
-          opacity: ${jaPago ? '1' : '0.6'}; 
-          user-select: ${jaPago ? 'auto' : 'none'}; 
-          line-height: 1.6;
-        ">
+  display: block; 
+  filter: ${jaPago ? 'none' : 'blur(8px)'}; 
+  opacity: ${jaPago ? '1' : '0.6'}; 
+  user-select: ${jaPago ? 'auto' : 'none'}; 
+  line-height: 1.6;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+">
           ${textoExibicao}
         </span>
 
@@ -1417,6 +1423,9 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
         const statusTxt = document.getElementById("statusCheck");
         if (btn) btn.remove();
         if (statusTxt) statusTxt.remove();
+        const wrapper = document.getElementById("wrapperBotao");
+        if (wrapper) wrapper.remove();
+        
 
         const blurArea = document.getElementById("targetBlur");
         if (blurArea) {
