@@ -807,7 +807,7 @@
     </div>
 
     <script>
-      let sessionIdGlobal = "";
+      let sessionIdGlobal = localStorage.getItem("session_id_pendente") || "";
       let intervaloStatus = null;
 
       window.onload = function () {
@@ -1108,6 +1108,10 @@
 
           const data = await resposta.json();
 
+          localStorage.setItem("conselho_pendente", data.texto);
+          localStorage.setItem("session_id_pendente", sessionIdGlobal);
+          localStorage.setItem("data_sintonizacao", new Date().getTime());
+
           // === SALVAMENTO CORRETO DO ESTADO ===
           const agora = new Date().getTime(); // Timestamp atual
 
@@ -1162,11 +1166,9 @@
   // Se partes[1] existir, ele está salvo no banco de dados, não precisamos dele no HTML agora.
   let textoDePreenchimento = "Este é o segredo que o universo guardou para este momento sagrado da sua jornada...";
 
-  // 3. Verificamos se já existe um pagamento aprovado para esta sessão no banco ou localmente
-  const jaPago = localStorage.getItem("status_pago_" + sessionIdGlobal) === "true";
-  
-  // Se já estiver pago, buscamos o texto real (que você deve ter salvo após a liberação)
-  let textoExibicao = jaPago ? (localStorage.getItem("texto_revelado_" + sessionIdGlobal) || textoDePreenchimento) : textoDePreenchimento;
+  const jaPago = localStorage.getItem("pagamento_confirmado") === "sim";
+  const textoRealSalvo = localStorage.getItem("conselho_secreto");
+  let textoExibicao = jaPago ? (textoRealSalvo || "Carregando...") : textoDePreenchimento;
 
   el.innerHTML = `
     <div class="reveal-box" style="position: relative; display: flex; flex-direction: column; padding-bottom: 50px;">
@@ -1408,8 +1410,8 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
       function liberarConteudo(textoReal) {
         fecharModal();
         
-        // MARCA COMO PAGO PARA SOBREVIVER AO REFRESH DA PÁGINA
         localStorage.setItem("pagamento_confirmado", "sim");
+        localStorage.setItem("conselho_secreto", textoReal);
 
         const btn = document.getElementById("btnReveal");
         const statusTxt = document.getElementById("statusCheck");
