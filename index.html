@@ -1148,31 +1148,28 @@
         }
       }
 
-      function montarCaixaDeRevelacao(textoVindoDaIA) {
-        const el = document.getElementById("resultado");
-        if (!el) return;
+    async function montarCaixaDeRevelacao(textoVindoDaIA) {
+  const el = document.getElementById("resultado");
+  if (!el) return;
 
-        const fraseIndutora =
-          " Muitos sinais passaram despercebidos, mas este é o único que você não pode ignorar; a razão espiritual de você estar aqui agora e o que o seu futuro exige que você saiba é que...";
+  const fraseIndutora = " Muitos sinais passaram despercebidos, mas este é o único que você não pode ignorar; a razão espiritual de você estar aqui agora e o que o seu futuro exige que você saiba é que...";
 
-        // Dividimos o texto
-        const partes = textoVindoDaIA.split("...");
-        const textoVisivel = partes[0].trim();
+  // 1. Dividimos o texto
+  const partes = textoVindoDaIA.split("...");
+  const textoVisivel = partes[0].trim();
+  
+  // 2. IMPORTANTE: Não mostramos o texto escondido real aqui por segurança.
+  // Se partes[1] existir, ele está salvo no banco de dados, não precisamos dele no HTML agora.
+  let textoDePreenchimento = "Este é o segredo que o universo guardou para este momento sagrado da sua jornada...";
 
-        // Pegamos o que vem depois. Se a IA falhou e veio vazio, usamos um texto reserva forte
-        let textoEscondido = partes.slice(1).join("...").trim();
+  // 3. Verificamos se já existe um pagamento aprovado para esta sessão no banco ou localmente
+  const jaPago = localStorage.getItem("status_pago_" + sessionIdGlobal) === "true";
+  
+  // Se já estiver pago, buscamos o texto real (que você deve ter salvo após a liberação)
+  let textoExibicao = jaPago ? (localStorage.getItem("texto_revelado_" + sessionIdGlobal) || textoDePreenchimento) : textoDePreenchimento;
 
-        if (textoEscondido.length < 5) {
-          textoEscondido =
-            "A clareza que você busca está em desapegar do que não pode mudar e focar na construção do seu novo propósito. Essa não é a resposta real";
-        }
-
-        // Salvamos no localStorage para que o texto nunca suma, mesmo atualizando
-        localStorage.setItem("conselho_secreto", textoEscondido);
-
-        el.innerHTML = `
+  el.innerHTML = `
     <div class="reveal-box" style="position: relative; display: flex; flex-direction: column; padding-bottom: 50px;">
-      
       <span class="text-visible" style="line-height: 1.6; display: block;">
         ${textoVisivel}${fraseIndutora}
       </span>
@@ -1180,15 +1177,16 @@
       <div style="position: relative; margin-top: 15px;">
         <span id="targetBlur" class="blur-text" style="
           display: block; 
-          filter: blur(5px); 
-          opacity: 0.7; 
-          user-select: none; 
+          filter: ${jaPago ? 'none' : 'blur(8px)'}; 
+          opacity: ${jaPago ? '1' : '0.6'}; 
+          user-select: ${jaPago ? 'auto' : 'none'}; 
           line-height: 1.6;
         ">
-          ${textoEscondido}
+          ${textoExibicao}
         </span>
 
-        <div class="blur-wrapper" style="
+        ${!jaPago ? `
+        <div id="wrapperBotao" class="blur-wrapper" style="
           position: absolute; 
           top: 0; left: 0; width: 100%; height: 100%;
           display: flex; justify-content: center; align-items: center;
@@ -1198,14 +1196,15 @@
             ✨ REVELAR O CONSELHO FINAL
           </button>
         </div>
+        ` : ''}
       </div>
 
-      <p id="statusCheck" style="display: none; font-size: 11px; color: #718096; text-align: center; position: absolute; bottom: 5px; width: 100%; font-style: italic;">
+      <p id="statusCheck" style="display: ${jaPago ? 'none' : 'none'}; font-size: 11px; color: #718096; text-align: center; position: absolute; bottom: 5px; width: 100%; font-style: italic;">
         Aguardando confirmação...
       </p>
     </div>
   `;
-      }
+}
 
       // --- Funções de Modal e Compartilhamento (Mantidas) ---
 
