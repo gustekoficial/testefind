@@ -1207,8 +1207,9 @@
         ` : ''}
       </div>
 
-      <p id="statusCheck" style="display: ${jaPago ? 'none' : 'block'}; font-size: 11px; color: #718096; text-align: center; position: absolute; bottom: 5px; width: 100%; font-style: italic;">
-        Aguardando confirmação...
+     <p id="statusCheck" style="display: none; font-size: 11px; color: #718096; text-align: center; position: absolute; bottom: 5px; width: 100%; font-style: italic;">
+    Aguardando confirmação...
+</p>
       </p>
     </div>
   `;
@@ -1282,6 +1283,9 @@ Se você também está buscando uma direção ou uma resposta para sua vida, vej
       // --- Lógica de Pagamento e Status (Mantidas e Corrigidas) ---
 
       async function iniciarPagamentoMercadoPago() {
+
+        document.getElementById("statusCheck").style.display = "block";
+        
         const btn = document.getElementById("btnCheckoutModal");
         const box = document.getElementById("boxPagamento");
         if (!btn || !box || btn.disabled) return;
