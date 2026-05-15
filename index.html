@@ -857,16 +857,16 @@
             
             // E. Verifica se já pagou para manter revelado, senão reativa verificação
            if (localStorage.getItem("pagamento_confirmado") === "sim") {
-   setTimeout(() => {
-       const blurArea = document.getElementById("targetBlur");
-       if (blurArea) {
-           blurArea.innerText = localStorage.getItem("conselho_secreto");
-           blurArea.style.filter = "none";
-           blurArea.style.opacity = "1";
-           blurArea.style.maskImage = "none";
-           blurArea.style.webkitMaskImage = "none";
-           blurArea.classList.remove("blur-text"); // Remove a classe que pode ter o degradê no CSS
-       }
+               setTimeout(() => {
+                   const blurArea = document.getElementById("targetBlur");
+                   if (blurArea) {
+                       blurArea.innerText = localStorage.getItem("conselho_secreto");
+                       blurArea.style.filter = "none";
+                       blurArea.style.opacity = "1";
+                       blurArea.style.maskImage = "none";
+                       blurArea.style.webkitMaskImage = "none";
+                       blurArea.classList.remove("blur-text"); // Remove a classe que pode ter o degradê no CSS
+                   }
                    const btnReveal = document.getElementById("btnReveal");
                    if (btnReveal) btnReveal.style.display = "none";
                    const statusTxt = document.getElementById("statusCheck");
@@ -1112,10 +1112,6 @@
 
           const data = await resposta.json();
 
-          localStorage.setItem("conselho_pendente", data.texto);
-          localStorage.setItem("session_id_pendente", sessionIdGlobal);
-          localStorage.setItem("data_sintonizacao", new Date().getTime());
-
           // === SALVAMENTO CORRETO DO ESTADO ===
           const agora = new Date().getTime(); // Timestamp atual
 
@@ -1210,7 +1206,6 @@
      <p id="statusCheck" style="display: none; font-size: 11px; color: #718096; text-align: center; position: absolute; bottom: 5px; width: 100%; font-style: italic;">
     Aguardando confirmação...
 </p>
-      </p>
     </div>
   `;
 }
@@ -1230,11 +1225,7 @@
       }
 
       function compartilharNoWhatsApp() {
-        const mensagem = `Algo tocou meu coração hoje e lembrei de você. ✨
-
-Se você também está buscando uma direção ou uma resposta para sua vida, veja o que está guardado pra você:
-
-👉 https://encontresuaresposta.com.br`;
+        const mensagem = `Algo tocou meu coração hoje e lembrei de você. ✨\n\nSe você também está buscando uma direção ou uma resposta para sua vida, veja o que está guardado pra você:\n\n👉 https://encontresuaresposta.com.br`;
 
         const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
         window.open(url, "_blank");
