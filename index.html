@@ -1127,8 +1127,13 @@
 
           const data = await resposta.json();
 
-          // === SALVAMENTO CORRETO DO ESTADO ===
-          const agora = new Date().getTime(); // Timestamp atual
+//trackface
+if (typeof fbq === "function") {
+  fbq("track", "ViewContent");
+}
+
+// === SALVAMENTO CORRETO DO ESTADO ===
+const agora = new Date().getTime(); // Timestamp atual
 
           // 1. Salva os dados da sintonização
           localStorage.setItem("conselho_pendente", data.texto);
@@ -1428,6 +1433,14 @@
         
         localStorage.setItem("pagamento_confirmado", "sim");
         localStorage.setItem("conselho_secreto", textoReal);
+
+        // === PIXEL EVENT: PURCHASE (Dispara no momento exato em que a resposta é paga e liberada)
+        if (typeof fbq === "function") {
+          fbq("track", "Purchase", {
+            value: 4.90,
+            currency: "BRL"
+          });
+        }
 
         const btn = document.getElementById("btnReveal");
         const statusTxt = document.getElementById("statusCheck");
