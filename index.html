@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <!-- Configuração da Imagem de Revelação para WhatsApp -->
     <meta property="og:title" content="Encontre Sua Resposta" />
     <meta
       property="og:description"
@@ -98,7 +97,8 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        padding: 40px 20px;
+        /* Padding top ajustado para acomodar a barra de urgência fixa */
+        padding: 70px 20px 40px 20px;
         box-sizing: border-box;
         gap: 24px;
       }
@@ -528,63 +528,64 @@
     </style>
   </head>
 
-  <div
-  id="barraUrgencia"
-  style="
-    display: none;
-    background: #111111;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 14px 20px;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    box-sizing: border-box;
-  "
->
-  <p
-    style="
-      margin: 0;
-      font-size: 13px;
-      color: #e2e8f0;
-      font-weight: 600;
-      font-family: 'Lora', serif;
-      letter-spacing: 0.03em;
-      line-height: 1.4;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    "
-  >
-    Sua resposta única irá sumir para sempre em
-    <span
-      id="timerRegressivo"
+  <body>
+    <div
+      id="barraUrgencia"
       style="
-        font-family: 'Courier New', monospace;
-        color: #ff4d4d;
-        font-weight: 700;
-        background: rgba(255, 77, 77, 0.1);
-        padding: 2px 6px;
-        border-radius: 4px;
-        border: 1px solid rgba(255, 77, 77, 0.2);
-        letter-spacing: 0.05em;
+        display: none;
+        background: #111111;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 14px 20px;
+        text-align: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 99999;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        box-sizing: border-box;
       "
-      >10:00</span
     >
-  </p>
-</div>
+      <p
+        style="
+          margin: 0;
+          font-size: 13px;
+          color: #e2e8f0;
+          font-weight: 600;
+          font-family: 'Lora', serif;
+          letter-spacing: 0.03em;
+          line-height: 1.4;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        "
+      >
+        Sua resposta única irá sumir para sempre em
+        <span
+          id="timerRegressivo"
+          style="
+            font-family: 'Courier New', monospace;
+            color: #ff4d4d;
+            font-weight: 700;
+            background: rgba(255, 77, 77, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 77, 77, 0.2);
+            letter-spacing: 0.05em;
+          "
+          >10:00</span
+        >
+      </p>
+    </div>
 
-<style>
-  @keyframes pulseFade {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-  }
-</style>
+    <style>
+      @keyframes pulseFade {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+    </style>
 
     <div id="pixInstructionsAlert" class="pix-instructions-overlay">
       <div class="pix-instructions-content">
@@ -611,7 +612,6 @@
       </div>
     </div>
 
-    <!-- CAIXA PRINCIPAL -->
     <div class="container">
       <h1>Encontre sua resposta</h1>
       <div class="sub">Algo precisa ser revelado para você hoje...</div>
@@ -633,10 +633,8 @@
       </div>
     </div>
 
-    <!-- CONTAINER DOS DEPOIMENTOS (Agora fora do bloco principal) -->
     <div id="testimonial-display" class="testimonial-container"></div>
 
-    <!-- MODAIS -->
     <div id="paymentModal" class="modal-overlay">
       <div class="modal-content" id="boxPagamento" style="padding: 40px 25px">
         <button
@@ -759,7 +757,7 @@
         </div>
       </div>
     </div>
-
+    
     <script>
       let sessionIdGlobal = localStorage.getItem("session_id_pendente") || "";
       let intervaloStatus = null;
