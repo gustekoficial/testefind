@@ -1043,7 +1043,7 @@ si<!doctype html>
         const segundos = Math.floor((tempoRestanteMS / 1000) % 60);
 
         const tempoFormatado = 
-            (minutos < 10 ? "0" + minutos : minutos) + ":" + 
+            (minutos < 10 ? "0" + minutes : minutos) + ":" + 
             (segundos < 10 ? "0" + segundos : segundos);
 
         // Atualiza a barra no topo (principal)
@@ -1105,6 +1105,20 @@ si<!doctype html>
           localStorage.removeItem("texto_revelado"); 
           localStorage.removeItem("guia_pago");
 
+          // DISPARO EM SEGUNDO PLANO PARA O RESUMO DO MODAL
+          fetch("https://backfind-production.up.railway.app/api/gerar-resumo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mensagem: input.value })
+          })
+          .then(res => res.json())
+          .then(resumoData => {
+            if (resumoData.resumo) {
+              localStorage.setItem("resumo_diagnostico_modal", resumoData.resumo);
+            }
+          })
+          .catch(err => console.error("Erro assíncrono ao gerar resumo:", err));
+
           const barra = document.getElementById("barraUrgencia");
           if (barra) barra.style.display = "block";
           iniciarTimerRegressivo(10 * 60 * 1000); 
@@ -1142,7 +1156,7 @@ si<!doctype html>
         const partes = textoVindoDaIA.split("...");
         const textoVisivel = partes[0].trim();
         
-        let textoDePreenchimento = "Este é o segredo que o universo guardou para este momento sagrado da sua jornada... Essa resposta não é real, somente é liberada quando você clicar no botão para receber seu direcionamento para sempre";
+        let textoDePreenchimento = "Este é o segredo que o universo guardou para este moment sagrado da sua jornada... Essa resposta não é real, somente é liberada quando você clicar no botão para receber seu direcionamento para sempre";
 
         const jaRevelado = localStorage.getItem("texto_revelado") === "sim";
         const textoRealSalvo = localStorage.getItem("conselho_secreto");
@@ -1305,8 +1319,6 @@ si<!doctype html>
         }, 2000);
       }
 
-
-
       function travarScroll(bloquear) {
     if (bloquear) {
         document.body.style.overflow = 'hidden'; // Trava o scroll
@@ -1317,8 +1329,6 @@ si<!doctype html>
     }
 }
 
-
-      
       function abrirModalVenda() {
         if (typeof fbq === "function") {
           fbq("track", "InitiateCheckout");
@@ -1365,12 +1375,24 @@ si<!doctype html>
           const data = await response.json();
 
           if (data.qr_code) {
+            // RECUPERA O RESUMO DO LOCALSTORAGE SE EXISTIR
+            const resumoSalvo = localStorage.getItem("resumo_diagnostico_modal") || "";
+            const htmlResumo = resumoSalvo ? `
+              <div style="background: #fdfaf0; border: 1px solid #d4af37; border-radius: 8px; padding: 12px; margin: 0 15px 20px 15px; text-align: center;">
+                  <p style="margin: 0; font-size: 13px; color: #4a3c1b; font-weight: 500; font-style: italic; line-height: 1.4;">
+                      "${resumoSalvo}"
+                  </p>
+              </div>
+            ` : "";
+
             box.innerHTML = `
               <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 20px; padding: 5px; z-index: 10;" onclick="fecharModal()">✕</button>
               
               <div style="font-size: 40px; margin-bottom: 10px; color: #1a1a1a;">🕊️</div>
               <h2 style="font-size: 22px; font-family: 'Lora', serif; font-style: italic; margin: 0 0 10px 0; color: #1a1a1a; font-weight: 600;">Seu Guia Personalizado</h2>
               <p style="font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.4; padding: 0 15px;">Para liberar seu Guia de Ação em PDF, utilize o QR Code ou copie o código PIX abaixo.</p>
+
+              ${htmlResumo}
 
               <div style="background: white; padding: 12px; display: inline-block; border-radius: 16px; border: 1px solid #f1f5f9; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);">
                   <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:160px; height:160px; display:block; border-radius: 4px;">
