@@ -1014,11 +1014,6 @@
         // Atualiza a barra no topo (principal)
         display.innerText = tempoFormatado;
 
-        // Atualiza a barra dentro do modal (se ele existir na tela)
-        if (displayModal) {
-            displayModal.innerText = tempoFormatado;
-        }
-
         tempoRestanteMS -= 1000;
     }
 
