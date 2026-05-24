@@ -829,84 +829,59 @@
       let intervaloStatus = null;
 
       window.onload = function () {
-  // 1. Inicia funções visuais básicas
-  iniciarContador();
-  carregarDepoimentosDoDia();
-  animarPlaceholder();
+        // 1. Inicia funções visuais básicas
+        iniciarContador();
+        carregarDepoimentosDoDia();
+        animarPlaceholder();
 
-  // 2. Tenta recuperar estado anterior do localStorage
-  const textoSalvo = localStorage.getItem("conselho_pendente");
-  const sessionSalva = localStorage.getItem("session_id_pendente");
-  const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
+        // 2. Tenta recuperar estado anterior do localStorage
+        const textoSalvo = localStorage.getItem("conselho_pendente");
+        const sessionSalva = localStorage.getItem("session_id_pendente");
+        const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
 
-  // LÓGICA DE VERIFICAÇÃO DE TEMPO (10 MINUTOS)
-  if (timestampSintonizacao && textoSalvo) {
-    const agora = new Date().getTime();
-    const dezMinutos = 10 * 60 * 1000;
-    const tempoPassado = agora - parseInt(timestampSintonizacao);
+        // LÓGICA DE VERIFICAÇÃO DE TEMPO (10 MINUTOS)
+        if (timestampSintonizacao && textoSalvo) {
+          const agora = new Date().getTime();
+          const dezMinutos = 10 * 60 * 1000;
+          const tempoPassado = agora - parseInt(timestampSintonizacao);
 
-    if (tempoPassado > dezMinutos) {
-      console.log("Tempo expirado. Resetando sintonização.");
-      localStorage.clear();
-      mostrarAlertaPrivacidade();
-    } else {
-      console.log("Sintonização ativa encontrada. Restaurando...");
+          if (tempoPassado > dezMinutos) {
+            console.log("Tempo expirado. Resetando sintonização.");
+            localStorage.clear();
+            mostrarAlertaPrivacidade();
+          } else {
+            console.log("Sintonização ativa encontrada. Restaurando...");
 
-      const barra = document.getElementById("barraUrgencia");
-      if (barra) barra.style.display = "block";
+            const barra = document.getElementById("barraUrgencia");
+            if (barra) barra.style.display = "block";
 
-      const tempoRestante = dezMinutos - tempoPassado;
-      iniciarTimerRegressivo(tempoRestante);
+            const tempoRestante = dezMinutos - tempoPassado;
+            iniciarTimerRegressivo(tempoRestante);
 
-      sessionIdGlobal = sessionSalva;
-      
-      const btnGerar = document.getElementById("btnGerar");
-      const input = document.getElementById("input");
-      if (btnGerar) btnGerar.style.display = "none";
-      if (input) input.style.display = "none";
-
-      const elResultado = document.getElementById("resultado");
-      if (elResultado) {
-        montarCaixaDeRevelacao(textoSalvo);
-      }
-
-      // Verifica se já passou pelo fluxo de revelação gratuita e pagamento
-      if (localStorage.getItem("pagamento_confirmado") === "sim") {
-        setTimeout(() => {
-          const textoRealSalvo = localStorage.getItem("conselho_secreto") || "";
-          liberarConteudo(textoRealSalvo); // Esta função já cuida de remover o bloqueio e adicionar o botão do PDF
-
-          // GARANTIA: Se o botão do PDF não apareceu, força a inserção
-          const elResultado = document.getElementById("resultado");
-          if (elResultado && !document.getElementById("btn-guia-pdf")) {
-            const btnGuia = document.createElement("button");
-            btnGuia.id = "btn-guia-pdf";
-            btnGuia.innerHTML = "📥 BAIXAR MEU GUIA DE AÇÃO (PDF)";
-            btnGuia.style.marginTop = "35px";
-            btnGuia.style.width = "100%";
-            btnGuia.style.padding = "18px";
-            btnGuia.style.background = "#D4AF37";
-            btnGuia.style.color = "white";
-            btnGuia.style.border = "none";
-            btnGuia.style.borderRadius = "50px";
-            btnGuia.style.fontSize = "15px";
-            btnGuia.style.fontWeight = "bold";
-            btnGuia.style.cursor = "pointer";
+            sessionIdGlobal = sessionSalva;
             
-            btnGuia.onclick = function() {
-              // Redireciona para o seu endpoint de PDF
-              window.location.href = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
-            };
-            
-            elResultado.appendChild(btnGuia);
+            const btnGerar = document.getElementById("btnGerar");
+            const input = document.getElementById("input");
+            if (btnGerar) btnGerar.style.display = "none";
+            if (input) input.style.display = "none";
+
+            const elResultado = document.getElementById("resultado");
+            if (elResultado) {
+              montarCaixaDeRevelacao(textoSalvo);
+            }
+
+            // Verifica se o texto já foi revelado pelo usuário
+            if (localStorage.getItem("texto_revelado") === "sim") {
+              setTimeout(() => {
+                const textoRealSalvo = localStorage.getItem("conselho_secreto") || "";
+                liberarConteudo(textoRealSalvo); // Já cuida de inserir o botão de PDF corretamente
+              }, 300);
+            }
           }
-        }, 300);
-      }
-    }
-  } else {
-    mostrarAlertaPrivacidade();
-  }
-};
+        } else {
+          mostrarAlertaPrivacidade();
+        }
+      };
 
       // === FUNÇÕES VISUAIS E DEPOIMENTOS ===
 
@@ -1089,7 +1064,7 @@
           localStorage.setItem("conselho_pendente", data.texto);
           localStorage.setItem("session_id_pendente", sessionIdGlobal);
           localStorage.setItem("data_sintonizacao", agora);
-          localStorage.removeItem("pagamento_confirmado"); 
+          localStorage.removeItem("texto_revelado"); 
 
           const barra = document.getElementById("barraUrgencia");
           if (barra) barra.style.display = "block";
@@ -1130,9 +1105,9 @@
         
         let textoDePreenchimento = "Este é o segredo que o universo guardou para este momento sagrado da sua jornada... Essa resposta não é real, somente é liberada quando você clicar no botão para receber seu direcionamento para sempre";
 
-        const jaPago = localStorage.getItem("pagamento_confirmado") === "sim";
+        const jaRevelado = localStorage.getItem("texto_revelado") === "sim";
         const textoRealSalvo = localStorage.getItem("conselho_secreto");
-        let textoExibicao = jaPago ? (textoRealSalvo || "Carregando...") : textoDePreenchimento;
+        let textoExibicao = jaRevelado ? (textoRealSalvo || "Carregando...") : textoDePreenchimento;
 
         el.innerHTML = `
           <div class="reveal-box" style="position: relative; display: flex; flex-direction: column; padding-bottom: 50px;">
@@ -1143,9 +1118,9 @@
             <div style="position: relative; margin-top: 15px;">
               <span id="targetBlur" class="blur-text" style="
                 display: block; 
-                filter: ${jaPago ? 'none' : 'blur(8px)'}; 
-                opacity: ${jaPago ? '1' : '0.6'}; 
-                user-select: ${jaPago ? 'auto' : 'none'}; 
+                filter: ${jaRevelado ? 'none' : 'blur(8px)'}; 
+                opacity: ${jaRevelado ? '1' : '0.6'}; 
+                user-select: ${jaRevelado ? 'auto' : 'none'}; 
                 line-height: 1.6;
                 mask-image: none !important;
                 -webkit-mask-image: none !important;
@@ -1153,7 +1128,7 @@
                 ${textoExibicao}
               </span>
 
-              ${!jaPago ? `
+              ${!jaRevelado ? `
               <div id="wrapperBotao" class="blur-wrapper" style="
                 position: absolute; 
                 top: 0; left: 0; width: 100%; height: 100%;
@@ -1183,7 +1158,7 @@
 
       function liberarConteudo(textoReal) {
         // Marca como liberado na sessão para persistir caso atualize
-        localStorage.setItem("pagamento_confirmado", "sim");
+        localStorage.setItem("texto_revelado", "sim");
         localStorage.setItem("conselho_secreto", textoReal);
 
         // Remove os elementos de bloqueio
@@ -1387,23 +1362,33 @@
             const res = await fetch(`https://backfind-production.up.railway.app/api/status?sessionId=${sessionIdGlobal}`);
             const data = await res.json();
 
-            // AGORA A VERIFICAÇÃO LIBERA O GUIA, NÃO A RESPOSTA
+            // AGORA A VERIFICAÇÃO LIBERA O GUIA
             if (data.pago === true) {
-    clearInterval(intervaloStatus);
-    
-    if (typeof fbq === "function") {
-        fbq("track", "Purchase", { value: 4.90, currency: "BRL" });
-    }
+              clearInterval(intervaloStatus);
+              
+              if (typeof fbq === "function") {
+                  fbq("track", "Purchase", { value: 4.90, currency: "BRL" });
+              }
 
-    fecharModal();
-    
-    // REDIRECIONA PARA O DOWNLOAD DO PDF
-    // O navegador iniciará o download automaticamente ao acessar esta URL
-    const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
-    window.location.href = urlPDF; 
-    
-    alert("Pagamento confirmado! Seu Guia de Ação está sendo gerado...");
-}
+              // Muda o visual do modal para "Aprovado" em vez de travar a tela com um alert()
+              const boxPagamento = document.getElementById("boxPagamento");
+              if (boxPagamento) {
+                  boxPagamento.innerHTML = `
+                      <div style="text-align:center; padding: 40px 20px;">
+                          <div style="font-size: 50px; margin-bottom: 20px;">✨</div>
+                          <h2 style="font-family: 'Lora', serif; font-style: italic; color: #1a1a1a;">Sintonização Concluída</h2>
+                          <p style="color: #64748b; margin-top: 10px;">Seu Guia de Ação está sendo gerado e o download começará automaticamente...</p>
+                      </div>
+                  `;
+              }
+
+              // REDIRECIONA PARA O DOWNLOAD DO PDF
+              const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
+              window.location.href = urlPDF; 
+              
+              // Fecha o modal automaticamente após o início do download
+              setTimeout(() => fecharModal(), 5000); 
+            }
           } catch (e) {
             console.log("Checando status da sua contribuição...");
           }
