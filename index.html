@@ -1497,47 +1497,103 @@
               // Salva o estado de pago
               localStorage.setItem("guia_pago", "sim");
 
+              const resumoFormatado = typeof resumoDaIA !== 'undefined' ? resumoDaIA : "Sua Jornada";
+              const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}&resumo=${encodeURIComponent(resumoFormatado)}`;
 
-const resumoFormatado = typeof resumoDaIA !== 'undefined' ? resumoDaIA : "Sua Jornada";
-
-
-const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}&resumo=${encodeURIComponent(resumoFormatado)}`;
-
-// 1. Atualiza o botão principal na tela
-const btnGuia = document.getElementById("btn-guia-pdf");
-if (btnGuia) {
-    btnGuia.innerHTML = "📄 VER MEU GUIA PERSONALIZADO";
-    btnGuia.style.background = "#2f855a"; // Fica verde de sucesso
-    btnGuia.style.boxShadow = "0 6px 15px rgba(47, 133, 90, 0.3)";
-    btnGuia.style.transform = "translateY(0)"; // Reseta animações antigas
-    
-    // 🔥 CORREÇÃO DE UX: Abre em nova aba para proteger seu site contra quedas/erros do servidor
-    btnGuia.onclick = function() {
-        window.open(urlPDF, '_blank');
-    };
-}
-
-              // 2. Esconde o texto de "Aguardando confirmação..."
+              // 1. Esconde o texto de "Aguardando confirmação..." no fundo do site
               const statusMain = document.getElementById("status-pagamento-main");
               if (statusMain) {
                   statusMain.style.display = "none";
               }
 
-              // 3. Muda a tela do Modal de Pagamento
+              // 2. Atualiza temporariamente o botão de fundo com estado de carregamento
+              const btnGuia = document.getElementById("btn-guia-pdf");
+              if (btnGuia) {
+                  btnGuia.innerHTML = "⏳ GERANDO SEU GUIA...";
+                  btnGuia.style.background = "#d4af37";
+                  btnGuia.style.cursor = "not-allowed";
+                  btnGuia.disabled = true;
+              }
+
+              // 3. Altera o Modal de Pagamento para o Estado de "Gerando o Arquivo com a IA"
               const boxPagamento = document.getElementById("boxPagamento");
               if (boxPagamento) {
                   boxPagamento.innerHTML = `
-                      <div style="text-align:center; padding: 40px 20px;">
-                          <div style="font-size: 50px; margin-bottom: 20px;">✨</div>
-                          <h2 style="font-family: 'Lora', serif; font-style: italic; color: #1a1a1a;">Sintonização Concluída</h2>
-                          <p style="color: #64748b; margin-top: 10px;">Seu Guia de Ação está pronto. O download começará automaticamente...</p>
+                      <div style="text-align:center; padding: 40px 20px; font-family: 'Georgia', serif;">
+                          <div class="spinner-ancestral" style="width: 50px; height: 50px; border: 3px solid #f3f3f3; border-top: 3px solid #d4af37; border-radius: 50%; margin: 0 auto 25px auto; animation: spin 1s linear infinite;"></div>
+                          <h2 style="font-style: italic; color: #1a1a1a; font-size: 22px; margin: 0;">Tecendo seu Direcionamento...</h2>
+                          <p style="color: #64748b; margin-top: 12px; font-size: 14px; line-height: 1.6; font-family: sans-serif;">
+                              A Inteligência Ancestral está analisando suas dores e estruturando seu manual personalizado de ciclos. Isso levará cerca de 10 a 15 segundos. <strong>Não feche esta tela.</strong>
+                          </p>
+                          <style>
+                              @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                          </style>
                       </div>
                   `;
               }
 
-              // 4. Inicia o download e fecha o modal
-              window.open(urlPDF, '_blank'); 
-              setTimeout(() => fecharModal(), 9000); 
+              // 4. Faz a requisição em segundo plano silenciosamente enquanto o usuário vê o loading dourado
+              try {
+                  const response = await fetch(urlPDF);
+                  if (!response.ok) throw new Error("Falha na criação do documento.");
+
+                  // Transforma a resposta do seu servidor em um arquivo local na memória do navegador (Blob)
+                  const blob = await response.blob();
+                  const linkDoAnexo = window.URL.createObjectURL(blob);
+
+                  // 5. IA Terminou! Altera o Modal visual para sucesso total
+                  if (boxPagamento) {
+                      boxPagamento.innerHTML = `
+                          <div style="text-align:center; padding: 40px 20px; font-family: 'Georgia', serif;">
+                              <div style="font-size: 55px; margin-bottom: 15px; color: #2f855a;">✨</div>
+                              <h2 style="font-style: italic; color: #1a1a1a; font-size: 22px; margin: 0;">Direcionamento Concluído!</h2>
+                              <p style="color: #2f855a; margin-top: 8px; font-weight: bold; font-family: sans-serif; font-size: 14px;">O download do seu PDF começou automaticamente.</p>
+                          </div>
+                      `;
+                  }
+
+                  // 6. Ativa e libera o botão definitivo de fundo da página (Caso o cliente queira baixar de novo depois)
+                  if (btnGuia) {
+                      btnGuia.disabled = false;
+                      btnGuia.innerHTML = "📄 VER MEU GUIA PERSONALIZADO";
+                      btnGuia.style.background = "#2f855a"; // Verde sucesso
+                      btnGuia.style.cursor = "pointer";
+                      btnGuia.style.boxShadow = "0 6px 15px rgba(47, 133, 90, 0.3)";
+                      btnGuia.onclick = function() {
+                          const a = document.createElement('a');
+                          a.href = linkDoAnexo;
+                          a.download = "Direcionamento_Completo.pdf";
+                          a.click();
+                      };
+                  }
+
+                  // 7. Força o download imediato e nativo (Burlar completamente qualquer bloqueador de pop-ups)
+                  const gatilhoDownload = document.createElement('a');
+                  gatilhoDownload.href = linkDoAnexo;
+                  gatilhoDownload.download = "Direcionamento_Completo.pdf";
+                  document.body.appendChild(gatilhoDownload);
+                  gatilhoDownload.click();
+                  document.body.removeChild(gatilhoDownload);
+
+                  // 8. Fecha o modal suavemente após 3 segundos com o download já iniciado
+                  setTimeout(() => {
+                      fecharModal();
+                  }, 3000);
+
+              } catch (error) {
+                  console.error("Erro ao gerar Guia:", error);
+                  // Caso a API da Groq/PDF dê timeout ou caia, o cliente não perde o fluxo nem vê erro de código
+                  if (boxPagamento) {
+                      boxPagamento.innerHTML = `
+                          <div style="text-align:center; padding: 40px 20px;">
+                              <div style="font-size: 50px; margin-bottom: 15px;">❌</div>
+                              <h2 style="color: #c53030; font-family: 'Georgia', serif;">Instabilidade na Conexão</h2>
+                              <p style="color: #4a5568; margin-top: 10px; font-size: 14px;">O volume de requisições está alto, mas seu pagamento já foi aprovado. Clique no botão abaixo para tentar gerar novamente.</p>
+                              <button onclick="window.location.reload()" style="margin-top: 15px; background: #d4af37; color: white; border: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; cursor: pointer;">Gerar Novamente</button>
+                          </div>
+                      `;
+                  }
+              }
             }
           } catch (e) {
             console.log("Checando status da sua contribuição...");
