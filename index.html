@@ -1043,7 +1043,7 @@
         const segundos = Math.floor((tempoRestanteMS / 1000) % 60);
 
         const tempoFormatado = 
-            (minutos < 10 ? "0" + minutes : minutos) + ":" + 
+            (minutos < 10 ? "0" + minutos : minutos) + ":" + 
             (segundos < 10 ? "0" + segundos : segundos);
 
         // Atualiza a barra no topo (principal)
@@ -1511,8 +1511,8 @@
               }
 
               // 4. Inicia o download e fecha o modal
-              window.location.href = urlPDF; 
-              setTimeout(() => fecharModal(), 4000); 
+              window.open(urlPDF, '_blank'); 
+              setTimeout(() => fecharModal(), 9000); 
             }
           } catch (e) {
             console.log("Checando status da sua contribuição...");
