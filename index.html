@@ -1272,17 +1272,33 @@
         }, 2000);
       }
 
+
+
+      function travarScroll(bloquear) {
+    if (bloquear) {
+        document.body.style.overflow = 'hidden'; // Trava o scroll
+        document.body.style.height = '100vh';    // Impede pulos em alguns navegadores mobile
+    } else {
+        document.body.style.overflow = 'auto';   // Libera o scroll
+        document.body.style.height = 'auto';
+    }
+}
+
+
+      
       function abrirModalVenda() {
         if (typeof fbq === "function") {
           fbq("track", "InitiateCheckout");
         }
         const modal = document.getElementById("paymentModal");
         if (modal) modal.style.display = "flex";
+        travarScroll(true);
       }
 
       function fecharModal() {
         const modal = document.getElementById("paymentModal");
         if (modal) modal.style.display = "none";
+        travarScroll(true);
 
         const btn = document.getElementById("btnCheckoutModal");
         if (btn) {
