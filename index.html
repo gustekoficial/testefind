@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
+    <!-- Configuração da Imagem de Revelação para WhatsApp -->
     <meta property="og:title" content="Encontre Sua Resposta" />
     <meta
       property="og:description"
@@ -97,8 +98,7 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        /* Padding top ajustado para acomodar a barra de urgência fixa */
-        padding: 70px 20px 40px 20px;
+        padding: 40px 20px;
         box-sizing: border-box;
         gap: 24px;
       }
@@ -528,64 +528,63 @@
     </style>
   </head>
 
-  <body>
-    <div
-      id="barraUrgencia"
+  <div
+  id="barraUrgencia"
+  style="
+    display: none;
+    background: #111111;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 14px 20px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+  "
+>
+  <p
+    style="
+      margin: 0;
+      font-size: 13px;
+      color: #e2e8f0;
+      font-weight: 600;
+      font-family: 'Lora', serif;
+      letter-spacing: 0.03em;
+      line-height: 1.4;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    "
+  >
+    Sua resposta única irá sumir para sempre em
+    <span
+      id="timerRegressivo"
       style="
-        display: none;
-        background: #111111;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 14px 20px;
-        text-align: center;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 99999;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        box-sizing: border-box;
+        font-family: 'Courier New', monospace;
+        color: #ff4d4d;
+        font-weight: 700;
+        background: rgba(255, 77, 77, 0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 77, 77, 0.2);
+        letter-spacing: 0.05em;
       "
+      >10:00</span
     >
-      <p
-        style="
-          margin: 0;
-          font-size: 13px;
-          color: #e2e8f0;
-          font-weight: 600;
-          font-family: 'Lora', serif;
-          letter-spacing: 0.03em;
-          line-height: 1.4;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          flex-wrap: wrap;
-        "
-      >
-        Sua resposta única irá sumir para sempre em
-        <span
-          id="timerRegressivo"
-          style="
-            font-family: 'Courier New', monospace;
-            color: #ff4d4d;
-            font-weight: 700;
-            background: rgba(255, 77, 77, 0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid rgba(255, 77, 77, 0.2);
-            letter-spacing: 0.05em;
-          "
-          >10:00</span
-        >
-      </p>
-    </div>
+  </p>
+</div>
 
-    <style>
-      @keyframes pulseFade {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.6; }
-      }
-    </style>
+<style>
+  @keyframes pulseFade {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+</style>
 
     <div id="pixInstructionsAlert" class="pix-instructions-overlay">
       <div class="pix-instructions-content">
@@ -612,6 +611,7 @@
       </div>
     </div>
 
+    <!-- CAIXA PRINCIPAL -->
     <div class="container">
       <h1>Encontre sua resposta</h1>
       <div class="sub">Algo precisa ser revelado para você hoje...</div>
@@ -633,7 +633,73 @@
       </div>
     </div>
 
+    <!-- CONTAINER DOS DEPOIMENTOS (Agora fora do bloco principal) -->
     <div id="testimonial-display" class="testimonial-container"></div>
+
+    <!-- MODAIS -->
+    <div id="shareModal" class="modal-overlay">
+      <div class="modal-content" style="padding: 40px 25px">
+        <button
+          style="
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #a0aec0;
+            font-size: 18px;
+            padding: 5px;
+          "
+          onclick="fecharShareModal()"
+        >
+          ✕
+        </button>
+
+        <div style="font-size: 40px; margin-bottom: 10px">🕯️</div>
+
+        <h2
+          style="
+            font-size: 24px;
+            font-family: &quot;Lora&quot;, serif;
+            font-style: italic;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+          "
+        >
+          A Corrente do Bem
+        </h2>
+
+        <p
+          style="
+            font-size: 15px;
+            color: #5a6c7d;
+            margin-bottom: 25px;
+            line-height: 1.6;
+          "
+        >
+          Seja a luz na vida de alguém hoje.
+          <b>Compartilhe este site com pessoas que você ama</b> no WhatsApp para
+          continuarmos essa corrente, e desbloqueie sua resposta final agora
+          mesmo.
+        </p>
+
+        <button class="btn-whatsapp" onclick="compartilharNoWhatsApp()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"
+            />
+          </svg>
+          Compartilhar e Desbloquear
+        </button>
+      </div>
+    </div>
 
     <div id="paymentModal" class="modal-overlay">
       <div class="modal-content" id="boxPagamento" style="padding: 40px 25px">
@@ -757,82 +823,90 @@
         </div>
       </div>
     </div>
-    
+
     <script>
       let sessionIdGlobal = localStorage.getItem("session_id_pendente") || "";
       let intervaloStatus = null;
 
       window.onload = function () {
-        // 1. Inicia funções visuais básicas
-        iniciarContador();
-        carregarDepoimentosDoDia();
-        animarPlaceholder();
+  // 1. Inicia funções visuais básicas
+  iniciarContador();
+  carregarDepoimentosDoDia();
+  animarPlaceholder();
 
-        // 2. Tenta recuperar estado anterior do localStorage
-        const textoSalvo = localStorage.getItem("conselho_pendente");
-        const sessionSalva = localStorage.getItem("session_id_pendente");
-        const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
+  // 2. Tenta recuperar estado anterior do localStorage
+  const textoSalvo = localStorage.getItem("conselho_pendente");
+  const sessionSalva = localStorage.getItem("session_id_pendente");
+  const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
 
-        // LÓGICA DE VERIFICAÇÃO DE TEMPO (ALTERADO PARA 10 MINUTOS)
-        if (timestampSintonizacao && textoSalvo) {
-          const agora = new Date().getTime();
-          const dezMinutos = 10 * 60 * 1000; // Milissegundos em 10 min
-          const tempoPassado = agora - parseInt(timestampSintonizacao);
+  // LÓGICA DE VERIFICAÇÃO DE TEMPO (10 MINUTOS)
+  if (timestampSintonizacao && textoSalvo) {
+    const agora = new Date().getTime();
+    const dezMinutos = 10 * 60 * 1000;
+    const tempoPassado = agora - parseInt(timestampSintonizacao);
 
-          if (tempoPassado > dezMinutos) {
-            // CASO A: O tempo ACABOU.
-            console.log("Tempo expirado. Resetando sintonização.");
-            localStorage.clear(); // Limpa tudo
-            mostrarAlertaPrivacidade(); // Mostra alerta inicial
-          } else {
-            // CASO B: Ainda está dentro do tempo. Restaura a resposta.
-            console.log("Sintonização ativa encontrada. Restaurando...");
+    if (tempoPassado > dezMinutos) {
+      console.log("Tempo expirado. Resetando sintonização.");
+      localStorage.clear();
+      mostrarAlertaPrivacidade();
+    } else {
+      console.log("Sintonização ativa encontrada. Restaurando...");
 
-            // A. Mostra a barra de urgência
-            const barra = document.getElementById("barraUrgencia");
-            if (barra) barra.style.display = "block";
+      const barra = document.getElementById("barraUrgencia");
+      if (barra) barra.style.display = "block";
 
-            // B. Calcula tempo restante e inicia o cronômetro visual
-            const tempoRestante = dezMinutos - tempoPassado;
-            iniciarTimerRegressivo(tempoRestante);
+      const tempoRestante = dezMinutos - tempoPassado;
+      iniciarTimerRegressivo(tempoRestante);
 
-            // C. Configura interface para o estado de pagamento
-            sessionIdGlobal = sessionSalva;
-            document.getElementById("btnGerar").style.display = "none";
-            document.getElementById("input").style.display = "none";
+      sessionIdGlobal = sessionSalva;
+      
+      const btnGerar = document.getElementById("btnGerar");
+      const input = document.getElementById("input");
+      if (btnGerar) btnGerar.style.display = "none";
+      if (input) input.style.display = "none";
 
-            // D. Tenta montar a caixa de revelação se o elemento existir
-            const elResultado = document.getElementById("resultado");
-            if (elResultado) {
-              montarCaixaDeRevelacao(textoSalvo);
-            }
+      const elResultado = document.getElementById("resultado");
+      if (elResultado) {
+        montarCaixaDeRevelacao(textoSalvo);
+      }
+
+      // Verifica se já passou pelo fluxo de revelação gratuita e pagamento
+      if (localStorage.getItem("pagamento_confirmado") === "sim") {
+        setTimeout(() => {
+          const textoRealSalvo = localStorage.getItem("conselho_secreto") || "";
+          liberarConteudo(textoRealSalvo); // Esta função já cuida de remover o bloqueio e adicionar o botão do PDF
+
+          // GARANTIA: Se o botão do PDF não apareceu, força a inserção
+          const elResultado = document.getElementById("resultado");
+          if (elResultado && !document.getElementById("btn-guia-pdf")) {
+            const btnGuia = document.createElement("button");
+            btnGuia.id = "btn-guia-pdf";
+            btnGuia.innerHTML = "📥 BAIXAR MEU GUIA DE AÇÃO (PDF)";
+            btnGuia.style.marginTop = "35px";
+            btnGuia.style.width = "100%";
+            btnGuia.style.padding = "18px";
+            btnGuia.style.background = "#D4AF37";
+            btnGuia.style.color = "white";
+            btnGuia.style.border = "none";
+            btnGuia.style.borderRadius = "50px";
+            btnGuia.style.fontSize = "15px";
+            btnGuia.style.fontWeight = "bold";
+            btnGuia.style.cursor = "pointer";
             
-            // E. Verifica se já pagou para manter revelado, senão reativa verificação
-           if (localStorage.getItem("pagamento_confirmado") === "sim") {
-               setTimeout(() => {
-                   const blurArea = document.getElementById("targetBlur");
-                   if (blurArea) {
-                       blurArea.innerText = localStorage.getItem("conselho_secreto");
-                       blurArea.style.filter = "none";
-                       blurArea.style.opacity = "1";
-                       blurArea.style.maskImage = "none";
-                       blurArea.style.webkitMaskImage = "none";
-                       blurArea.classList.remove("blur-text"); // Remove a classe que pode ter o degradê no CSS
-                   }
-                   const btnReveal = document.getElementById("btnReveal");
-                   if (btnReveal) btnReveal.style.display = "none";
-                   const statusTxt = document.getElementById("statusCheck");
-                   if (statusTxt) statusTxt.style.display = "none";
-               }, 100);
-            } else {
-               verificarStatus();
-            }
+            btnGuia.onclick = function() {
+              // Redireciona para o seu endpoint de PDF
+              window.location.href = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
+            };
+            
+            elResultado.appendChild(btnGuia);
           }
-        } else {
-          // CASO C: Primeira visita ou nada salvo.
-          mostrarAlertaPrivacidade();
-        }
-      };
+        }, 300);
+      }
+    }
+  } else {
+    mostrarAlertaPrivacidade();
+  }
+};
 
       // === FUNÇÕES VISUAIS E DEPOIMENTOS ===
 
@@ -849,94 +923,38 @@
         const bancoDeFrases = [
           // Domingo (0)
           [
-            {
-              nome: "Clarice Rocha",
-              texto:
-                "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio.",
-            },
-            {
-              nome: "José Oliveira",
-              texto:
-                "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado.",
-            },
+            { nome: "Clarice Rocha", texto: "Eu pedi um sinal hoje cedo e esse site apareceu para mim. O que eu li aqui me deu um arrepio. Chorei de alívio." },
+            { nome: "José Oliveira", texto: "Parece que o destino me trouxe até aqui no momento exato. encontrou uma solução que eu não tinha encontrado." },
           ],
           // Segunda (1)
           [
-            {
-              nome: "Geraldo Neto",
-              texto:
-                "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz.",
-            },
-            {
-              nome: "Maria Silva",
-              texto:
-                "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente.",
-            },
+            { nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz." },
+            { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente." },
           ],
           // Terça (2)
           [
-            {
-              nome: "Sônia Magalhães",
-              texto:
-                "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso.",
-            },
-            {
-              nome: "Neuza Ramos",
-              texto:
-                "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão.",
-            },
+            { nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que nada é por acaso." },
+            { nome: "Neuza Ramos", texto: "Achei que era só mais uma página, mas o que li aqui tocou na ferida e me ajudou de verdade. Gratidão." },
           ],
           // Quarta (3)
           [
-            {
-              nome: "Benedito Alves",
-              texto:
-                "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo.",
-            },
-            {
-              nome: "Antônio Carlos",
-              texto:
-                "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje.",
-            },
+            { nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos de leitura. Sinto uma leveza que não sentia faz tempo." },
+            { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade da resposta. Foi um acolhimento que eu não esperava encontrar hoje." },
           ],
           // Quinta (4)
           [
-            {
-              nome: "Tânia Soares",
-              texto:
-                "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora.",
-            },
-            {
-              nome: "Dona Izabel",
-              texto:
-                "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma.",
-            },
+            { nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente agora." },
+            { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendi o porquê. É emocionante ler algo tão verdadeiro sobre a nossa alma." },
           ],
           // Sexta (5)
           [
-            {
-              nome: "Ricardo Viana",
-              texto:
-                "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um novo caminho, nada é por acaso.",
-            },
-            {
-              nome: "Margarida Lemos",
-              texto:
-                "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida.",
-            },
+            { nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um novo caminho, nada é por acaso." },
+            { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que esteja se sentindo perdida." },
           ],
           // Sábado (6)
           [
-            {
-              nome: "Helena Faria",
-              texto:
-                "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade.",
-            },
-            {
-              nome: "Roberto Mendes",
-              texto:
-                "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos",
-            },
+            { nome: "Helena Faria", texto: "Gostei muito do fato de o site não guardar nada do que a gente escreve. Me senti segura para desabafar de verdade." },
+            { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões, essa resposta me abriu os olhos" },
           ],
         ];
 
@@ -999,14 +1017,12 @@
         const display = document.getElementById("timerRegressivo");
         if (!display) return;
 
-        // Cancela intervalo anterior se houver para evitar múltiplos timers
         if (window.intervaloUrgencia) clearInterval(window.intervaloUrgencia);
 
         function atualizarDisplay() {
           if (tempoRestanteMS <= 0) {
             clearInterval(window.intervaloUrgencia);
             console.log("Tempo esgotado no timer.");
-            // ESTE É O ÚNICO MOMENTO EM QUE TUDO É APAGADO
             localStorage.clear();
             location.reload();
             return;
@@ -1023,11 +1039,11 @@
           tempoRestanteMS -= 1000;
         }
 
-        atualizarDisplay(); // Executa imediato para não esperar 1s
+        atualizarDisplay();
         window.intervaloUrgencia = setInterval(atualizarDisplay, 1000);
       }
 
-      // === LÓGICA CORE (GERAR RESPOSTA E PAGAMENTO) ===
+      // === LÓGICA CORE (GERAR RESPOSTA) ===
 
       async function gerarResposta() {
         const input = document.getElementById("input");
@@ -1064,33 +1080,27 @@
 
           const data = await resposta.json();
 
-//trackface
-if (typeof fbq === "function") {
-  fbq("track", "ViewContent");
-}
+          if (typeof fbq === "function") {
+            fbq("track", "ViewContent");
+          }
 
-// === SALVAMENTO CORRETO DO ESTADO ===
-const agora = new Date().getTime(); // Timestamp atual
+          const agora = new Date().getTime();
 
-          // 1. Salva os dados da sintonização
           localStorage.setItem("conselho_pendente", data.texto);
           localStorage.setItem("session_id_pendente", sessionIdGlobal);
-          localStorage.setItem("data_sintonizacao", agora); // Salva o horário de início
-          localStorage.removeItem("pagamento_confirmado"); // Reseta estado de pagamento anterior
+          localStorage.setItem("data_sintonizacao", agora);
+          localStorage.removeItem("pagamento_confirmado"); 
 
-          // 2. Ativa a barra de urgência IMEDIATAMENTE (ALTERADO PARA 10 MINUTOS)
           const barra = document.getElementById("barraUrgencia");
           if (barra) barra.style.display = "block";
-          iniciarTimerRegressivo(10 * 60 * 1000); // Inicia 10 min cheios
+          iniciarTimerRegressivo(10 * 60 * 1000); 
 
-          // 3. Atualiza a interface
           btn.style.display = "none";
           input.style.display = "none";
           montarCaixaDeRevelacao(data.texto);
         } catch (err) {
           console.error("Erro na sintonização:", err);
 
-          // Limpa para não travar
           localStorage.removeItem("conselho_pendente");
           localStorage.removeItem("session_id_pendente");
           localStorage.removeItem("data_sintonizacao");
@@ -1109,70 +1119,128 @@ const agora = new Date().getTime(); // Timestamp atual
         }
       }
 
-    async function montarCaixaDeRevelacao(textoVindoDaIA) {
-  const el = document.getElementById("resultado");
-  if (!el) return;
+      async function montarCaixaDeRevelacao(textoVindoDaIA) {
+        const el = document.getElementById("resultado");
+        if (!el) return;
 
-  const fraseIndutora = ". Muitos sinais passaram despercebidos, mas este é o único que você não pode ignorar; a razão espiritual de você estar aqui agora e o que o seu futuro exige que você saiba é que...";
+        const fraseIndutora = ". Muitos sinais passaram despercebidos, mas este é o único que você não pode ignorar; a razão espiritual de você estar aqui agora e o que o seu futuro exige que você saiba é que...";
 
-  // 1. Dividimos o texto
-  const partes = textoVindoDaIA.split("...");
-  const textoVisivel = partes[0].trim();
-  
-  // 2. IMPORTANTE: Não mostramos o texto escondido real aqui por segurança.
-  // Se partes[1] existir, ele está salvo no banco de dados, não precisamos dele no HTML agora.
-  let textoDePreenchimento = "Este é o segredo que o universo guardou para este momento sagrado da sua jornada... Essa resposta não é real, somente é liberada quando você clicar no botão para receber seu direcionamento para sempre";
+        const partes = textoVindoDaIA.split("...");
+        const textoVisivel = partes[0].trim();
+        
+        let textoDePreenchimento = "Este é o segredo que o universo guardou para este momento sagrado da sua jornada... Essa resposta não é real, somente é liberada quando você clicar no botão para receber seu direcionamento para sempre";
 
-  const jaPago = localStorage.getItem("pagamento_confirmado") === "sim";
-  const textoRealSalvo = localStorage.getItem("conselho_secreto");
-  let textoExibicao = jaPago ? (textoRealSalvo || "Carregando...") : textoDePreenchimento;
+        const jaPago = localStorage.getItem("pagamento_confirmado") === "sim";
+        const textoRealSalvo = localStorage.getItem("conselho_secreto");
+        let textoExibicao = jaPago ? (textoRealSalvo || "Carregando...") : textoDePreenchimento;
 
-  el.innerHTML = `
-    <div class="reveal-box" style="position: relative; display: flex; flex-direction: column; padding-bottom: 50px;">
-      <span class="text-visible" style="line-height: 1.6; display: block;">
-        ${textoVisivel}${fraseIndutora}
-      </span>
+        el.innerHTML = `
+          <div class="reveal-box" style="position: relative; display: flex; flex-direction: column; padding-bottom: 50px;">
+            <span class="text-visible" style="line-height: 1.6; display: block;">
+              ${textoVisivel}${fraseIndutora}
+            </span>
 
-      <div style="position: relative; margin-top: 15px;">
-        <span id="targetBlur" class="blur-text" style="
-  display: block; 
-  filter: ${jaPago ? 'none' : 'blur(8px)'}; 
-  opacity: ${jaPago ? '1' : '0.6'}; 
-  user-select: ${jaPago ? 'auto' : 'none'}; 
-  line-height: 1.6;
-  mask-image: none !important;
-  -webkit-mask-image: none !important;
-">
-          ${textoExibicao}
-        </span>
+            <div style="position: relative; margin-top: 15px;">
+              <span id="targetBlur" class="blur-text" style="
+                display: block; 
+                filter: ${jaPago ? 'none' : 'blur(8px)'}; 
+                opacity: ${jaPago ? '1' : '0.6'}; 
+                user-select: ${jaPago ? 'auto' : 'none'}; 
+                line-height: 1.6;
+                mask-image: none !important;
+                -webkit-mask-image: none !important;
+              ">
+                ${textoExibicao}
+              </span>
 
-        ${!jaPago ? `
-        <div id="wrapperBotao" class="blur-wrapper" style="
-          position: absolute; 
-          top: 0; left: 0; width: 100%; height: 100%;
-          display: flex; justify-content: center; align-items: center;
-          z-index: 10;
-        ">
-          <button id="btnReveal" onclick="verificarFluxoDeRevelacao()" style="cursor: pointer;">
-            ✨ REVELAR O CONSELHO FINAL
-          </button>
-        </div>
-        ` : ''}
-      </div>
+              ${!jaPago ? `
+              <div id="wrapperBotao" class="blur-wrapper" style="
+                position: absolute; 
+                top: 0; left: 0; width: 100%; height: 100%;
+                display: flex; justify-content: center; align-items: center;
+                z-index: 10;
+              ">
+                <button id="btnReveal" onclick="verificarFluxoDeRevelacao()" style="cursor: pointer; padding: 15px 30px; border-radius: 30px; font-weight: bold; background: #fff; color: #1a1a1a; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                  ✨ REVELAR O CONSELHO FINAL
+                </button>
+              </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }
 
-     <p id="statusCheck" style="display: none; font-size: 11px; color: #718096; text-align: center; position: absolute; bottom: 5px; width: 100%; font-style: italic;">
-    Aguardando confirmação...
-</p>
-    </div>
-  `;
-}
-
-      // --- Funções de Modal e Compartilhamento (Mantidas) ---
-
+      // NOVO FLUXO: Revela sem pagar e cria o botão do Guia
       function verificarFluxoDeRevelacao() {
-  // Ignora a verificação de compartilhamento e abre direto o modal de venda
-  abrirModalVenda();
-}
+        const textoCompleto = localStorage.getItem("conselho_pendente") || "";
+        const partes = textoCompleto.split("...");
+        
+        // Pega a segunda parte do texto (depois do "...") para ser o texto real
+        const textoReal = partes.length > 1 ? partes.slice(1).join("...").trim() : "O universo está guiando seus passos. Confie na jornada.";
+        
+        liberarConteudo(textoReal);
+      }
+
+      function liberarConteudo(textoReal) {
+        // Marca como liberado na sessão para persistir caso atualize
+        localStorage.setItem("pagamento_confirmado", "sim");
+        localStorage.setItem("conselho_secreto", textoReal);
+
+        // Remove os elementos de bloqueio
+        const btn = document.getElementById("btnReveal");
+        if (btn) btn.remove();
+        const wrapper = document.getElementById("wrapperBotao");
+        if (wrapper) wrapper.remove();
+
+        // Limpa o Blur e insere o texto real
+        const blurArea = document.getElementById("targetBlur");
+        if (blurArea) {
+          blurArea.innerText = textoReal || localStorage.getItem("conselho_secreto");
+          blurArea.classList.remove("blur-text");
+          blurArea.classList.add("no-blur");
+          blurArea.style.filter = "none";
+          blurArea.style.opacity = "1";
+          blurArea.style.maskImage = "none";
+          blurArea.style.webkitMaskImage = "none";
+        }
+
+        // CRIA O NOVO BOTÃO DO GUIA DE AÇÃO PERSONALIZADO
+        const elResultado = document.getElementById("resultado");
+        if (elResultado && !document.getElementById("btn-guia-pdf")) {
+            const btnGuia = document.createElement("button");
+            btnGuia.id = "btn-guia-pdf";
+            btnGuia.innerHTML = "✨ RECEBER MEU GUIA DE AÇÃO PERSONALIZADO";
+            btnGuia.style.marginTop = "35px";
+            btnGuia.style.width = "100%";
+            btnGuia.style.padding = "18px";
+            btnGuia.style.background = "#D4AF37"; // Dourado minimalista
+            btnGuia.style.color = "white";
+            btnGuia.style.border = "none";
+            btnGuia.style.borderRadius = "50px";
+            btnGuia.style.fontSize = "15px";
+            btnGuia.style.fontWeight = "bold";
+            btnGuia.style.cursor = "pointer";
+            btnGuia.style.boxShadow = "0 4px 15px rgba(212, 175, 55, 0.4)";
+            btnGuia.style.transition = "transform 0.2s ease";
+            
+            btnGuia.onmouseover = () => btnGuia.style.transform = "scale(1.02)";
+            btnGuia.onmouseout = () => btnGuia.style.transform = "scale(1)";
+
+            // Ao clicar, ABRE O MODAL DE VENDAS PARA PAGAR O GUIA
+            btnGuia.onclick = function() {
+                abrirModalVenda();
+            };
+            
+            const revealBox = elResultado.querySelector('.reveal-box');
+            if (revealBox) {
+                revealBox.appendChild(btnGuia);
+            } else {
+                elResultado.appendChild(btnGuia);
+            }
+        }
+      }
+
+      // --- Funções de Modal e Compartilhamento ---
 
       function fecharShareModal() {
         document.getElementById("shareModal").style.display = "none";
@@ -1185,7 +1253,6 @@ const agora = new Date().getTime(); // Timestamp atual
         window.open(url, "_blank");
         localStorage.setItem("ja_compartilhou", "true");
 
-        // Lógica para abrir modal após voltar
         window.addEventListener(
           "focus",
           function aoVoltarProSite() {
@@ -1193,9 +1260,7 @@ const agora = new Date().getTime(); // Timestamp atual
             abrirModalVenda();
             window.removeEventListener("focus", aoVoltarProSite);
           },
-          {
-            once: true,
-          },
+          { once: true }
         );
 
         setTimeout(() => {
@@ -1205,7 +1270,6 @@ const agora = new Date().getTime(); // Timestamp atual
       }
 
       function abrirModalVenda() {
-        // Verificação do Pixel do Facebook
         if (typeof fbq === "function") {
           fbq("track", "InitiateCheckout");
         }
@@ -1219,18 +1283,15 @@ const agora = new Date().getTime(); // Timestamp atual
 
         const btn = document.getElementById("btnCheckoutModal");
         if (btn) {
-          btn.innerText = "FAZER MINHA CONTRIBUIÇÃO E REVELAR";
+          btn.innerText = "FAZER MINHA CONTRIBUIÇÃO E RECEBER GUIA";
           btn.disabled = false;
           btn.style.opacity = "1";
         }
       }
 
-      // --- Lógica de Pagamento e Status (Mantidas e Corrigidas) ---
+      // --- Lógica de Pagamento do Guia Personalizado ---
 
       async function iniciarPagamentoMercadoPago() {
-
-        document.getElementById("statusCheck").style.display = "block";
-        
         const btn = document.getElementById("btnCheckoutModal");
         const box = document.getElementById("boxPagamento");
         if (!btn || !box || btn.disabled) return;
@@ -1244,66 +1305,45 @@ const agora = new Date().getTime(); // Timestamp atual
             "https://backfind-production.up.railway.app/api/pagamento",
             {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                sessionId: sessionIdGlobal,
-              }),
-            },
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ sessionId: sessionIdGlobal }),
+            }
           );
 
           const data = await response.json();
 
           if (data.qr_code) {
             box.innerHTML = `
-    <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 20px; padding: 5px; z-index: 10;" onclick="fecharModal()">✕</button>
-    
-    <div style="font-size: 40px; margin-bottom: 10px; color: #1a1a1a;">🕊️</div>
-    <h2 style="font-size: 22px; font-family: 'Lora', serif; font-style: italic; margin: 0 0 10px 0; color: #1a1a1a; font-weight: 600;">Seu Ato de Fé</h2>
-    <p style="font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.4; padding: 0 15px;">Para liberar sua resposta, utilize o QR Code ou copie o código PIX abaixo.</p>
+              <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 20px; padding: 5px; z-index: 10;" onclick="fecharModal()">✕</button>
+              
+              <div style="font-size: 40px; margin-bottom: 10px; color: #1a1a1a;">🕊️</div>
+              <h2 style="font-size: 22px; font-family: 'Lora', serif; font-style: italic; margin: 0 0 10px 0; color: #1a1a1a; font-weight: 600;">Seu Guia Personalizado</h2>
+              <p style="font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.4; padding: 0 15px;">Para liberar seu Guia de Ação em PDF, utilize o QR Code ou copie o código PIX abaixo.</p>
 
-    <div style="background: white; padding: 12px; display: inline-block; border-radius: 16px; border: 1px solid #f1f5f9; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);">
-        <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:160px; height:160px; display:block; border-radius: 4px;">
-    </div>
+              <div style="background: white; padding: 12px; display: inline-block; border-radius: 16px; border: 1px solid #f1f5f9; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);">
+                  <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:160px; height:160px; display:block; border-radius: 4px;">
+              </div>
 
-    <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin: 0 10px 15px 10px; cursor: pointer;" onclick="copiarPix()">
-        <textarea id="pixCode" readonly 
-            style="width: 100%; 
-                   min-height: 60px; 
-                   height: auto;
-                   border: none; 
-                   background: transparent; 
-                   font-size: 12px; 
-                   color: #475569; 
-                   resize: none; 
-                   outline: none; 
-                   text-align: center; 
-                   font-family: 'Courier New', monospace; 
-                   margin: 0; 
-                   padding: 0;
-                   display: block;
-                   word-break: break-all;
-                   cursor: pointer;"
-        >${data.qr_code}</textarea>
-    </div>
+              <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin: 0 10px 15px 10px; cursor: pointer;" onclick="copiarPix()">
+                  <textarea id="pixCode" readonly 
+                      style="width: 100%; min-height: 60px; height: auto; border: none; background: transparent; font-size: 12px; color: #475569; resize: none; outline: none; text-align: center; font-family: 'Courier New', monospace; margin: 0; padding: 0; display: block; word-break: break-all; cursor: pointer;"
+                  >${data.qr_code}</textarea>
+              </div>
 
-    <button onclick="copiarPix()" id="btnCopiar" style="width: calc(100% - 20px); background:#48bb78; color:white; border:none; padding:16px; border-radius:50px; margin: 0 10px; font-weight:bold; cursor:pointer; font-size: 14px; text-transform: uppercase; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(72, 187, 120, 0.2);">
-        COPIAR CÓDIGO
-    </button>
+              <button onclick="copiarPix()" id="btnCopiar" style="width: calc(100% - 20px); background:#48bb78; color:white; border:none; padding:16px; border-radius:50px; margin: 0 10px; font-weight:bold; cursor:pointer; font-size: 14px; text-transform: uppercase; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(72, 187, 120, 0.2);">
+                  COPIAR CÓDIGO
+              </button>
 
-    <p style="font-size: 12px; color: #718096; margin-top: 20px;">
-        ✓ Assim que a doação for confirmada, sua resposta será liberada automaticamente na tela de trás.
-    </p>
-`;
+              <p id="statusCheck" style="display: block; font-size: 12px; color: #718096; margin-top: 20px; font-style: italic;">
+                  Aguardando confirmação do pagamento...
+              </p>
+            `;
             verificarStatus();
           } else {
             throw new Error("Erro ao gerar PIX");
           }
         } catch (err) {
-          alert(
-            "Houve uma pequena oscilação na rede. Por favor, tente clicar novamente.",
-          );
+          alert("Houve uma pequena oscilação na rede. Por favor, tente clicar novamente.");
           btn.innerText = "TENTAR NOVAMENTE";
           btn.disabled = false;
           btn.style.opacity = "1";
@@ -1342,65 +1382,34 @@ const agora = new Date().getTime(); // Timestamp atual
       function verificarStatus() {
         if (intervaloStatus) clearInterval(intervaloStatus);
 
-        const statusCheckHtml = document.getElementById("statusCheck");
-        if (statusCheckHtml) statusCheckHtml.style.display = "block";
-
         intervaloStatus = setInterval(async () => {
           try {
-            const res = await fetch(
-              `https://backfind-production.up.railway.app/api/status?sessionId=${sessionIdGlobal}`,
-            );
+            const res = await fetch(`https://backfind-production.up.railway.app/api/status?sessionId=${sessionIdGlobal}`);
             const data = await res.json();
 
+            // AGORA A VERIFICAÇÃO LIBERA O GUIA, NÃO A RESPOSTA
             if (data.pago === true) {
-              clearInterval(intervaloStatus);
-              liberarConteudo(data.textoRevelado);
-            }
+    clearInterval(intervaloStatus);
+    
+    if (typeof fbq === "function") {
+        fbq("track", "Purchase", { value: 4.90, currency: "BRL" });
+    }
+
+    fecharModal();
+    
+    // REDIRECIONA PARA O DOWNLOAD DO PDF
+    // O navegador iniciará o download automaticamente ao acessar esta URL
+    const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
+    window.location.href = urlPDF; 
+    
+    alert("Pagamento confirmado! Seu Guia de Ação está sendo gerado...");
+}
           } catch (e) {
             console.log("Checando status da sua contribuição...");
           }
         }, 3000);
       }
 
-      function liberarConteudo(textoReal) {
-        fecharModal();
-        
-        localStorage.setItem("pagamento_confirmado", "sim");
-        localStorage.setItem("conselho_secreto", textoReal);
-
-        // === PIXEL EVENT: PURCHASE (Dispara no momento exato em que a resposta é paga e liberada)
-        if (typeof fbq === "function") {
-          fbq("track", "Purchase", {
-            value: 4.90,
-            currency: "BRL"
-          });
-        }
-
-        const btn = document.getElementById("btnReveal");
-        const statusTxt = document.getElementById("statusCheck");
-        if (btn) btn.remove();
-        if (statusTxt) statusTxt.remove();
-        const wrapper = document.getElementById("wrapperBotao");
-        if (wrapper) wrapper.remove();
-        
-
-        const blurArea = document.getElementById("targetBlur");
-        if (blurArea) {
-          // Usa o texto da API ou o salvo no sistema local para garantir que NÃO FICARÁ VAZIO
-          blurArea.innerText = textoReal || localStorage.getItem("conselho_secreto");
-          blurArea.classList.remove("blur-text");
-          blurArea.classList.add("no-blur");
-          blurArea.style.filter = "none";
-          blurArea.style.opacity = "1";
-          blurArea.style.maskImage = "none";
-          blurArea.style.webkitMaskImage = "none";
-        }
-
-        // REMOVIDO DAQUI: localStorage.removeItem("conselho_pendente")
-        // Agora, se a página atualizar, os dados continuam lá até o contador zerar!
-      }
-
-      // --- Função Placeholder (Faltava no seu envio) ---
       function mostrarAlertaPrivacidade() {
         const alert = document.getElementById("privacyAlert");
         if (alert) alert.classList.add("show");
