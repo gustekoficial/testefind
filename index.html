@@ -1047,7 +1047,7 @@
 
         try {
           const resposta = await fetch(
-            "https://backfind.vercel.app/api/responder",
+            "https://backfind-production.up.railway.app/api/responder",
             {
               method: "POST",
               headers: {
@@ -1241,7 +1241,7 @@ const agora = new Date().getTime(); // Timestamp atual
 
         try {
           const response = await fetch(
-            "https://backfind.vercel.app/api/pagamento",
+            "https://backfind-production.up.railway.app/api/pagamento",
             {
               method: "POST",
               headers: {
@@ -1348,7 +1348,7 @@ const agora = new Date().getTime(); // Timestamp atual
         intervaloStatus = setInterval(async () => {
           try {
             const res = await fetch(
-              `https://backfind.vercel.app/api/status?sessionId=${sessionIdGlobal}`,
+              `https://backfind-production.up.railway.app/api/status?sessionId=${sessionIdGlobal}`,
             );
             const data = await res.json();
 
