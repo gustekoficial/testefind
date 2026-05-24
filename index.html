@@ -874,7 +874,7 @@
             if (localStorage.getItem("texto_revelado") === "sim") {
               setTimeout(() => {
                 const textoRealSalvo = localStorage.getItem("conselho_secreto") || "";
-                liberarConteudo(textoRealSalvo); // Já cuida de inserir o botão de PDF corretamente
+                liberarConteudo(textoRealSalvo); 
               }, 300);
             }
           }
@@ -1065,6 +1065,7 @@
           localStorage.setItem("session_id_pendente", sessionIdGlobal);
           localStorage.setItem("data_sintonizacao", agora);
           localStorage.removeItem("texto_revelado"); 
+          localStorage.removeItem("guia_pago");
 
           const barra = document.getElementById("barraUrgencia");
           if (barra) barra.style.display = "block";
@@ -1145,29 +1146,24 @@
         `;
       }
 
-      // NOVO FLUXO: Revela sem pagar e cria o botão do Guia
       function verificarFluxoDeRevelacao() {
         const textoCompleto = localStorage.getItem("conselho_pendente") || "";
         const partes = textoCompleto.split("...");
         
-        // Pega a segunda parte do texto (depois do "...") para ser o texto real
         const textoReal = partes.length > 1 ? partes.slice(1).join("...").trim() : "O universo está guiando seus passos. Confie na jornada.";
         
         liberarConteudo(textoReal);
       }
 
       function liberarConteudo(textoReal) {
-        // Marca como liberado na sessão para persistir caso atualize
         localStorage.setItem("texto_revelado", "sim");
         localStorage.setItem("conselho_secreto", textoReal);
 
-        // Remove os elementos de bloqueio
         const btn = document.getElementById("btnReveal");
         if (btn) btn.remove();
         const wrapper = document.getElementById("wrapperBotao");
         if (wrapper) wrapper.remove();
 
-        // Limpa o Blur e insere o texto real
         const blurArea = document.getElementById("targetBlur");
         if (blurArea) {
           blurArea.innerText = textoReal || localStorage.getItem("conselho_secreto");
@@ -1179,38 +1175,67 @@
           blurArea.style.webkitMaskImage = "none";
         }
 
-        // CRIA O NOVO BOTÃO DO GUIA DE AÇÃO PERSONALIZADO
         const elResultado = document.getElementById("resultado");
         if (elResultado && !document.getElementById("btn-guia-pdf")) {
+            
+            // 1. Criação e Estilização Melhorada do Botão Principal
             const btnGuia = document.createElement("button");
             btnGuia.id = "btn-guia-pdf";
-            btnGuia.innerHTML = "✨ RECEBER MEU GUIA DE AÇÃO PERSONALIZADO";
             btnGuia.style.marginTop = "35px";
             btnGuia.style.width = "100%";
-            btnGuia.style.padding = "18px";
-            btnGuia.style.background = "#D4AF37"; // Dourado minimalista
-            btnGuia.style.color = "white";
+            btnGuia.style.padding = "20px";
             btnGuia.style.border = "none";
-            btnGuia.style.borderRadius = "50px";
-            btnGuia.style.fontSize = "15px";
-            btnGuia.style.fontWeight = "bold";
+            btnGuia.style.borderRadius = "8px"; 
+            btnGuia.style.fontSize = "16px";
+            btnGuia.style.fontWeight = "800";
+            btnGuia.style.textTransform = "uppercase";
+            btnGuia.style.letterSpacing = "0.5px";
             btnGuia.style.cursor = "pointer";
-            btnGuia.style.boxShadow = "0 4px 15px rgba(212, 175, 55, 0.4)";
-            btnGuia.style.transition = "transform 0.2s ease";
-            
-            btnGuia.onmouseover = () => btnGuia.style.transform = "scale(1.02)";
-            btnGuia.onmouseout = () => btnGuia.style.transform = "scale(1)";
+            btnGuia.style.transition = "all 0.3s ease";
 
-            // Ao clicar, ABRE O MODAL DE VENDAS PARA PAGAR O GUIA
-            btnGuia.onclick = function() {
-                abrirModalVenda();
-            };
+            // 2. Criação do Texto de Status logo abaixo do botão
+            const statusText = document.createElement("p");
+            statusText.id = "status-pagamento-main";
+            statusText.innerText = "Aguardando confirmação do pagamento...";
+            statusText.style.textAlign = "center";
+            statusText.style.fontSize = "13px";
+            statusText.style.color = "#718096";
+            statusText.style.marginTop = "12px";
+            statusText.style.fontStyle = "italic";
+            statusText.style.display = "none"; // Oculto até gerar o PIX
+
+            // Verifica o estado atual para definir a aparência e função do botão
+            const jaPago = localStorage.getItem("guia_pago") === "sim";
+
+            if (jaPago) {
+                btnGuia.innerHTML = "📄 VER MEU GUIA PERSONALIZADO";
+                btnGuia.style.background = "#2f855a";
+                btnGuia.style.color = "white";
+                btnGuia.style.boxShadow = "0 6px 15px rgba(47, 133, 90, 0.3)";
+                btnGuia.onclick = function() {
+                    window.location.href = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
+                };
+            } else {
+                btnGuia.innerHTML = "✨ RECEBER MEU GUIA DE AÇÃO PERSONALIZADO";
+                btnGuia.style.background = "linear-gradient(135deg, #D4AF37 0%, #B5952F 100%)";
+                btnGuia.style.color = "#ffffff";
+                btnGuia.style.boxShadow = "0 8px 20px rgba(212, 175, 55, 0.3)";
+                
+                btnGuia.onmouseover = () => btnGuia.style.transform = "translateY(-2px)";
+                btnGuia.onmouseout = () => btnGuia.style.transform = "translateY(0)";
+
+                btnGuia.onclick = function() {
+                    abrirModalVenda();
+                };
+            }
             
             const revealBox = elResultado.querySelector('.reveal-box');
             if (revealBox) {
                 revealBox.appendChild(btnGuia);
+                revealBox.appendChild(statusText);
             } else {
                 elResultado.appendChild(btnGuia);
+                elResultado.appendChild(statusText);
             }
         }
       }
@@ -1313,6 +1338,11 @@
                   Aguardando confirmação do pagamento...
               </p>
             `;
+            
+            // Mostra o status também na página principal embaixo do botão
+            const statusMain = document.getElementById("status-pagamento-main");
+            if (statusMain) statusMain.style.display = "block";
+
             verificarStatus();
           } else {
             throw new Error("Erro ao gerar PIX");
@@ -1362,7 +1392,6 @@
             const res = await fetch(`https://backfind-production.up.railway.app/api/status?sessionId=${sessionIdGlobal}`);
             const data = await res.json();
 
-            // AGORA A VERIFICAÇÃO LIBERA O GUIA
             if (data.pago === true) {
               clearInterval(intervaloStatus);
               
@@ -1370,24 +1399,46 @@
                   fbq("track", "Purchase", { value: 4.90, currency: "BRL" });
               }
 
-              // Muda o visual do modal para "Aprovado" em vez de travar a tela com um alert()
+              // Salva o estado de pago
+              localStorage.setItem("guia_pago", "sim");
+
+              const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
+
+              // 1. Atualiza o botão principal na tela
+              const btnGuia = document.getElementById("btn-guia-pdf");
+              if (btnGuia) {
+                  btnGuia.innerHTML = "📄 VER MEU GUIA PERSONALIZADO";
+                  btnGuia.style.background = "#2f855a"; // Fica verde
+                  btnGuia.style.boxShadow = "0 6px 15px rgba(47, 133, 90, 0.3)";
+                  btnGuia.style.transform = "translateY(0)"; // Remove a animação de hover do antigo
+                  
+                  // O botão agora apenas baixa o PDF, sem abrir modal
+                  btnGuia.onclick = function() {
+                      window.location.href = urlPDF;
+                  };
+              }
+
+              // 2. Esconde o texto de "Aguardando confirmação..."
+              const statusMain = document.getElementById("status-pagamento-main");
+              if (statusMain) {
+                  statusMain.style.display = "none";
+              }
+
+              // 3. Muda a tela do Modal de Pagamento
               const boxPagamento = document.getElementById("boxPagamento");
               if (boxPagamento) {
                   boxPagamento.innerHTML = `
                       <div style="text-align:center; padding: 40px 20px;">
                           <div style="font-size: 50px; margin-bottom: 20px;">✨</div>
                           <h2 style="font-family: 'Lora', serif; font-style: italic; color: #1a1a1a;">Sintonização Concluída</h2>
-                          <p style="color: #64748b; margin-top: 10px;">Seu Guia de Ação está sendo gerado e o download começará automaticamente...</p>
+                          <p style="color: #64748b; margin-top: 10px;">Seu Guia de Ação está pronto. O download começará automaticamente...</p>
                       </div>
                   `;
               }
 
-              // REDIRECIONA PARA O DOWNLOAD DO PDF
-              const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
+              // 4. Inicia o download e fecha o modal
               window.location.href = urlPDF; 
-              
-              // Fecha o modal automaticamente após o início do download
-              setTimeout(() => fecharModal(), 5000); 
+              setTimeout(() => fecharModal(), 4000); 
             }
           } catch (e) {
             console.log("Checando status da sua contribuição...");
