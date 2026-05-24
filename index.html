@@ -1497,21 +1497,25 @@
               // Salva o estado de pago
               localStorage.setItem("guia_pago", "sim");
 
-              const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
 
-              // 1. Atualiza o botão principal na tela
-              const btnGuia = document.getElementById("btn-guia-pdf");
-              if (btnGuia) {
-                  btnGuia.innerHTML = "📄 VER MEU GUIA PERSONALIZADO";
-                  btnGuia.style.background = "#2f855a"; // Fica verde
-                  btnGuia.style.boxShadow = "0 6px 15px rgba(47, 133, 90, 0.3)";
-                  btnGuia.style.transform = "translateY(0)"; // Remove a animação de hover do antigo
-                  
-                  // O botão agora apenas baixa o PDF, sem abrir modal
-                  btnGuia.onclick = function() {
-                      window.location.href = urlPDF;
-                  };
-              }
+const resumoFormatado = typeof resumoDaIA !== 'undefined' ? resumoDaIA : "Sua Jornada";
+
+
+const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}&resumo=${encodeURIComponent(resumoFormatado)}`;
+
+// 1. Atualiza o botão principal na tela
+const btnGuia = document.getElementById("btn-guia-pdf");
+if (btnGuia) {
+    btnGuia.innerHTML = "📄 VER MEU GUIA PERSONALIZADO";
+    btnGuia.style.background = "#2f855a"; // Fica verde de sucesso
+    btnGuia.style.boxShadow = "0 6px 15px rgba(47, 133, 90, 0.3)";
+    btnGuia.style.transform = "translateY(0)"; // Reseta animações antigas
+    
+    // 🔥 CORREÇÃO DE UX: Abre em nova aba para proteger seu site contra quedas/erros do servidor
+    btnGuia.onclick = function() {
+        window.open(urlPDF, '_blank');
+    };
+}
 
               // 2. Esconde o texto de "Aguardando confirmação..."
               const statusMain = document.getElementById("status-pagamento-main");
