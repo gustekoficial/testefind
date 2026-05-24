@@ -862,6 +862,7 @@
 
     <script>
       let sessionIdGlobal = localStorage.getItem("session_id_pendente") || "";
+      let resumoDaIA = localStorage.getItem("resumo_diagnostico_modal") || "";
       let intervaloStatus = null;
 
       window.onload = function () {
@@ -1104,6 +1105,21 @@
           if (!resposta.ok) throw new Error("Falha na resposta");
 
           const data = await resposta.json();
+
+          try {
+    const resumoData = await fetch("https://backfind-production.up.railway.app/api/gerar-resumo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensagem: input.value })
+    }).then(res => res.json());
+
+    // Atualiza a variável global e o localStorage imediatamente
+    resumoDaIA = resumoData.resumo || "Sua Jornada";
+    localStorage.setItem("resumo_diagnostico_modal", resumoDaIA);
+} catch (err) {
+    console.error("Erro ao gerar resumo:", err);
+    resumoDaIA = "Sua Jornada";
+}
 
           if (typeof fbq === "function") {
             fbq("track", "ViewContent");
@@ -1397,14 +1413,13 @@
 
           if (data.qr_code) {
             // RECUPERA O RESUMO DO LOCALSTORAGE SE EXISTIR
-            const resumoSalvo = localStorage.getItem("resumo_diagnostico_modal") || "";
-            const htmlResumo = resumoSalvo ? `
-              <div style="background: #fdfaf0; border: 1px solid #d4af37; border-radius: 8px; padding: 12px; margin: 0 15px 20px 15px; text-align: center;">
-                  <p style="margin: 0; font-size: 13px; color: #4a3c1b; font-weight: 500; font-style: italic; line-height: 1.4;">
-                      "${resumoSalvo}"
-                  </p>
-              </div>
-            ` : "";
+            const htmlResumo = resumoDaIA ? `
+  <div style="background: #fdfaf0; border: 1px solid #d4af37; border-radius: 8px; padding: 12px; margin: 0 15px 20px 15px; text-align: center;">
+      <p style="margin: 0; font-size: 13px; color: #4a3c1b; font-weight: 500; font-style: italic; line-height: 1.4;">
+          "${resumoDaIA}"
+      </p>
+  </div>
+` : "";
 
             box.innerHTML = `
               <button style="position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; color: #a0aec0; font-size: 20px; padding: 5px; z-index: 10;" onclick="fecharModal()">✕</button>
@@ -1498,8 +1513,8 @@
               localStorage.setItem("guia_pago", "sim");
 
               const resumoFormatado = typeof resumoDaIA !== 'undefined' ? resumoDaIA : "Sua Jornada";
-              const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}&resumo=${encodeURIComponent(resumoFormatado)}`;
-
+              const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}&resumo=${encodeURIComponent(resumoDaIA)}`;
+              
               // 1. Esconde o texto de "Aguardando confirmação..." no fundo do site
               const statusMain = document.getElementById("status-pagamento-main");
               if (statusMain) {
