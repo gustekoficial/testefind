@@ -1,4 +1,4 @@
-<!doctype html>
+si<!doctype html>
 <html lang="pt-BR">
   <head>
     <!-- Configuração da Imagem de Revelação para WhatsApp -->
@@ -396,6 +396,41 @@
           opacity: 0.5;
         }
       }
+
+
+      .btn-premium {
+    padding: 18px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #D4AF37 0%, #B5952F 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* Efeito de "levitação" ao passar o mouse */
+.btn-premium:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+}
+
+/* Efeito de "afundar" ao clicar */
+.btn-premium:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+}
+
+/* Estado de carregamento */
+.btn-premium:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
 
       .btn-whatsapp {
         background: #25d366;
@@ -1219,10 +1254,8 @@
                     window.location.href = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}`;
                 };
             } else {
-                btnGuia.innerHTML = "✨ RECEBER MEU GUIA DE AÇÃO PERSONALIZADO";
-                btnGuia.style.background = "linear-gradient(135deg, #D4AF37 0%, #B5952F 100%)";
-                btnGuia.style.color = "#ffffff";
-                btnGuia.style.boxShadow = "0 8px 20px rgba(212, 175, 55, 0.3)";
+                btnGuia.classList.add("btn-premium");
+                btnGuia.innerText = "✨ RECEBER MEU GUIA DE AÇÃO PERSONALIZADO";
                 
                 btnGuia.onmouseover = () => btnGuia.style.transform = "translateY(-2px)";
                 btnGuia.onmouseout = () => btnGuia.style.transform = "translateY(0)";
