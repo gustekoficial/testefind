@@ -939,7 +939,7 @@
           ],
           // Segunda (1)
           [
-            { nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz." },
+            { nome: "Geraldo Neto", texto: "Fiquei in choque. Como um texto pode ser tão preciso sobre algo que eu nunca contei para ninguém? Me trouxe paz." },
             { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há meses. Foi o empurrão que eu precisava para seguir em frente." },
           ],
           // Terça (2)
@@ -1022,39 +1022,51 @@
         }, 3000);
       }
 
-      // === LÓGICA DO CRONÔMETRO ===
+      // === LÓGICA DO CRONÔMETRO CORRIGIDA (IMUNE A CONGELAMENTO) ===
 
       function iniciarTimerRegressivo(tempoRestanteMS) {
-    const display = document.getElementById("timerRegressivo");
-        
-    if (!display) return;
+        const display = document.getElementById("timerRegressivo");
+            
+        if (!display) return;
 
-    if (window.intervaloUrgencia) clearInterval(window.intervaloUrgencia);
+        if (window.intervaloUrgencia) clearInterval(window.intervaloUrgencia);
 
-    function atualizarDisplay() {
-        if (tempoRestanteMS <= 0) {
-            clearInterval(window.intervaloUrgencia);
-            localStorage.clear();
-            location.reload();
-            return;
+        // Define estritamente o timestamp do futuro onde o cronômetro DEVE expirar
+        const tempoFinalAlvo = Date.now() + tempoRestanteMS;
+
+        function atualizarDisplay() {
+            const agora = Date.now();
+            const tempoRealRestanteMS = tempoFinalAlvo - agora;
+
+            if (tempoRealRestanteMS <= 0) {
+                clearInterval(window.intervaloUrgencia);
+                localStorage.clear();
+                location.reload();
+                return;
+            }
+
+            const minutos = Math.floor(tempoRealRestanteMS / 1000 / 60);
+            const segundos = Math.floor((tempoRealRestanteMS / 1000) % 60);
+
+            const tempoFormatado = 
+                (minutos < 10 ? "0" + minutos : minutos) + ":" + 
+                (segundos < 10 ? "0" + segundos : segundos);
+
+            // Atualiza a barra no topo (principal) com a matemática real baseada no relógio global
+            display.innerText = tempoFormatado;
         }
 
-        const minutos = Math.floor(tempoRestanteMS / 1000 / 60);
-        const segundos = Math.floor((tempoRestanteMS / 1000) % 60);
+        // Executa imediatamente para evitar delay visual
+        atualizarDisplay();
+        window.intervaloUrgencia = setInterval(atualizarDisplay, 1000);
 
-        const tempoFormatado = 
-            (minutos < 10 ? "0" + minutos : minutos) + ":" + 
-            (segundos < 10 ? "0" + segundos : segundos);
-
-        // Atualiza a barra no topo (principal)
-        display.innerText = tempoFormatado;
-
-        tempoRestanteMS -= 1000;
-    }
-
-    atualizarDisplay();
-    window.intervaloUrgencia = setInterval(atualizarDisplay, 1000);
-}
+        // 🔥 PROTEÇÃO CONTRA TAB THROTTLING: Recalcula na hora quando o usuário reabre a aba/celular
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") {
+                atualizarDisplay();
+            }
+        });
+      }
 
       // === LÓGICA CORE (GERAR RESPOSTA) ===
 
@@ -1196,6 +1208,11 @@
             </div>
           </div>
         `;
+
+        // Se já foi revelado, adiciona os botões de vendas ou do PDF diretamente
+        if (jaRevelado) {
+           renderizarBotoesFinaisEfluxo(jaRevelado);
+        }
       }
 
       function verificarFluxoDeRevelacao() {
@@ -1227,6 +1244,10 @@
           blurArea.style.webkitMaskImage = "none";
         }
 
+        renderizarBotoesFinaisEfluxo(true);
+      }
+
+      function renderizarBotoesFinaisEfluxo(jaRevelado) {
         const elResultado = document.getElementById("resultado");
         if (elResultado && !document.getElementById("btn-guia-pdf")) {
             
@@ -1320,14 +1341,14 @@
       }
 
       function travarScroll(bloquear) {
-    if (bloquear) {
-        document.body.style.overflow = 'hidden'; // Trava o scroll
-        document.body.style.height = '100vh';    // Impede pulos em alguns navegadores mobile
-    } else {
-        document.body.style.overflow = 'auto';   // Libera o scroll
-        document.body.style.height = 'auto';
-    }
-}
+        if (bloquear) {
+            document.body.style.overflow = 'hidden'; // Trava o scroll
+            document.body.style.height = '100vh';    // Impede pulos em alguns navegadores mobile
+        } else {
+            document.body.style.overflow = 'auto';   // Libera o scroll
+            document.body.style.height = 'auto';
+        }
+      }
 
       function abrirModalVenda() {
         if (typeof fbq === "function") {
@@ -1400,7 +1421,7 @@
 
               <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin: 0 10px 15px 10px; cursor: pointer;" onclick="copiarPix()">
                   <textarea id="pixCode" readonly 
-                      style="width: 100%; min-height: 60px; height: auto; border: none; background: transparent; font-size: 12px; color: #475569; resize: none; outline: none; text-align: center; font-family: 'Courier New', monospace; margin: 0; padding: 0; display: block; word-break: break-all; cursor: pointer;"
+                    style="width: 100%; min-height: 60px; height: auto; border: none; background: transparent; font-size: 12px; color: #475569; resize: none; outline: none; text-align: center; font-family: 'Courier New', monospace; margin: 0; padding: 0; display: block; word-break: break-all; cursor: pointer;"
                   >${data.qr_code}</textarea>
               </div>
 
