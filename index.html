@@ -198,71 +198,30 @@ body {
   align-items: center;
   gap: 10px;
 
+  margin-bottom: 20px;
+
   color: #718096;
 
-  font-size: 16px;
+  font-size: 17px;
+
   font-style: italic;
+
   font-family: "Lora", serif;
 
-  margin-bottom: 18px;
+  min-height: 28px;
 }
 
-#input {
-  width: 100%;
-  height: 240px;
-
-  border: none;
-  outline: none;
-  resize: none;
-
-  background: transparent;
-
-  font-size: 18px;
-  line-height: 1.9;
-
-  font-family: "Inter", sans-serif;
-
-  color: #2d3748;
-
-  box-sizing: border-box;
+.typing-text::after {
+  content: "|";
+  animation: blink 0.8s infinite;
+  margin-left: 3px;
+  color: #d4af37;
 }
 
-#input::placeholder {
-  color: #8a94a6;
-
-  font-style: italic;
-
-  font-size: 16px;
-
-  line-height: 1.8;
-}
-
-.textarea-footer {
-  margin-top: 14px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.gold-divider {
-  flex: 1;
-  height: 1px;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(212,175,55,0.8),
-    transparent
-  );
-
-  margin-right: 12px;
-}
-
-#charCount {
-  font-size: 13px;
-  color: #94a3b8;
-  font-weight: 500;
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }
 
       .label-text {
@@ -766,13 +725,12 @@ body {
       <label class="label-text">Digite o que você está vivendo</label>
       <div class="textarea-wrapper">
   <div class="textarea-top">
-    ✒️
-    <span>Clique aqui para escrever...</span>
+    <span class="textarea-icon">✒️</span>
+    <span class="typing-text" id="typingText"></span>
   </div>
 
   <textarea
     id="input"
-    placeholder="Desabafe, pergunte, compartilhe.\nSeja sincero(a)."
     maxlength="1000"
   ></textarea>
 
@@ -997,7 +955,6 @@ body {
         // 1. Inicia funções visuais básicas
         iniciarContador();
         carregarDepoimentosDoDia();
-        animarPlaceholder();
 
         // 2. Tenta recuperar estado anterior do localStorage
         const textoSalvo = localStorage.getItem("conselho_pendente");
@@ -1121,25 +1078,6 @@ body {
               })
               .join("")}
         `;
-      }
-
-      function animarPlaceholder() {
-        const input = document.getElementById("input");
-        if (!input) return;
-        const estados = [
-          "Clique aqui para escrever",
-          "Clique aqui para escrever.",
-          "Clique aqui para escrever..",
-          "Clique aqui para escrever...",
-        ];
-        let i = 0;
-
-        setInterval(() => {
-          if (input.value === "") {
-            input.placeholder = estados[i];
-            i = (i + 1) % estados.length;
-          }
-        }, 500);
       }
 
       function iniciarContador() {
@@ -1745,19 +1683,78 @@ body {
       }
 
       function mostrarAlertaPrivacidade() {
-        const alert = document.getElementById("privacyAlert");
-        if (alert) alert.classList.add("show");
-      }
-</script>
+    const alert = document.getElementById("privacyAlert");
+    if (alert) alert.classList.add("show");
+  }
 
+  const frases = [
+    "Escreva sua dor...",
+    "Conte o que está sentindo...",
+    "Desabafe sem medo...",
+    "Abra seu coração...",
+    "Sua resposta pode começar aqui..."
+  ];
 
-  <script>
+  const typingText = document.getElementById("typingText");
   const input = document.getElementById("input");
   const charCount = document.getElementById("charCount");
 
+  let fraseIndex = 0;
+  let letraIndex = 0;
+  let apagando = false;
+
+  function animarTexto() {
+
+    charCount.textContent = `${input.value.length} / 1000`;
+
+    if (input.value.length > 0) {
+      typingText.style.opacity = "0";
+      return;
+    } else {
+      typingText.style.opacity = "1";
+    }
+
+    const fraseAtual = frases[fraseIndex];
+
+    if (!apagando) {
+
+      typingText.textContent =
+        fraseAtual.substring(0, letraIndex + 1);
+
+      letraIndex++;
+
+      if (letraIndex === fraseAtual.length) {
+        apagando = true;
+        setTimeout(animarTexto, 1800);
+        return;
+      }
+
+    } else {
+
+      typingText.textContent =
+        fraseAtual.substring(0, letraIndex - 1);
+
+      letraIndex--;
+
+      if (letraIndex === 0) {
+        apagando = false;
+        fraseIndex = (fraseIndex + 1) % frases.length;
+      }
+    }
+
+    setTimeout(animarTexto, apagando ? 40 : 70);
+  }
+
   input.addEventListener("input", () => {
     charCount.textContent = `${input.value.length} / 1000`;
+
+    if (input.value.length === 0) {
+      animarTexto();
+    }
   });
+
+  animarTexto();
+
 </script>
 
   
