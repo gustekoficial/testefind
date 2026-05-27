@@ -694,7 +694,23 @@ body {
       <div class="sub">Algo precisa ser revelado para você hoje...</div>
 
       <label class="label-text">Digite o que você está vivendo</label>
-      <textarea id="input" placeholder="Clique aqui para escrever..."></textarea>
+      <div class="textarea-wrapper">
+  <div class="textarea-top">
+    ✒️
+    <span>Clique aqui para escrever...</span>
+  </div>
+
+  <textarea
+    id="input"
+    placeholder="Desabafe, pergunte, compartilhe.\nSeja sincero(a)."
+    maxlength="1000"
+  ></textarea>
+
+  <div class="textarea-footer">
+    <div class="gold-divider"></div>
+    <span id="charCount">0 / 1000</span>
+  </div>
+</div>
       <button class="btn-main" id="btnGerar" onclick="gerarResposta()">
         REVELAR MINHA RESPOSTA
       </button>
