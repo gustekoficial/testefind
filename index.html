@@ -768,7 +768,7 @@ body {
 
 <textarea
   id="input"
-  placeholder=""
+  placeholder="Clique aqui para escrever..."
   maxlength="1000"
 ></textarea>
 
@@ -1120,23 +1120,25 @@ body {
       }
 
       function animarPlaceholder() {
-        const input = document.getElementById("input");
-        if (!input) return;
-        const estados = [
-          "Clique aqui para escrever",
-          "Clique aqui para escrever.",
-          "Clique aqui para escrever..",
-          "Clique aqui para escrever...",
-        ];
-        let i = 0;
+  const input = document.getElementById("input");
+  if (!input) return;
 
-        setInterval(() => {
-          if (input.value === "") {
-            input.placeholder = estados[i];
-            i = (i + 1) % estados.length;
-          }
-        }, 500);
-      }
+  const estados = [
+    "Clique aqui para escrever",
+    "Clique aqui para escrever.",
+    "Clique aqui para escrever..",
+    "Clique aqui para escrever...",
+  ];
+
+  let i = 0;
+
+  setInterval(() => {
+    if (input.value === "") {
+      i = (i + 1) % estados.length;
+      input.placeholder = estados[i];
+    }
+  }, 500);
+}
 
       function iniciarContador() {
         const txt = document.getElementById("txt-contador");
