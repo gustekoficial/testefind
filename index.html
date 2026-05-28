@@ -44,7 +44,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Encontre Sua Resposta</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
     <style>
       :root {
@@ -60,13 +60,24 @@
 
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      html, body { width: 100%; overflow-x: hidden; }
-
-      body {
-        font-family: "DM Sans", sans-serif;
+      html {
+        width: 100%;
+        overflow-x: hidden;
+        /* Fix background on mobile: pseudo-element on html instead of body fixed bg */
+      }
+      html::before {
+        content: "";
+        position: fixed;
+        inset: 0;
         background:
           linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)),
-          url("fundo.png") center center / cover no-repeat fixed;
+          url("fundo.png") center center / cover no-repeat;
+        z-index: -1;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: transparent;
         color: var(--text);
         display: flex;
         flex-direction: column;
@@ -74,6 +85,8 @@
         min-height: 100vh;
         padding: 40px 16px 60px;
         gap: 16px;
+        width: 100%;
+        overflow-x: hidden;
       }
 
       /* ── URGENCY BAR ── */
@@ -127,7 +140,7 @@
 
       /* ── HEADER ── */
       .site-title {
-        font-family: "Playfair Display", serif;
+        font-family: "Lora", serif;
         font-weight: 700;
         font-size: 24px;
         color: var(--dark);
@@ -135,7 +148,7 @@
         margin-bottom: 6px;
       }
       .site-subtitle {
-        font-family: "Playfair Display", serif;
+        font-family: "Inter", sans-serif;
         font-style: italic;
         font-size: 14px;
         color: var(--muted);
@@ -169,7 +182,7 @@
         background: transparent;
         color: var(--muted);
         transition: all 0.2s ease;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Inter", sans-serif;
       }
       .chip:hover {
         border-color: var(--gold);
@@ -208,7 +221,7 @@
         font-size: 14px;
       }
       .textarea-label-text {
-        font-family: "Playfair Display", serif;
+        font-family: "Inter", sans-serif;
         font-style: italic;
         font-size: 13px;
         color: #9ca3af;
@@ -222,14 +235,14 @@
         background: transparent;
         font-size: 15.5px;
         line-height: 1.85;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Inter", sans-serif;
         color: #1f2937;
         font-weight: 400;
       }
       #input::placeholder {
         color: #9ca3af;
         font-style: italic;
-        font-size: 14.5px;
+        font-size: 14px;
         line-height: 1.75;
       }
       .textarea-footer {
@@ -266,7 +279,7 @@
         letter-spacing: 1.2px;
         cursor: pointer;
         transition: all 0.25s ease;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Inter", sans-serif;
         position: relative;
         overflow: hidden;
       }
@@ -357,11 +370,11 @@
       }
       .text-visible {
         display: block;
-        font-family: "Playfair Display", serif;
-        font-size: 15.5px;
-        line-height: 1.85;
+        font-family: "Inter", sans-serif;
+        font-size: 15px;
+        line-height: 1.9;
         color: #1a1a1a;
-        font-style: italic;
+        font-weight: 400;
       }
       .inline-proof {
         margin: 18px 0 14px;
@@ -394,10 +407,9 @@
       }
       #targetBlur {
         display: block;
-        font-family: "Playfair Display", serif;
-        font-size: 15.5px;
-        line-height: 1.85;
-        font-style: italic;
+        font-family: "Inter", sans-serif;
+        font-size: 15px;
+        line-height: 1.9;
         color: #1a1a1a;
         transition: filter 0.5s ease;
       }
@@ -432,10 +444,10 @@
         border: 1.5px solid rgba(201,168,76,0.4);
         border-radius: 50px;
         padding: 14px 32px;
-        font-family: "Playfair Display", serif;
+        font-family: "Inter", sans-serif;
         font-style: italic;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
         backdrop-filter: blur(10px);
         box-shadow: 0 6px 20px rgba(201,168,76,0.15), 0 2px 8px rgba(0,0,0,0.06);
@@ -530,7 +542,7 @@
         cursor: pointer;
         box-shadow: 0 8px 24px rgba(201,168,76,0.35);
         transition: all 0.25s ease;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Inter", sans-serif;
       }
       .btn-premium-final:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(201,168,76,0.45); }
       .btn-premium-final:active { transform: translateY(0); }
@@ -552,7 +564,7 @@
         cursor: pointer;
         box-shadow: 0 6px 16px rgba(21,128,61,0.25);
         transition: all 0.25s ease;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Inter", sans-serif;
       }
 
       /* ── TESTIMONIALS ── */
@@ -590,8 +602,7 @@
         font-weight: 600;
         font-size: 13px;
         color: var(--dark);
-        font-family: "Playfair Display", serif;
-        font-style: italic;
+        font-family: "Inter", sans-serif;
       }
       .t-time { font-size: 11px; color: #9ca3af; }
       .t-text {
@@ -660,7 +671,7 @@
         margin-bottom: 8px;
       }
       .modal-title {
-        font-family: "Playfair Display", serif;
+        font-family: "Lora", serif;
         font-size: 22px;
         font-weight: 700;
         color: var(--dark);
@@ -781,7 +792,7 @@
         font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Inter", sans-serif;
       }
 
       @keyframes blink { 50% { opacity: 0.5; } }
@@ -903,12 +914,20 @@
           </div>
 
           <div class="price-row">
-            <span class="price-label">R$ 19,90</span>
+            <span class="price-label">R$ 39,90</span>
             <div>
-              <div class="price-main">R$ 4,90</div>
+              <div class="price-main">R$ 19,90</div>
               <div class="price-sub">pagamento único via PIX</div>
             </div>
-            <span class="price-badge">75% OFF</span>
+            <span class="price-badge">50% OFF</span>
+          </div>
+
+          <!-- GATILHO DE PREÇO ESTRATÉGICO -->
+          <div style="background: #fffbf0; border: 1px solid rgba(201,168,76,0.3); border-radius: 12px; padding: 13px 16px; margin-bottom: 16px; text-align: center;">
+            <p style="font-size: 13px; color: #5a430e; line-height: 1.6; margin: 0;">
+              💡 <strong>Você vai gastar mais do que isso no almoço de amanhã.</strong><br>
+              <span style="color: #7a6030; font-size: 12.5px;">A diferença é que o almoço vai embora em 20 minutos — esse direcionamento fica com você para sempre.</span>
+            </p>
           </div>
 
           <button
@@ -916,7 +935,7 @@
             class="btn-premium-final"
             onclick="iniciarPagamentoMercadoPago()"
           >
-            📄 DESBLOQUEAR MEU GUIA — R$ 4,90
+            📄 DESBLOQUEAR MEU GUIA — R$ 19,90
           </button>
 
           <div class="modal-security">
@@ -927,132 +946,251 @@
     </div>
 
     <script>
-      let sessionIdGlobal = localStorage.getItem("session_id_pendente") || "";
-      let resumoDaIA = localStorage.getItem("resumo_diagnostico_modal") || "";
-      let intervaloStatus = null;
-      let visibilityHandler = null;
-      let categoriaSelecionada = "";
+let sessionIdGlobal = localStorage.getItem("session_id_pendente") || "";
+let resumoDaIA = localStorage.getItem("resumo_diagnostico_modal") || "";
+let intervaloStatus = null;
+let visibilityHandler = null;
+let categoriaSelecionada = "";
 
-      const placeholdersPorCategoria = {
-        amor: "Ex: Estou num relacionamento que me confunde. Às vezes sinto amor, outras vezes dúvida. Não sei se devo continuar ou deixar ir...",
-        trabalho: "Ex: Tenho uma oportunidade nova na frente mas estou com medo de mudar. Fico me perguntando se estou no caminho certo...",
-        família: "Ex: Existe uma tensão na minha família que parece não ter solução. Já tentei de tudo mas sinto que nada muda...",
-        saúde: "Ex: Meu corpo está me dando sinais que eu não consigo ignorar. Sinto um cansaço que vai além do físico...",
-        propósito: "Ex: Tenho tudo que a sociedade diz que é sucesso, mas me sinto vazio. Não sei qual é o meu verdadeiro propósito...",
-        outro: "Escreva livremente o que está no seu coração. Não precisa ser perfeito — quanto mais honesto, mais precisa será sua resposta..."
-      };
+const placeholdersPorCategoria = {
+  amor: "Ex: Estou num relacionamento que me confunde. Às vezes sinto amor, outras vezes dúvida. Não sei se devo continuar ou deixar ir...",
+  trabalho: "Ex: Tenho uma oportunidade nova na frente mas estou com medo de mudar. Fico me perguntando se estou no caminho certo...",
+  família: "Ex: Existe uma tensão na minha família que parece não ter solução. Já tentei de tudo mas sinto que nada muda...",
+  saúde: "Ex: Meu corpo está me dando sinais que eu não consigo ignorar. Sinto um cansaço que vai além do físico...",
+  propósito: "Ex: Tenho tudo que a sociedade diz que é sucesso, mas me sinto vazio. Não sei qual é o meu verdadeiro propósito...",
+  outro: "Escreva livremente o que está no seu coração. Não precisa ser perfeito — quanto mais honesto, mais precisa será sua resposta..."
+};
 
-      function selecionarCategoria(el) {
-        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-        el.classList.add("active");
-        categoriaSelecionada = el.dataset.cat;
-        const input = document.getElementById("input");
-        if (input && input.value === "") {
-          input.placeholder = placeholdersPorCategoria[categoriaSelecionada] || placeholdersPorCategoria.outro;
-        }
-        if (typeof fbq === "function") fbq("trackCustom", "CategoriaEscolhida", { categoria: categoriaSelecionada });
+function selecionarCategoria(el) {
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+
+  el.classList.add("active");
+
+  categoriaSelecionada = el.dataset.cat;
+
+  const input = document.getElementById("input");
+
+  if (input && input.value === "") {
+    input.placeholder =
+      placeholdersPorCategoria[categoriaSelecionada] ||
+      placeholdersPorCategoria.outro;
+  }
+
+  if (typeof fbq === "function") {
+    fbq("trackCustom", "CategoriaEscolhida", {
+      categoria: categoriaSelecionada
+    });
+  }
+}
+
+window.onload = function () {
+  iniciarContador();
+  carregarDepoimentos();
+
+  const textoSalvo = localStorage.getItem("conselho_pendente");
+  const sessionSalva = localStorage.getItem("session_id_pendente");
+  const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
+
+  if (timestampSintonizacao && textoSalvo) {
+    const agora = new Date().getTime();
+    const dezMinutos = 10 * 60 * 1000;
+    const tempoPassado = agora - parseInt(timestampSintonizacao);
+
+    if (tempoPassado > dezMinutos) {
+      localStorage.clear();
+    } else {
+      const barra = document.getElementById("barraUrgencia");
+
+      if (barra) {
+        barra.style.display = "block";
       }
 
-      window.onload = function () {
-        iniciarContador();
-        carregarDepoimentos();
+      iniciarTimerRegressivo(dezMinutos - tempoPassado);
 
-        const textoSalvo = localStorage.getItem("conselho_pendente");
-        const sessionSalva = localStorage.getItem("session_id_pendente");
-        const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
+      sessionIdGlobal = sessionSalva || "";
 
-        if (timestampSintonizacao && textoSalvo) {
-          const agora = new Date().getTime();
-          const dezMinutos = 10 * 60 * 1000;
-          const tempoPassado = agora - parseInt(timestampSintonizacao);
+      const inputSection = document.getElementById("inputSection");
 
-          if (tempoPassado > dezMinutos) {
-            localStorage.clear();
-          } else {
-            const barra = document.getElementById("barraUrgencia");
-            if (barra) barra.style.display = "block";
+      if (inputSection) {
+        inputSection.style.display = "none";
+      }
 
-            iniciarTimerRegressivo(dezMinutos - tempoPassado);
-            sessionIdGlobal = sessionSalva;
+      montarCaixaDeRevelacao(textoSalvo);
 
-            document.getElementById("inputSection").style.display = "none";
+      if (localStorage.getItem("texto_revelado") === "sim") {
+        setTimeout(() => {
+          liberarConteudo(
+            localStorage.getItem("conselho_secreto") || ""
+          );
+        }, 300);
+      }
+    }
+  }
+};
 
-            montarCaixaDeRevelacao(textoSalvo);
+document.addEventListener("DOMContentLoaded", function () {
 
-            if (localStorage.getItem("texto_revelado") === "sim") {
-              setTimeout(() => {
-                liberarConteudo(localStorage.getItem("conselho_secreto") || "");
-              }, 300);
-            }
-          }
-        }
-      };
+  const inputEl = document.getElementById("input");
+  const containerEl = document.querySelector(".container");
+  const feedback = document.getElementById("charFeedback");
 
-      // ── CHAR FEEDBACK ──
-      document.addEventListener("DOMContentLoaded", function () {
-        const input = document.getElementById("input");
-        const feedback = document.getElementById("charFeedback");
-        if (!input || !feedback) return;
+  if (containerEl && inputEl) {
+    containerEl.addEventListener("click", function (e) {
 
-        input.addEventListener("input", () => {
-          const len = input.value.length;
-          if (len === 0) {
-            feedback.textContent = "0 / 1000";
-            feedback.className = "";
-          } else if (len < 60) {
-            feedback.textContent = `${len} / 1000 — Continue... quanto mais você escrever, mais precisa será sua resposta`;
-            feedback.className = "encouraging";
-          } else if (len < 120) {
-            feedback.textContent = `${len} / 1000 — Ótimo! Você pode ir mais fundo se quiser`;
-            feedback.className = "encouraging";
-          } else {
-            feedback.textContent = `${len} / 1000 — ✓ Excelente! Você está pronto para revelar`;
-            feedback.className = "good";
-          }
+      const tag = e.target.tagName.toLowerCase();
+
+      const isInteractive =
+        tag === "textarea" ||
+        tag === "button" ||
+        tag === "a" ||
+        e.target.closest("button") ||
+        e.target.closest("a") ||
+        e.target.id === "resultado" ||
+        e.target.closest("#resultado");
+
+      const sec = document.getElementById("inputSection");
+
+      const secVisible =
+        sec &&
+        sec.style.display !== "none" &&
+        sec.style.opacity !== "0";
+
+      if (!isInteractive && secVisible) {
+        inputEl.focus();
+
+        inputEl.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
         });
-      });
+      }
+    });
+  }
 
-      // ── CONTADOR ──
-      function iniciarContador() {
-        const txt = document.getElementById("txt-contador");
-        if (!txt) return;
-        const atualizar = () => {
-          const n = Math.floor(Math.random() * (155 - 118 + 1)) + 118;
-          txt.innerHTML = `<strong>${n} pessoas</strong> agora`;
-        };
-        atualizar();
-        setInterval(atualizar, 4000);
+  if (inputEl && feedback) {
+    inputEl.addEventListener("input", () => {
+
+      const len = inputEl.value.length;
+
+      if (len === 0) {
+        feedback.textContent = "0 / 1000";
+        feedback.className = "";
+
+      } else if (len < 60) {
+
+        feedback.textContent =
+          `${len} / 1000 — Continue... quanto mais você escrever, mais precisa será sua resposta`;
+
+        feedback.className = "encouraging";
+
+      } else if (len < 120) {
+
+        feedback.textContent =
+          `${len} / 1000 — Ótimo! Você pode ir mais fundo se quiser`;
+
+        feedback.className = "encouraging";
+
+      } else {
+
+        feedback.textContent =
+          `${len} / 1000 — ✓ Excelente! Você está pronto para revelar`;
+
+        feedback.className = "good";
+      }
+    });
+  }
+});
+
+function iniciarContador() {
+
+  const txt = document.getElementById("txt-contador");
+
+  if (!txt) return;
+
+  const atualizar = () => {
+    const n =
+      Math.floor(Math.random() * (155 - 118 + 1)) + 118;
+
+    txt.innerHTML = `<strong>${n} pessoas</strong> agora`;
+  };
+
+  atualizar();
+
+  if (window.intervaloContador) {
+    clearInterval(window.intervaloContador);
+  }
+
+  window.intervaloContador = setInterval(atualizar, 4000);
+}
+
+function iniciarTimerRegressivo(tempoRestanteMS) {
+
+  const display = document.getElementById("timerRegressivo");
+
+  if (!display) return;
+
+  if (window.intervaloUrgencia) {
+    clearInterval(window.intervaloUrgencia);
+  }
+
+  const alvo = Date.now() + tempoRestanteMS;
+
+  function tick() {
+
+    const restante = alvo - Date.now();
+
+    if (restante <= 0) {
+
+      clearInterval(window.intervaloUrgencia);
+
+      if (visibilityHandler) {
+        document.removeEventListener(
+          "visibilitychange",
+          visibilityHandler
+        );
+
+        visibilityHandler = null;
       }
 
-      // ── TIMER ──
-      function iniciarTimerRegressivo(tempoRestanteMS) {
-        const display = document.getElementById("timerRegressivo");
-        if (!display) return;
-        if (window.intervaloUrgencia) clearInterval(window.intervaloUrgencia);
+      localStorage.clear();
 
-        const alvo = Date.now() + tempoRestanteMS;
+      location.reload();
 
-        function tick() {
-          const restante = alvo - Date.now();
-          if (restante <= 0) {
-            clearInterval(window.intervaloUrgencia);
-            if (visibilityHandler) { document.removeEventListener("visibilitychange", visibilityHandler); visibilityHandler = null; }
-            localStorage.clear();
-            location.reload();
-            return;
-          }
-          const m = Math.floor(restante / 60000);
-          const s = Math.floor((restante % 60000) / 1000);
-          display.innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-        }
+      return;
+    }
 
-        tick();
-        window.intervaloUrgencia = setInterval(tick, 1000);
+    const m = Math.floor(restante / 60000);
 
-        if (visibilityHandler) document.removeEventListener("visibilitychange", visibilityHandler);
-        visibilityHandler = () => { if (document.visibilityState === "visible") tick(); };
-        document.addEventListener("visibilitychange", visibilityHandler);
-      }
+    const s = Math.floor((restante % 60000) / 1000);
+
+    display.innerText =
+      (m < 10 ? "0" + m : m) +
+      ":" +
+      (s < 10 ? "0" + s : s);
+  }
+
+  tick();
+
+  window.intervaloUrgencia = setInterval(tick, 1000);
+
+  if (visibilityHandler) {
+    document.removeEventListener(
+      "visibilitychange",
+      visibilityHandler
+    );
+  }
+
+  visibilityHandler = () => {
+    if (document.visibilityState === "visible") {
+      tick();
+    }
+  };
+
+  document.addEventListener(
+    "visibilitychange",
+    visibilityHandler
+  );
+}
+</script>
 
       // ── GERAR RESPOSTA ──
       async function gerarResposta() {
@@ -1278,7 +1416,7 @@
                 ✨ RECEBER MEU GUIA PERSONALIZADO
               </button>
               <p style="text-align: center; font-size: 11.5px; color: #9ca3af; margin-top: 10px;">
-                R$ 4,90 · PIX · Liberação imediata após confirmação
+                R$ 19,90 · PIX · Liberação imediata após confirmação
               </p>
             </div>`;
         }
@@ -1355,7 +1493,7 @@
                   style="width:100%; min-height:52px; border:none; background:transparent; font-size:11.5px; color:#4b5563; resize:none; outline:none; text-align:center; font-family:'Courier New',monospace; word-break:break-all; cursor:pointer; display:block;"
                 >${data.qr_code}</textarea>
               </div>
-              <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#16a34a; color:white; border:none; padding:16px; border-radius:50px; font-weight:700; cursor:pointer; font-size:14px; text-transform:uppercase; letter-spacing:0.5px; transition:0.3s; box-shadow:0 4px 12px rgba(22,163,74,0.25); font-family:'DM Sans',sans-serif;">
+              <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#16a34a; color:white; border:none; padding:16px; border-radius:50px; font-weight:700; cursor:pointer; font-size:14px; text-transform:uppercase; letter-spacing:0.5px; transition:0.3s; box-shadow:0 4px 12px rgba(22,163,74,0.25); font-family:'Inter',sans-serif;">
                 COPIAR CÓDIGO PIX
               </button>
               <p id="statusCheck" style="display:block; font-size:12px; color:#6b7280; margin-top:16px; font-style:italic; text-align:center; animation: blink 1.5s infinite;">
