@@ -13,6 +13,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
+    <!-- Microsoft Clarity -->
     <script type="text/javascript">
       (function (c, l, a, r, i, t, y) {
         c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
@@ -23,6 +24,7 @@
       })(window, document, "clarity", "script", "wfwlz7qo7g");
     </script>
 
+    <!-- Meta Pixel -->
     <script>
       !(function (f, b, e, v, n, t, s) {
         if (f.fbq) return;
@@ -44,27 +46,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Encontre Sua Resposta</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
     <style>
+      /* ══════════════════════════════════════════
+         VARIÁVEIS E RESET
+      ══════════════════════════════════════════ */
       :root {
-        --gold: #c9a84c;
-        --gold-light: #f0d98b;
+        --gold:     #c9a84c;
         --gold-dim: rgba(201, 168, 76, 0.15);
-        --dark: #111111;
-        --text: #2a2a2a;
-        --muted: #6b7280;
-        --surface: rgba(255,255,255,0.96);
-        --border: rgba(201, 168, 76, 0.2);
+        --dark:     #111111;
+        --muted:    #6b7280;
+        --surface:  rgba(255,255,255,0.97);
+        --border:   rgba(201, 168, 76, 0.2);
       }
 
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      html {
-        width: 100%;
-        overflow-x: hidden;
-        /* Fix background on mobile: pseudo-element on html instead of body fixed bg */
-      }
+      html { width: 100%; overflow-x: hidden; }
       html::before {
         content: "";
         position: fixed;
@@ -78,23 +77,28 @@
       body {
         font-family: "Inter", sans-serif;
         background: transparent;
-        color: var(--text);
+        color: #2a2a2a;
         display: flex;
         flex-direction: column;
         align-items: center;
         min-height: 100vh;
-        padding: 40px 16px 60px;
+        padding: 32px 16px 60px;
         gap: 16px;
         width: 100%;
         overflow-x: hidden;
       }
+      /* padding-top extra quando barra de urgência está ativa */
+      body.has-urgency-bar { padding-top: 72px; }
 
-      /* ── URGENCY BAR ── */
+
+      /* ══════════════════════════════════════════
+         BARRA DE URGÊNCIA (fixa no topo)
+      ══════════════════════════════════════════ */
       #barraUrgencia {
         display: none;
         background: #0f0f0f;
         border-bottom: 1px solid rgba(201,168,76,0.2);
-        padding: 13px 20px;
+        padding: 11px 20px;
         text-align: center;
         position: fixed;
         top: 0; left: 0;
@@ -103,14 +107,14 @@
         box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       }
       #barraUrgencia p {
-        font-size: 13px;
+        font-size: 12.5px;
         color: #d1d5db;
         font-family: "DM Sans", sans-serif;
         font-weight: 500;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 7px;
         flex-wrap: wrap;
         line-height: 1.4;
       }
@@ -119,18 +123,21 @@
         color: #f87171;
         font-weight: 700;
         background: rgba(248,113,113,0.12);
-        padding: 2px 8px;
+        padding: 2px 7px;
         border-radius: 4px;
         border: 1px solid rgba(248,113,113,0.25);
         letter-spacing: 0.05em;
       }
 
-      /* ── MAIN CARD ── */
+
+      /* ══════════════════════════════════════════
+         CARD PRINCIPAL
+      ══════════════════════════════════════════ */
       .container {
         width: 100%;
         max-width: 390px;
         background: var(--surface);
-        padding: 48px 24px 40px;
+        padding: 36px 22px 32px;
         border-radius: 28px;
         text-align: center;
         box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
@@ -138,44 +145,45 @@
         border: 1px solid var(--border);
       }
 
-      /* ── HEADER ── */
+      /* ── Cabeçalho ── */
       .site-title {
         font-family: "Lora", serif;
         font-weight: 700;
-        font-size: 24px;
+        font-size: 23px;
         color: var(--dark);
         letter-spacing: -0.3px;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
       }
       .site-subtitle {
-        font-family: "Inter", sans-serif;
         font-style: italic;
-        font-size: 14px;
+        font-size: 13.5px;
         color: var(--muted);
-        margin-bottom: 28px;
+        margin-bottom: 26px;
       }
 
-      /* ── CATEGORY CHIPS ── */
+
+      /* ══════════════════════════════════════════
+         CHIPS — STEP 1
+      ══════════════════════════════════════════ */
       .chips-label {
         font-size: 11px;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 1.2px;
         color: var(--muted);
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         display: block;
       }
       .chips-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 7px;
+        gap: 8px;
         justify-content: center;
-        margin-bottom: 22px;
       }
       .chip {
-        padding: 7px 14px;
+        padding: 9px 16px;
         border-radius: 50px;
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: 500;
         cursor: pointer;
         border: 1.5px solid rgba(201,168,76,0.3);
@@ -183,131 +191,130 @@
         color: var(--muted);
         transition: all 0.2s ease;
         font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
       }
-      .chip:hover {
-        border-color: var(--gold);
-        color: #8a6e2a;
-        background: var(--gold-dim);
-      }
+      .chip:active { transform: scale(0.96); }
       .chip.active {
         border-color: var(--gold);
         background: var(--gold-dim);
         color: #7a5f1e;
         font-weight: 600;
+        box-shadow: 0 2px 10px rgba(201,168,76,0.22);
       }
 
-      /* ── TEXTAREA ── */
+
+      /* ══════════════════════════════════════════
+         STEP 2 — textarea + botão
+         Animação de abertura ao clicar no chip
+      ══════════════════════════════════════════ */
+      #inputStep2 {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.45s ease, opacity 0.35s ease, margin-top 0.35s ease;
+        margin-top: 0;
+      }
+      #inputStep2.open {
+        max-height: 520px;
+        opacity: 1;
+        margin-top: 20px;
+      }
+
+
+      /* ══════════════════════════════════════════
+         TEXTAREA
+      ══════════════════════════════════════════ */
       .textarea-wrapper {
-        position: relative;
-        border-radius: 20px;
-        padding: 18px 18px 14px;
-        background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
+        border-radius: 18px;
+        padding: 16px 16px 12px;
+        background: #fff;
         border: 1.5px solid rgba(201,168,76,0.3);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        transition: all 0.3s ease;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+        transition: border-color 0.3s, box-shadow 0.3s;
       }
       .textarea-wrapper:focus-within {
         border-color: rgba(201,168,76,0.7);
-        box-shadow: 0 8px 30px rgba(201,168,76,0.12);
-        transform: translateY(-1px);
+        box-shadow: 0 6px 24px rgba(201,168,76,0.1);
       }
       .textarea-label-row {
         display: flex;
         align-items: center;
-        gap: 7px;
-        margin-bottom: 12px;
+        gap: 6px;
+        margin-bottom: 10px;
       }
-      .textarea-label-icon {
-        font-size: 14px;
-      }
-      .textarea-label-text {
-        font-family: "Inter", sans-serif;
-        font-style: italic;
-        font-size: 13px;
-        color: #9ca3af;
-      }
+      .textarea-label-icon { font-size: 13px; }
+      .textarea-label-text { font-style: italic; font-size: 12.5px; color: #9ca3af; }
+
       #input {
         width: 100%;
-        height: 200px;
+        height: 160px;
         border: none;
         outline: none;
         resize: none;
         background: transparent;
-        font-size: 15.5px;
-        line-height: 1.85;
+        font-size: 15px;
+        line-height: 1.8;
         font-family: "Inter", sans-serif;
         color: #1f2937;
-        font-weight: 400;
       }
       #input::placeholder {
-        color: #9ca3af;
+        color: #b0b8c4;
         font-style: italic;
-        font-size: 14px;
-        line-height: 1.75;
+        font-size: 13.5px;
+        line-height: 1.7;
       }
       .textarea-footer {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 10px;
-        padding-top: 10px;
-        border-top: 1px solid rgba(201,168,76,0.15);
+        justify-content: flex-end;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(201,168,76,0.12);
       }
-      #charFeedback {
-        font-size: 12.5px;
-        color: #9ca3af;
-        font-weight: 400;
-        text-align: left;
-        transition: color 0.3s;
-      }
+      #charFeedback { font-size: 11.5px; color: #b0b8c4; transition: color 0.3s; }
       #charFeedback.encouraging { color: #b08d3a; font-weight: 500; }
-      #charFeedback.good { color: #2f855a; font-weight: 600; }
+      #charFeedback.good        { color: #2f855a; font-weight: 600; }
 
-      /* ── MAIN BUTTON ── */
+
+      /* ══════════════════════════════════════════
+         BOTÃO PRINCIPAL
+      ══════════════════════════════════════════ */
       .btn-main {
         display: block;
-        width: 88%;
-        margin: 22px auto 0;
+        width: 100%;
+        margin: 16px auto 0;
         background: var(--dark);
         color: white;
         border: none;
-        border-radius: 16px;
+        border-radius: 14px;
         padding: 16px 0;
-        font-size: 13.5px;
+        font-size: 13px;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 1.2px;
         cursor: pointer;
-        transition: all 0.25s ease;
+        transition: all 0.22s ease;
         font-family: "Inter", sans-serif;
-        position: relative;
-        overflow: hidden;
+        -webkit-tap-highlight-color: transparent;
       }
-      .btn-main::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, transparent 0%, rgba(201,168,76,0.08) 50%, transparent 100%);
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-      .btn-main:hover { background: #000; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-      .btn-main:hover::after { opacity: 1; }
-      .btn-main:active { transform: translateY(0); box-shadow: none; }
-      .btn-main:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+      .btn-main:active   { transform: scale(0.98); }
+      .btn-main:disabled { opacity: 0.55; cursor: not-allowed; }
 
-      /* ── PRIVACY + COUNTER ── */
+
+      /* ══════════════════════════════════════════
+         TRUST ROW
+      ══════════════════════════════════════════ */
       .trust-row {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 16px;
-        margin-top: 18px;
-        padding-top: 16px;
+        gap: 14px;
+        margin-top: 14px;
+        padding-top: 14px;
         border-top: 1px solid rgba(0,0,0,0.05);
       }
       .trust-item {
-        font-size: 11px;
+        font-size: 10.5px;
         color: #9ca3af;
         font-weight: 500;
         display: flex;
@@ -322,69 +329,53 @@
         flex-shrink: 0;
       }
 
-      /* ── LOADING STEPS ── */
-      #resultado { margin-top: 24px; text-align: left; }
 
-      .loading-container {
-        text-align: center;
-        padding: 10px 0;
-      }
+      /* ══════════════════════════════════════════
+         LOADING STEPS
+      ══════════════════════════════════════════ */
+      #resultado { margin-top: 20px; text-align: left; }
+      .loading-container { text-align: center; padding: 8px 0; }
       .loading-step-row {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 9px 0;
+        padding: 8px 0;
         opacity: 0;
         transform: translateY(6px);
         transition: all 0.4s ease;
         text-align: left;
       }
       .loading-step-row.visible { opacity: 1; transform: translateY(0); }
-      .loading-step-row.done .step-dot { background: #34d399; }
-      .loading-step-row.done .step-text { color: #2f855a; }
-      .loading-step-row.active .step-dot { background: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.2); animation: pulseDot 1s infinite; }
+      .loading-step-row.done   .step-dot { background: #34d399; }
+      .loading-step-row.done   .step-text { color: #2f855a; }
+      .loading-step-row.active .step-dot  { background: var(--gold); animation: pulseDot 1s infinite; }
       .step-dot {
         width: 8px; height: 8px;
         border-radius: 50%;
         background: #d1d5db;
         flex-shrink: 0;
-        transition: all 0.3s;
+        transition: background 0.3s;
       }
-      .step-text {
-        font-size: 13.5px;
-        color: var(--muted);
-        font-family: "DM Sans", sans-serif;
-        line-height: 1.3;
-      }
+      .step-text { font-size: 13.5px; color: var(--muted); font-family: "DM Sans", sans-serif; line-height: 1.3; }
       .step-text strong { color: var(--dark); font-weight: 600; }
       @keyframes pulseDot {
         0%, 100% { box-shadow: 0 0 0 2px rgba(201,168,76,0.2); }
-        50% { box-shadow: 0 0 0 5px rgba(201,168,76,0.35); }
+        50%       { box-shadow: 0 0 0 5px rgba(201,168,76,0.35); }
       }
 
-      /* ── REVEAL BOX ── */
-      .reveal-box {
-        line-height: 1.8;
-        font-size: 15px;
-        position: relative;
-      }
-      .text-visible {
-        display: block;
-        font-family: "Inter", sans-serif;
-        font-size: 15px;
-        line-height: 1.9;
-        color: #1a1a1a;
-        font-weight: 400;
-      }
+
+      /* ══════════════════════════════════════════
+         CAIXA DE REVELAÇÃO
+      ══════════════════════════════════════════ */
+      .reveal-box { line-height: 1.8; font-size: 15px; position: relative; }
+      .text-visible { display: block; font-size: 15px; line-height: 1.9; color: #1a1a1a; font-weight: 400; }
+
       .inline-proof {
-        margin: 18px 0 14px;
-        background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+        margin: 16px 0 12px;
+        background: #f9fafb;
         border-radius: 12px;
-        padding: 14px 16px;
+        padding: 12px 14px;
         border-left: 3px solid var(--gold);
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
       }
       .inline-proof-quote {
         font-family: "Playfair Display", serif;
@@ -397,17 +388,19 @@
         font-size: 11px;
         font-weight: 600;
         color: var(--muted);
-        margin-top: 6px;
+        margin-top: 5px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
-      .blur-zone {
-        position: relative;
-        margin-top: 16px;
-      }
+
+
+      /* ══════════════════════════════════════════
+         ZONA DE BLUR (2ª parte bloqueada)
+      ══════════════════════════════════════════ */
+      .blur-zone { position: relative; margin-top: 14px; }
+
       #targetBlur {
         display: block;
-        font-family: "Inter", sans-serif;
         font-size: 15px;
         line-height: 1.9;
         color: #1a1a1a;
@@ -427,7 +420,10 @@
         -webkit-mask-image: none !important;
       }
 
-      /* ── REVEAL BUTTON ── */
+
+      /* ══════════════════════════════════════════
+         BOTÃO REVELAR — dourado, pulso, destaque máximo
+      ══════════════════════════════════════════ */
       #revealOverlay {
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -437,295 +433,242 @@
         justify-content: center;
         z-index: 10;
         gap: 10px;
+        background: linear-gradient(to top, rgba(255,255,255,0.2) 0%, transparent 60%);
       }
       #btnReveal {
-        background: white;
-        color: #7a5f1e;
-        border: 1.5px solid rgba(201,168,76,0.4);
+        background: linear-gradient(135deg, #c9a84c 0%, #a8872d 100%);
+        color: white;
+        border: none;
         border-radius: 50px;
-        padding: 14px 32px;
-        font-family: "Inter", sans-serif;
-        font-style: italic;
-        font-size: 14px;
-        font-weight: 600;
+        padding: 15px 34px;
+        font-size: 14.5px;
+        font-weight: 700;
         cursor: pointer;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 6px 20px rgba(201,168,76,0.15), 0 2px 8px rgba(0,0,0,0.06);
-        transition: all 0.3s ease;
-        animation: gentlePulse 2.8s ease-in-out infinite;
+        box-shadow: 0 8px 28px rgba(201,168,76,0.45);
+        animation: gentlePulse 2.5s ease-in-out infinite;
         position: relative;
         overflow: hidden;
         white-space: nowrap;
+        font-family: "Inter", sans-serif;
+        letter-spacing: 0.3px;
+        -webkit-tap-highlight-color: transparent;
       }
+      /* Efeito brilho deslizante */
       #btnReveal::before {
         content: "";
         position: absolute;
         top: -100%; left: -100%;
         width: 300%; height: 300%;
-        background: linear-gradient(135deg, transparent 40%, rgba(201,168,76,0.15) 50%, transparent 60%);
-        animation: shinePass 3s ease-in-out infinite;
+        background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+        animation: shinePass 2.8s ease-in-out infinite;
       }
-      #btnReveal:hover {
-        border-color: rgba(201,168,76,0.8);
-        box-shadow: 0 10px 30px rgba(201,168,76,0.25);
-        transform: translateY(-2px) scale(1.02);
-      }
+      #btnReveal:active { transform: scale(0.97); }
+
       .reveal-hint {
         font-size: 11px;
-        color: rgba(107,114,128,0.7);
+        color: rgba(80,60,20,0.65);
         font-style: italic;
-        text-align: center;
+        text-shadow: 0 1px 3px rgba(255,255,255,0.9);
       }
+
       @keyframes gentlePulse {
-        0%, 100% { box-shadow: 0 6px 20px rgba(201,168,76,0.15), 0 2px 8px rgba(0,0,0,0.06); }
-        50% { box-shadow: 0 8px 30px rgba(201,168,76,0.3), 0 2px 8px rgba(0,0,0,0.06); }
+        0%, 100% { box-shadow: 0 8px 28px rgba(201,168,76,0.4); }
+        50%       { box-shadow: 0 10px 36px rgba(201,168,76,0.65); transform: translateY(-1px); }
       }
       @keyframes shinePass {
-        0% { top: -100%; left: -100%; }
-        35% { top: 100%; left: 100%; }
-        100% { top: 100%; left: 100%; }
+        0%   { top: -100%; left: -100%; }
+        35%  { top: 100%;  left: 100%;  }
+        100% { top: 100%;  left: 100%;  }
       }
 
-      /* ── GUIDE PREVIEW (antes do pagamento) ── */
-      .guide-preview {
-        margin-top: 24px;
-        background: linear-gradient(135deg, #fffbf0 0%, #faf6e8 100%);
-        border-radius: 16px;
-        border: 1px solid rgba(201,168,76,0.25);
-        padding: 20px;
-        text-align: left;
-      }
-      .guide-preview-title {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-        color: #9a7a2a;
-        margin-bottom: 12px;
-      }
-      .guide-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-        margin-bottom: 9px;
-        padding-bottom: 9px;
-        border-bottom: 1px solid rgba(201,168,76,0.12);
-      }
-      .guide-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-      .guide-icon {
-        font-size: 15px;
-        flex-shrink: 0;
-        margin-top: 1px;
-      }
-      .guide-item-text {
-        font-size: 13px;
-        color: #4b3a12;
-        line-height: 1.4;
-        font-weight: 400;
-      }
-      .guide-item-text strong { font-weight: 600; color: #2d220a; }
 
-      /* ── PREMIUM BUTTON ── */
-      .btn-premium-final {
-        display: block;
-        width: 100%;
-        margin-top: 16px;
-        background: linear-gradient(135deg, #c9a84c 0%, #a8872d 100%);
-        color: white;
-        border: none;
-        border-radius: 14px;
-        padding: 18px 24px;
-        font-size: 14px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        cursor: pointer;
-        box-shadow: 0 8px 24px rgba(201,168,76,0.35);
-        transition: all 0.25s ease;
-        font-family: "Inter", sans-serif;
+      /* ══════════════════════════════════════════
+         PÓS PAGAMENTO — conteúdo desbloqueado
+      ══════════════════════════════════════════ */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
       }
-      .btn-premium-final:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(201,168,76,0.45); }
-      .btn-premium-final:active { transform: translateY(0); }
-      .btn-premium-final:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+      .content-unlocked { animation: fadeInUp 0.5s ease both; }
 
       .btn-paid {
         display: block;
         width: 100%;
-        margin-top: 16px;
+        margin-top: 20px;
         background: #15803d;
         color: white;
         border: none;
-        border-radius: 14px;
-        padding: 18px 24px;
-        font-size: 14px;
+        border-radius: 13px;
+        padding: 17px 24px;
+        font-size: 13.5px;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.8px;
         cursor: pointer;
-        box-shadow: 0 6px 16px rgba(21,128,61,0.25);
-        transition: all 0.25s ease;
         font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        box-shadow: 0 4px 14px rgba(21,128,61,0.25);
       }
 
-      /* ── TESTIMONIALS ── */
+
+      /* ══════════════════════════════════════════
+         DEPOIMENTOS
+      ══════════════════════════════════════════ */
       .testimonial-container {
         display: flex;
         flex-direction: column;
         width: 100%;
         max-width: 390px;
-        gap: 10px;
+        gap: 9px;
       }
       .testimonial-header {
         text-align: center;
-        font-size: 11px;
+        font-size: 10.5px;
         color: #9ca3af;
         font-weight: 600;
         letter-spacing: 1px;
         text-transform: uppercase;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
       }
       .testimonial-card {
         background: rgba(255,255,255,0.78);
-        border-radius: 14px;
-        padding: 16px 18px;
+        border-radius: 13px;
+        padding: 14px 16px;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255,255,255,0.6);
         box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       }
-      .t-name-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 6px;
-      }
-      .t-name {
-        font-weight: 600;
-        font-size: 13px;
-        color: var(--dark);
-        font-family: "Inter", sans-serif;
-      }
-      .t-time { font-size: 11px; color: #9ca3af; }
-      .t-text {
-        font-size: 13px;
-        color: #4b5563;
-        line-height: 1.55;
-      }
+      .t-name-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+      .t-name     { font-weight: 600; font-size: 12.5px; color: var(--dark); }
+      .t-time     { font-size: 10.5px; color: #9ca3af; }
+      .t-text     { font-size: 12.5px; color: #4b5563; line-height: 1.55; }
 
-      /* ── MODAL ── */
+
+      /* ══════════════════════════════════════════
+         MODAL DE PAGAMENTO — bottom sheet
+      ══════════════════════════════════════════ */
       .modal-overlay {
         display: none;
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
-        background: rgba(10,10,10,0.65);
-        backdrop-filter: blur(6px);
+        background: rgba(10,10,10,0.6);
+        backdrop-filter: blur(5px);
         z-index: 1000;
         justify-content: center;
         align-items: flex-end;
-        padding: 0;
       }
       .modal-sheet {
         background: white;
-        border-radius: 28px 28px 0 0;
+        border-radius: 24px 24px 0 0;
         width: 100%;
         max-width: 480px;
-        padding: 30px 22px 22px;
+        padding: 20px 20px 28px;
         position: relative;
-        max-height: calc(100dvh - 55px);
+        max-height: 92vh;
+        max-height: 92dvh;
         overflow-y: auto;
-        animation: slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1);
+        animation: slideUp 0.32s cubic-bezier(0.34,1.4,0.64,1);
       }
       @keyframes slideUp {
         from { transform: translateY(100%); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+        to   { transform: translateY(0);    opacity: 1; }
       }
+
       .sheet-handle {
-        width: 40px;
-        height: 4px;
+        width: 36px; height: 4px;
         background: #e5e7eb;
         border-radius: 2px;
-        margin: 0 auto 18px;
+        margin: 0 auto 14px;
       }
       .modal-close {
         position: absolute;
-        top: 16px; right: 20px;
+        top: 14px; right: 16px;
         background: #f3f4f6;
         border: none;
-        width: 32px; height: 32px;
+        width: 30px; height: 30px;
         border-radius: 50%;
-        font-size: 16px;
+        font-size: 15px;
         color: #6b7280;
         cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        transition: background 0.2s;
+        -webkit-tap-highlight-color: transparent;
       }
-      .modal-close:hover { background: #e5e7eb; }
+
+      /* Título alternativo quando abre pelo botão Revelar */
+      .modal-sheet[data-origin="reveal"] .modal-title-default { display: none; }
+      .modal-sheet[data-origin="reveal"] .modal-title-reveal  { display: block; }
+      .modal-title-reveal { display: none; }
 
       .modal-eyebrow {
         font-size: 10px;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
+        letter-spacing: 1.4px;
         color: #9a7a2a;
         text-align: center;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
       }
       .modal-title {
         font-family: "Lora", serif;
-        font-size: 22px;
+        font-size: 19px;
         font-weight: 700;
         color: var(--dark);
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         line-height: 1.3;
       }
       .modal-sub {
-        font-size: 14px;
+        font-size: 13px;
         color: var(--muted);
         text-align: center;
-        line-height: 1.6;
-        margin-bottom: 16px;
+        line-height: 1.55;
+        margin-bottom: 12px;
       }
-      .modal-preview-items {
+
+      /* Grade 2×2 de itens — cabe em mobile sem scroll */
+      .modal-items-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .modal-item-card {
         background: #fafaf8;
-        border-radius: 14px;
-        padding: 12px;
-        margin-bottom: 20px;
         border: 1px solid #f0e9d0;
-      }
-      .modal-preview-row {
+        border-radius: 10px;
+        padding: 10px;
         display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 6px 0;
-        border-bottom: 1px solid #f0ece0;
+        flex-direction: column;
+        gap: 4px;
       }
-      .modal-preview-row:last-child { border-bottom: none; }
-      .modal-preview-icon { font-size: 16px; flex-shrink: 0; }
-      .modal-preview-label { font-size: 13px; color: #374151; font-weight: 500; }
-      .modal-preview-label small { display: block; font-size: 12px; color: #9ca3af; font-weight: 400; }
-      .price-row {
+      .modal-item-icon  { font-size: 18px; }
+      .modal-item-label { font-size: 12px; font-weight: 600; color: #374151; line-height: 1.3; }
+      .modal-item-desc  { font-size: 11px; color: #9ca3af; line-height: 1.3; }
+
+      /* Bloco de preço */
+      .price-block {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px;
-        margin-bottom: 16px;
-        text-align: center;
+        gap: 10px;
+        margin-bottom: 10px;
       }
-      .price-label {
-        font-size: 12px;
-        color: var(--muted);
-        text-decoration: line-through;
-      }
-      .price-main {
+      .price-old  { font-size: 12px; color: var(--muted); text-decoration: line-through; }
+      .price-new  {
         font-family: "Playfair Display", serif;
-        font-size: 26px;
+        font-size: 24px;
         font-weight: 700;
         color: var(--dark);
+        line-height: 1;
       }
-      .price-sub {
-        font-size: 12px;
+      .price-new small {
+        display: block;
+        font-family: "Inter", sans-serif;
+        font-size: 11px;
         color: #9ca3af;
+        font-weight: 400;
+        margin-top: 2px;
       }
       .price-badge {
         background: #dcfce7;
@@ -735,20 +678,67 @@
         padding: 3px 8px;
         border-radius: 20px;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.4px;
       }
+
+      /* Timer dentro do modal */
+      .modal-timer-line {
+        text-align: center;
+        font-size: 11.5px;
+        color: #b91c1c;
+        font-weight: 500;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+      }
+      .timer-inline {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: #f87171;
+        background: rgba(248,113,113,0.1);
+        padding: 1px 6px;
+        border-radius: 4px;
+        border: 1px solid rgba(248,113,113,0.22);
+      }
+
+      /* Botão CTA do modal */
+      .modal-cta-btn {
+        display: block;
+        width: 100%;
+        background: linear-gradient(135deg, #c9a84c 0%, #a8872d 100%);
+        color: white;
+        border: none;
+        border-radius: 14px;
+        padding: 17px;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(201,168,76,0.3);
+        font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        transition: opacity 0.2s;
+      }
+      .modal-cta-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
       .modal-security {
         text-align: center;
         font-size: 11px;
         color: #9ca3af;
-        margin-top: 12px;
+        margin-top: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 4px;
       }
 
-      /* ── PIX SCREEN (dentro do modal) ── */
+
+      /* ══════════════════════════════════════════
+         ALERTA PIX (modal de instruções)
+      ══════════════════════════════════════════ */
       .pix-instructions-overlay {
         display: none;
         position: fixed;
@@ -762,19 +752,19 @@
       }
       .pix-instructions-content {
         background: white;
-        padding: 28px 22px;
-        border-radius: 24px;
+        padding: 26px 20px;
+        border-radius: 22px;
         width: 100%;
-        max-width: 320px;
+        max-width: 310px;
         text-align: center;
       }
       .pix-step {
         text-align: left;
         background: #f0fdf4;
-        padding: 12px 14px;
-        border-radius: 10px;
-        margin-bottom: 8px;
-        font-size: 13.5px;
+        padding: 11px 13px;
+        border-radius: 9px;
+        margin-bottom: 7px;
+        font-size: 13px;
         border-left: 4px solid #34d399;
         color: #1f2937;
         line-height: 1.5;
@@ -783,24 +773,96 @@
         background: #16a34a;
         color: white;
         border: none;
-        padding: 16px;
+        padding: 15px;
         width: 100%;
         border-radius: 50px;
-        margin-top: 14px;
+        margin-top: 12px;
         font-weight: 700;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 13.5px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
       }
 
+
+      /* ══════════════════════════════════════════
+         DOWNSELL — exibido ao tentar fechar modal
+      ══════════════════════════════════════════ */
+      .modal-downsell-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(10,10,10,0.6);
+        backdrop-filter: blur(5px);
+        z-index: 2001;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+      .modal-downsell-box {
+        background: white;
+        border-radius: 22px;
+        padding: 26px 20px 20px;
+        max-width: 330px;
+        width: 100%;
+        text-align: center;
+        animation: fadeInScale 0.28s ease;
+      }
+      @keyframes fadeInScale {
+        from { opacity: 0; transform: scale(0.93); }
+        to   { opacity: 1; transform: scale(1); }
+      }
+      .downsell-emoji  { font-size: 36px; margin-bottom: 10px; }
+      .downsell-title  { font-family: "Lora", serif; font-size: 18px; font-weight: 700; color: #111; margin-bottom: 8px; line-height: 1.3; }
+      .downsell-body   { font-size: 13px; color: #4b5563; line-height: 1.6; margin-bottom: 14px; }
+      .downsell-timer  {
+        font-family: "Courier New", monospace;
+        font-size: 14px; font-weight: 700;
+        color: #f87171;
+        background: rgba(248,113,113,0.1);
+        padding: 5px 12px;
+        border-radius: 7px;
+        border: 1px solid rgba(248,113,113,0.22);
+        display: inline-block;
+        margin-bottom: 14px;
+      }
+      .btn-downsell-sim {
+        display: block; width: 100%;
+        background: linear-gradient(135deg, #c9a84c 0%, #a8872d 100%);
+        color: white; border: none;
+        border-radius: 13px; padding: 14px;
+        font-size: 13.5px; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.7px;
+        cursor: pointer; font-family: "Inter", sans-serif;
+        margin-bottom: 9px;
+        box-shadow: 0 5px 16px rgba(201,168,76,0.28);
+        -webkit-tap-highlight-color: transparent;
+      }
+      .btn-downsell-nao {
+        display: block; width: 100%;
+        background: transparent; color: #9ca3af;
+        border: none; padding: 8px; font-size: 12px;
+        cursor: pointer; font-family: "Inter", sans-serif;
+        text-decoration: underline;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+
+      /* ══════════════════════════════════════════
+         UTILITÁRIOS
+      ══════════════════════════════════════════ */
       @keyframes blink { 50% { opacity: 0.5; } }
+      @keyframes spin   { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
   </head>
   <body>
 
-    <!-- URGENCY BAR -->
+    <!-- ═══════════════════════════════════
+         BARRA DE URGÊNCIA (fixa no topo)
+    ════════════════════════════════════ -->
     <div id="barraUrgencia">
       <p>
         ⚠️ Sua revelação expira em
@@ -809,12 +871,14 @@
       </p>
     </div>
 
-    <!-- PIX ALERT -->
+    <!-- ═══════════════════════════════════
+         ALERTA PIX (instruções pós cópia)
+    ════════════════════════════════════ -->
     <div id="pixInstructionsAlert" class="pix-instructions-overlay">
       <div class="pix-instructions-content">
-        <div style="font-size: 34px; margin-bottom: 10px">✅</div>
-        <h3 style="font-size: 18px; font-family: 'Playfair Display', serif; margin-bottom: 8px;">Código Copiado!</h3>
-        <p style="font-size: 13px; color: #6b7280; margin-bottom: 18px; line-height: 1.5;">Siga os passos abaixo para finalizar:</p>
+        <div style="font-size:32px; margin-bottom:8px">✅</div>
+        <h3 style="font-size:17px; font-family:'Playfair Display',serif; margin-bottom:7px;">Código Copiado!</h3>
+        <p style="font-size:12.5px; color:#6b7280; margin-bottom:16px; line-height:1.5;">Siga os passos abaixo para finalizar:</p>
         <div class="pix-step"><strong>1.</strong> Abra o app do seu banco</div>
         <div class="pix-step"><strong>2.</strong> Acesse <strong>Pix → Pix Copia e Cola</strong></div>
         <div class="pix-step"><strong>3.</strong> Cole o código e confirme</div>
@@ -823,112 +887,139 @@
       </div>
     </div>
 
-    <!-- MAIN CONTAINER -->
-    <div class="container">
+    <!-- ═══════════════════════════════════
+         DOWNSELL (ao tentar fechar modal)
+    ════════════════════════════════════ -->
+    <div id="downsellOverlay" class="modal-downsell-overlay">
+      <div class="modal-downsell-box">
+        <div class="downsell-emoji">⏳</div>
+        <h2 class="downsell-title">Tem certeza que quer sair?</h2>
+        <p class="downsell-body">
+          Sem esse direcionamento, a maioria continua presa no mesmo padrão por meses — sem saber o que está travando o avanço.
+        </p>
+        <div class="downsell-timer" id="downsellTimer">--:--</div>
+        <p style="font-size:11px; color:#9ca3af; margin-bottom:14px;">Esta oferta desaparece quando o cronômetro zerar</p>
+        <button class="btn-downsell-sim" onclick="fecharDownsellEManter()">
+          🔓 Quero desbloquear — R$ 19,90
+        </button>
+        <button class="btn-downsell-nao" onclick="confirmarFecharModal()">
+          Não, prefiro continuar sem clareza
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         CARD PRINCIPAL
+    ════════════════════════════════════ -->
+    <main class="container">
       <h1 class="site-title">Encontre sua resposta</h1>
       <p class="site-subtitle">Algo precisa ser revelado para você hoje</p>
 
-      <!-- INPUT SECTION (shown before generation) -->
-      <div id="inputSection">
+      <section id="inputSection">
 
-        <!-- CATEGORY CHIPS -->
+        <!-- STEP 1: só os chips aparecem -->
         <span class="chips-label">Sobre o que você quer clareza?</span>
         <div class="chips-row" id="chipsRow">
-          <button class="chip" data-cat="amor" onclick="selecionarCategoria(this)">💛 Amor</button>
-          <button class="chip" data-cat="trabalho" onclick="selecionarCategoria(this)">💼 Trabalho</button>
-          <button class="chip" data-cat="família" onclick="selecionarCategoria(this)">🏠 Família</button>
-          <button class="chip" data-cat="saúde" onclick="selecionarCategoria(this)">🌿 Saúde</button>
+          <button class="chip" data-cat="amor"      onclick="selecionarCategoria(this)">💛 Amor</button>
+          <button class="chip" data-cat="trabalho"  onclick="selecionarCategoria(this)">💼 Trabalho</button>
+          <button class="chip" data-cat="família"   onclick="selecionarCategoria(this)">🏠 Família</button>
+          <button class="chip" data-cat="saúde"     onclick="selecionarCategoria(this)">🌿 Saúde</button>
           <button class="chip" data-cat="propósito" onclick="selecionarCategoria(this)">✨ Propósito</button>
-          <button class="chip" data-cat="outro" onclick="selecionarCategoria(this)">🔮 Outro</button>
+          <button class="chip" data-cat="outro"     onclick="selecionarCategoria(this)">🔮 Outro</button>
         </div>
 
-        <!-- TEXTAREA -->
-        <div class="textarea-wrapper">
-          <div class="textarea-label-row">
-            <span class="textarea-label-icon">✍️</span>
-            <span class="textarea-label-text">Conte o que está vivendo com suas próprias palavras</span>
+        <!-- STEP 2: textarea + botão — abre com animação ao clicar no chip -->
+        <div id="inputStep2">
+          <div class="textarea-wrapper">
+            <div class="textarea-label-row">
+              <span class="textarea-label-icon">✍️</span>
+              <span class="textarea-label-text">Conte com suas próprias palavras</span>
+            </div>
+            <textarea id="input"
+              placeholder="Escreva livremente... quanto mais honesto, mais precisa será sua resposta."
+              maxlength="1000"
+            ></textarea>
+            <div class="textarea-footer">
+              <span id="charFeedback">0 / 1000</span>
+            </div>
           </div>
-          <textarea id="input"
-            placeholder="Toque aqui e escreva livremente... seja específico sobre o que você está sentindo ou vivendo."
-            maxlength="1000"
-          ></textarea>
-          <div class="textarea-footer">
-            <span id="charFeedback">0 / 1000</span>
+
+          <button class="btn-main" id="btnGerar" onclick="gerarResposta()">
+            ✦ REVELAR MINHA RESPOSTA
+          </button>
+
+          <div class="trust-row">
+            <span class="trust-item">🔒 Ninguém verá o que você escrever</span>
+            <span class="trust-item">
+              <span class="dot-live"></span>
+              <span id="txt-contador">Carregando...</span>
+            </span>
           </div>
         </div>
 
-        <button class="btn-main" id="btnGerar" onclick="gerarResposta()">
-          ✦ REVELAR MINHA RESPOSTA
-        </button>
-
-        <div class="trust-row">
-          <span class="trust-item">🔒 Ninguém verá o que você escrever</span>
-          <span class="trust-item"><span class="dot-live"></span><span id="txt-contador">Carregando...</span></span>
-        </div>
-
-      </div><!-- /inputSection -->
+      </section>
 
       <div id="resultado"></div>
+    </main>
 
-    </div><!-- /container -->
+    <!-- DEPOIMENTOS -->
+    <aside id="testimonial-display" class="testimonial-container"></aside>
 
-    <!-- TESTIMONIALS -->
-    <div id="testimonial-display" class="testimonial-container"></div>
-
-    <!-- PAYMENT MODAL (bottom sheet) -->
+    <!-- ═══════════════════════════════════
+         MODAL DE PAGAMENTO (bottom sheet)
+    ════════════════════════════════════ -->
     <div id="paymentModal" class="modal-overlay">
       <div class="modal-sheet">
         <div class="sheet-handle"></div>
-        <button class="modal-close" onclick="fecharModal()">✕</button>
+        <button class="modal-close" onclick="tentarFecharModal()">✕</button>
 
         <div id="boxPagamento">
-          <p class="modal-eyebrow">✦ Seu guia está pronto</p>
-          <h2 class="modal-title">Receba seu direcionamento completo</h2>
-          <p class="modal-sub">A resposta que você acabou de ler é apenas o começo. Seu Guia Personalizado vai aprofundar tudo isso em passos concretos para a sua vida.</p>
+          <p class="modal-eyebrow">✦ A resposta está aqui</p>
+          <!-- Título padrão (acesso direto ao modal) -->
+          <h2 class="modal-title modal-title-default">Receba seu direcionamento completo</h2>
+          <!-- Título alternativo (quando vem do botão Revelar) -->
+          <h2 class="modal-title modal-title-reveal">O que vem depois dessas palavras é o que você precisa ouvir</h2>
+          <p class="modal-sub">Desbloqueie a continuação e receba seu guia personalizado com os próximos passos.</p>
 
-          <div class="modal-preview-items">
-            <div class="modal-preview-row">
-              <span class="modal-preview-icon">🔍</span>
-              <span class="modal-preview-label">Diagnóstico da sua situação
-                <small>O que está por trás do que você está vivendo</small>
-              </span>
+          <!-- Grade 2×2 — cabe em mobile sem rolar -->
+          <div class="modal-items-grid">
+            <div class="modal-item-card">
+              <span class="modal-item-icon">📖</span>
+              <span class="modal-item-label">2ª parte revelada</span>
+              <span class="modal-item-desc">O direcionamento completo sobre o que você descreveu</span>
             </div>
-            <div class="modal-preview-row">
-              <span class="modal-preview-icon">🗺️</span>
-              <span class="modal-preview-label">Seu mapa de ação em 3 passos
-                <small>O que fazer nos próximos 7 dias</small>
-              </span>
+            <div class="modal-item-card">
+              <span class="modal-item-icon">🗺️</span>
+              <span class="modal-item-label">Mapa em 3 passos</span>
+              <span class="modal-item-desc">O que fazer nos próximos 7 dias</span>
             </div>
-            <div class="modal-preview-row">
-              <span class="modal-preview-icon">⚠️</span>
-              <span class="modal-preview-label">O principal erro a evitar agora
-                <small>O que impede a maioria de avançar</small>
-              </span>
+            <div class="modal-item-card">
+              <span class="modal-item-icon">⚠️</span>
+              <span class="modal-item-label">Erro a evitar</span>
+              <span class="modal-item-desc">O que trava a maioria das pessoas</span>
             </div>
+            <div class="modal-item-card">
+              <span class="modal-item-icon">💬</span>
+              <span class="modal-item-label">Afirmação pessoal</span>
+              <span class="modal-item-desc">Criada para o que você está vivendo</span>
+            </div>
+          </div>
 
-          <div class="price-row">
-            <span class="price-label">R$ 39,90</span>
-            <div>
-              <div class="price-main">R$ 19,90</div>
-              <div class="price-sub">pagamento único via PIX</div>
+          <div class="price-block">
+            <span class="price-old">R$ 39,90</span>
+            <div class="price-new">
+              R$ 19,90
+              <small>pagamento único via PIX</small>
             </div>
             <span class="price-badge">50% OFF</span>
           </div>
 
-          <!-- GATILHO DE PREÇO ESTRATÉGICO -->
-          <div style="background: #fffbf0; border: 1px solid rgba(201,168,76,0.3); border-radius: 12px; padding: 13px 16px; margin-bottom: 16px; text-align: center;">
-            <p style="font-size: 13px; color: #5a430e; line-height: 1.6; margin: 0;">
-              💡 <strong>Você vai gastar mais do que isso no almoço de amanhã.</strong><br>
-              <span style="color: #7a6030; font-size: 12.5px;">A diferença é que o almoço vai embora em 20 minutos — esse direcionamento fica com você para sempre.</span>
-            </p>
+          <div class="modal-timer-line">
+            ⚠️ Oferta expira em <span class="timer-inline" id="modalTimerDisplay">--:--</span>
           </div>
 
-          <button
-            id="btnCheckoutModal"
-            class="btn-premium-final"
-            onclick="iniciarPagamentoMercadoPago()"
-          >
-            📄 DESBLOQUEAR MEU GUIA — R$ 19,90
+          <button id="btnCheckoutModal" class="modal-cta-btn" onclick="iniciarPagamentoMercadoPago()">
+            🔓 DESBLOQUEAR A CONTINUAÇÃO — R$ 19,90
           </button>
 
           <div class="modal-security">
@@ -938,294 +1029,262 @@
       </div>
     </div>
 
+
+    <!-- ═══════════════════════════════════
+         JAVASCRIPT
+    ════════════════════════════════════ -->
     <script>
-let sessionIdGlobal = localStorage.getItem("session_id_pendente") || "";
-let resumoDaIA = localStorage.getItem("resumo_diagnostico_modal") || "";
-let intervaloStatus = null;
-let visibilityHandler = null;
-let categoriaSelecionada = "";
+      /* ══════════════════════════════════════════
+         ESTADO GLOBAL
+      ══════════════════════════════════════════ */
+      let sessionIdGlobal     = localStorage.getItem("session_id_pendente") || "";
+      let resumoDaIA          = localStorage.getItem("resumo_diagnostico_modal") || "";
+      let intervaloStatus     = null;
+      let visibilityHandler   = null;
+      let categoriaSelecionada = "";
+      let _gerandoResposta    = false;  // flag anti-double-click
 
-const placeholdersPorCategoria = {
-  amor: "Ex: Estou num relacionamento que me confunde. Às vezes sinto amor, outras vezes dúvida. Não sei se devo continuar ou deixar ir...",
-  trabalho: "Ex: Tenho uma oportunidade nova na frente mas estou com medo de mudar. Fico me perguntando se estou no caminho certo...",
-  família: "Ex: Existe uma tensão na minha família que parece não ter solução. Já tentei de tudo mas sinto que nada muda...",
-  saúde: "Ex: Meu corpo está me dando sinais que eu não consigo ignorar. Sinto um cansaço que vai além do físico...",
-  propósito: "Ex: Tenho tudo que a sociedade diz que é sucesso, mas me sinto vazio. Não sei qual é o meu verdadeiro propósito...",
-  outro: "Escreva livremente o que está no seu coração. Não precisa ser perfeito — quanto mais honesto, mais precisa será sua resposta..."
-};
 
-function selecionarCategoria(el) {
-  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      /* ══════════════════════════════════════════
+         PLACEHOLDERS POR CATEGORIA
+      ══════════════════════════════════════════ */
+      const placeholdersPorCategoria = {
+        amor:      "Ex: Estou num relacionamento que me confunde. Às vezes sinto amor, outras vezes dúvida. Não sei se devo continuar ou deixar ir...",
+        trabalho:  "Ex: Tenho uma oportunidade nova na frente mas estou com medo de mudar. Fico me perguntando se estou no caminho certo...",
+        família:   "Ex: Existe uma tensão na minha família que parece não ter solução. Já tentei de tudo mas sinto que nada muda...",
+        saúde:     "Ex: Meu corpo está me dando sinais que eu não consigo ignorar. Sinto um cansaço que vai além do físico...",
+        propósito: "Ex: Tenho tudo que a sociedade diz que é sucesso, mas me sinto vazio. Não sei qual é o meu verdadeiro propósito...",
+        outro:     "Escreva livremente o que está no seu coração. Não precisa ser perfeito — quanto mais honesto, mais precisa será sua resposta..."
+      };
 
-  el.classList.add("active");
 
-  categoriaSelecionada = el.dataset.cat;
+      /* ══════════════════════════════════════════
+         INICIALIZAÇÃO
+      ══════════════════════════════════════════ */
+      window.onload = function () {
+        iniciarContador();
+        carregarDepoimentos();
 
-  const input = document.getElementById("input");
+        const textoSalvo            = localStorage.getItem("conselho_pendente");
+        const sessionSalva          = localStorage.getItem("session_id_pendente");
+        const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
 
-  if (input && input.value === "") {
-    input.placeholder =
-      placeholdersPorCategoria[categoriaSelecionada] ||
-      placeholdersPorCategoria.outro;
-  }
+        if (timestampSintonizacao && textoSalvo) {
+          const agora      = Date.now();
+          const dezMinutos = 10 * 60 * 1000;
+          const passado    = agora - parseInt(timestampSintonizacao, 10);
 
-  if (typeof fbq === "function") {
-    fbq("trackCustom", "CategoriaEscolhida", {
-      categoria: categoriaSelecionada
-    });
-  }
-}
+          if (passado > dezMinutos) {
+            // Sessão expirada → limpa tudo
+            localStorage.clear();
+          } else {
+            exibirBarraUrgencia();
+            iniciarTimerRegressivo(dezMinutos - passado);
+            sessionIdGlobal = sessionSalva || "";
 
-window.onload = function () {
-  iniciarContador();
-  carregarDepoimentos();
+            const inputSection = document.getElementById("inputSection");
+            if (inputSection) inputSection.style.display = "none";
 
-  const textoSalvo = localStorage.getItem("conselho_pendente");
-  const sessionSalva = localStorage.getItem("session_id_pendente");
-  const timestampSintonizacao = localStorage.getItem("data_sintonizacao");
+            montarCaixaDeRevelacao(textoSalvo);
 
-  if (timestampSintonizacao && textoSalvo) {
-    const agora = new Date().getTime();
-    const dezMinutos = 10 * 60 * 1000;
-    const tempoPassado = agora - parseInt(timestampSintonizacao);
+            // Já pagou anteriormente → libera direto sem re-pagar
+            if (localStorage.getItem("texto_revelado") === "sim") {
+              const textoSalvoSecr = localStorage.getItem("conselho_secreto") || "";
+              setTimeout(() => liberarConteudoPago(textoSalvoSecr), 300);
+            }
+          }
+        }
+      };
 
-    if (tempoPassado > dezMinutos) {
-      localStorage.clear();
-    } else {
-      const barra = document.getElementById("barraUrgencia");
+      /* Contador de caracteres na textarea */
+      document.addEventListener("DOMContentLoaded", function () {
+        const inputEl  = document.getElementById("input");
+        const feedback = document.getElementById("charFeedback");
+        if (!inputEl || !feedback) return;
 
-      if (barra) {
-        barra.style.display = "block";
-      }
-
-      iniciarTimerRegressivo(dezMinutos - tempoPassado);
-
-      sessionIdGlobal = sessionSalva || "";
-
-      const inputSection = document.getElementById("inputSection");
-
-      if (inputSection) {
-        inputSection.style.display = "none";
-      }
-
-      montarCaixaDeRevelacao(textoSalvo);
-
-      if (localStorage.getItem("texto_revelado") === "sim") {
-        setTimeout(() => {
-          liberarConteudo(
-            localStorage.getItem("conselho_secreto") || ""
-          );
-        }, 300);
-      }
-    }
-  }
-};
-
-document.addEventListener("DOMContentLoaded", function () {
-
-  const inputEl = document.getElementById("input");
-  const containerEl = document.querySelector(".container");
-  const feedback = document.getElementById("charFeedback");
-
-  if (containerEl && inputEl) {
-    containerEl.addEventListener("click", function (e) {
-
-      const tag = e.target.tagName.toLowerCase();
-
-      const isInteractive =
-        tag === "textarea" ||
-        tag === "button" ||
-        tag === "a" ||
-        e.target.closest("button") ||
-        e.target.closest("a") ||
-        e.target.id === "resultado" ||
-        e.target.closest("#resultado");
-
-      const sec = document.getElementById("inputSection");
-
-      const secVisible =
-        sec &&
-        sec.style.display !== "none" &&
-        sec.style.opacity !== "0";
-
-      if (!isInteractive && secVisible) {
-        inputEl.focus();
-
-        inputEl.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
+        inputEl.addEventListener("input", () => {
+          const len = inputEl.value.length;
+          if (len === 0) {
+            feedback.textContent = "0 / 1000";
+            feedback.className   = "";
+          } else if (len < 60) {
+            feedback.textContent = `${len} / 1000 — Continue escrevendo...`;
+            feedback.className   = "encouraging";
+          } else if (len < 120) {
+            feedback.textContent = `${len} / 1000 — Ótimo!`;
+            feedback.className   = "encouraging";
+          } else {
+            feedback.textContent = `${len} / 1000 — ✓ Pronto para revelar`;
+            feedback.className   = "good";
+          }
         });
-      }
-    });
-  }
+      });
 
-  if (inputEl && feedback) {
-    inputEl.addEventListener("input", () => {
 
-      const len = inputEl.value.length;
+      /* ══════════════════════════════════════════
+         SELEÇÃO DE CATEGORIA
+         → abre textarea com animação suave
+      ══════════════════════════════════════════ */
+      function selecionarCategoria(el) {
+        // Marca chip ativo
+        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+        el.classList.add("active");
+        categoriaSelecionada = el.dataset.cat;
 
-      if (len === 0) {
-        feedback.textContent = "0 / 1000";
-        feedback.className = "";
+        // Atualiza placeholder se campo ainda vazio
+        const inputEl = document.getElementById("input");
+        if (inputEl && inputEl.value.trim() === "") {
+          inputEl.placeholder = placeholdersPorCategoria[categoriaSelecionada]
+                              || placeholdersPorCategoria.outro;
+        }
 
-      } else if (len < 60) {
+        // Abre step 2 com animação (se ainda não estiver aberto)
+        const step2 = document.getElementById("inputStep2");
+        if (step2 && !step2.classList.contains("open")) {
+          step2.classList.add("open");
+          setTimeout(() => { if (inputEl) inputEl.focus(); }, 380);
+        }
 
-        feedback.textContent =
-          `${len} / 1000 — Continue... quanto mais você escrever, mais precisa será sua resposta`;
-
-        feedback.className = "encouraging";
-
-      } else if (len < 120) {
-
-        feedback.textContent =
-          `${len} / 1000 — Ótimo! Você pode ir mais fundo se quiser`;
-
-        feedback.className = "encouraging";
-
-      } else {
-
-        feedback.textContent =
-          `${len} / 1000 — ✓ Excelente! Você está pronto para revelar`;
-
-        feedback.className = "good";
-      }
-    });
-  }
-});
-
-function iniciarContador() {
-
-  const txt = document.getElementById("txt-contador");
-
-  if (!txt) return;
-
-  const atualizar = () => {
-    const n =
-      Math.floor(Math.random() * (155 - 118 + 1)) + 118;
-
-    txt.innerHTML = `<strong>${n} pessoas</strong> agora`;
-  };
-
-  atualizar();
-
-  if (window.intervaloContador) {
-    clearInterval(window.intervaloContador);
-  }
-
-  window.intervaloContador = setInterval(atualizar, 4000);
-}
-
-function iniciarTimerRegressivo(tempoRestanteMS) {
-
-  const display = document.getElementById("timerRegressivo");
-
-  if (!display) return;
-
-  if (window.intervaloUrgencia) {
-    clearInterval(window.intervaloUrgencia);
-  }
-
-  const alvo = Date.now() + tempoRestanteMS;
-
-  function tick() {
-
-    const restante = alvo - Date.now();
-
-    if (restante <= 0) {
-
-      clearInterval(window.intervaloUrgencia);
-
-      if (visibilityHandler) {
-        document.removeEventListener(
-          "visibilitychange",
-          visibilityHandler
-        );
-
-        visibilityHandler = null;
+        // Pixel custom
+        if (typeof fbq === "function") {
+          fbq("trackCustom", "CategoriaEscolhida", { categoria: categoriaSelecionada });
+        }
       }
 
-      localStorage.clear();
 
-      location.reload();
+      /* ══════════════════════════════════════════
+         CONTADOR AO VIVO (pessoas online)
+      ══════════════════════════════════════════ */
+      function iniciarContador() {
+        const txt = document.getElementById("txt-contador");
+        if (!txt) return;
+        const atualizar = () => {
+          const n = Math.floor(Math.random() * (155 - 118 + 1)) + 118;
+          txt.innerHTML = `<strong>${n} pessoas</strong> agora`;
+        };
+        atualizar();
+        if (window.intervaloContador) clearInterval(window.intervaloContador);
+        window.intervaloContador = setInterval(atualizar, 4000);
+      }
 
-      return;
-    }
 
-    const m = Math.floor(restante / 60000);
+      /* ══════════════════════════════════════════
+         BARRA DE URGÊNCIA
+      ══════════════════════════════════════════ */
+      function exibirBarraUrgencia() {
+        const barra = document.getElementById("barraUrgencia");
+        if (barra) {
+          barra.style.display = "block";
+          document.body.classList.add("has-urgency-bar");
+        }
+      }
 
-    const s = Math.floor((restante % 60000) / 1000);
 
-    display.innerText =
-      (m < 10 ? "0" + m : m) +
-      ":" +
-      (s < 10 ? "0" + s : s);
-  }
+      /* ══════════════════════════════════════════
+         TIMER REGRESSIVO
+         → sincronizado em: barra, modal e downsell
+      ══════════════════════════════════════════ */
+      function iniciarTimerRegressivo(tempoRestanteMS) {
+        const elBarra    = document.getElementById("timerRegressivo");
+        const elModal    = document.getElementById("modalTimerDisplay");
+        const elDownsell = document.getElementById("downsellTimer");
+        if (!elBarra) return;
 
-  tick();
+        if (window.intervaloUrgencia) clearInterval(window.intervaloUrgencia);
+        const alvo = Date.now() + tempoRestanteMS;
 
-  window.intervaloUrgencia = setInterval(tick, 1000);
+        function tick() {
+          const restante = alvo - Date.now();
+          if (restante <= 0) {
+            clearInterval(window.intervaloUrgencia);
+            if (visibilityHandler) {
+              document.removeEventListener("visibilitychange", visibilityHandler);
+              visibilityHandler = null;
+            }
+            localStorage.clear();
+            location.reload();
+            return;
+          }
+          const m   = Math.floor(restante / 60000);
+          const s   = Math.floor((restante % 60000) / 1000);
+          const str = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+          elBarra.innerText = str;
+          if (elModal)    elModal.textContent    = str;
+          if (elDownsell) elDownsell.textContent = str;
+        }
 
-  if (visibilityHandler) {
-    document.removeEventListener(
-      "visibilitychange",
-      visibilityHandler
-    );
-  }
+        tick();
+        window.intervaloUrgencia = setInterval(tick, 1000);
 
-  visibilityHandler = () => {
-    if (document.visibilityState === "visible") {
-      tick();
-    }
-  };
+        // Atualiza ao voltar para a aba
+        if (visibilityHandler) document.removeEventListener("visibilitychange", visibilityHandler);
+        visibilityHandler = () => { if (document.visibilityState === "visible") tick(); };
+        document.addEventListener("visibilitychange", visibilityHandler);
+      }
 
-  document.addEventListener(
-    "visibilitychange",
-    visibilityHandler
-  );
-}
 
-      // ── GERAR RESPOSTA ──
+      /* ══════════════════════════════════════════
+         GERAR RESPOSTA
+         Botão principal (✦ REVELAR MINHA RESPOSTA)
+      ══════════════════════════════════════════ */
       async function gerarResposta() {
-        const input = document.getElementById("input");
-        const btn = document.getElementById("btnGerar");
+        if (_gerandoResposta) return;
+
+        const inputEl      = document.getElementById("input");
+        const btn          = document.getElementById("btnGerar");
         const resultadoDiv = document.getElementById("resultado");
-        if (!input || !btn || !resultadoDiv) return;
-        if (input.value.trim().length < 10) {
-          alert("Conte um pouco mais — quanto mais você compartilhar, mais precisa será sua resposta.");
+        if (!inputEl || !btn || !resultadoDiv) return;
+
+        // Campo vazio / texto curto → abre / foca a textarea (sem alertar)
+        if (inputEl.value.trim().length < 10) {
+          const step2 = document.getElementById("inputStep2");
+          if (step2 && !step2.classList.contains("open")) {
+            if (!categoriaSelecionada) {
+              // Seleciona "Outro" automaticamente para mostrar o step2
+              const outroChip = document.querySelector('.chip[data-cat="outro"]');
+              if (outroChip) selecionarCategoria(outroChip);
+            } else {
+              step2.classList.add("open");
+              setTimeout(() => { if (inputEl) inputEl.focus(); }, 380);
+            }
+          } else {
+            inputEl.focus();
+            inputEl.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
           return;
         }
 
-        btn.disabled = true;
-        btn.innerText = "Sintonizando...";
+        _gerandoResposta = true;
+        btn.disabled     = true;
+        btn.innerText    = "Sintonizando...";
 
-        // Esconder input section com fade
+        // Oculta a seção de input com fade
         const sec = document.getElementById("inputSection");
         if (sec) {
           sec.style.transition = "opacity 0.4s ease";
-          sec.style.opacity = "0";
+          sec.style.opacity    = "0";
           setTimeout(() => { sec.style.display = "none"; }, 400);
         }
 
         sessionIdGlobal = "sess_" + Math.random().toString(36).substring(2, 12);
 
-        // LOADING STEPS
+        // Passos do loading
         const loadingSteps = [
-          { text: "Lendo a sua situação com atenção...", delay: 0 },
-          { text: `<strong>Identificando padrões</strong> no que você descreveu...`, delay: 1200 },
-          { text: "Estruturando uma resposta <strong>exclusiva para você</strong>...", delay: 2600 },
-          { text: "<strong>Sua revelação</strong> está quase pronta...", delay: 4200 },
+          { text: "Lendo o que você compartilhou com atenção...",                         delay: 0 },
+          { text: "<strong>Percebendo o que está por trás</strong> das suas palavras...", delay: 1200 },
+          { text: "Tecendo uma resposta <strong>exclusiva para você</strong>...",         delay: 2600 },
+          { text: "<strong>Sua revelação</strong> está quase pronta...",                  delay: 4200 },
         ];
 
         resultadoDiv.innerHTML = `<div class="loading-container" id="loadingBox"></div>`;
-        const box = document.getElementById("loadingBox");
+        const loadBox = document.getElementById("loadingBox");
 
         loadingSteps.forEach((step, i) => {
           const row = document.createElement("div");
           row.className = "loading-step-row";
           row.id = `lstep-${i}`;
           row.innerHTML = `<span class="step-dot"></span><span class="step-text">${step.text}</span>`;
-          box.appendChild(row);
-
+          loadBox.appendChild(row);
           setTimeout(() => {
             row.classList.add("visible", "active");
             if (i > 0) {
@@ -1236,17 +1295,18 @@ function iniciarTimerRegressivo(tempoRestanteMS) {
         });
 
         try {
+          // Chama API de resposta e resumo em paralelo
           const [resposta, resumoData] = await Promise.all([
             fetch("https://backfind-production.up.railway.app/api/responder", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ mensagem: input.value, sessionId: sessionIdGlobal }),
-            }).then(r => { if (!r.ok) throw new Error("Falha"); return r.json(); }),
+              body: JSON.stringify({ mensagem: inputEl.value, sessionId: sessionIdGlobal }),
+            }).then(r => { if (!r.ok) throw new Error("Falha na API"); return r.json(); }),
 
             fetch("https://backfind-production.up.railway.app/api/gerar-resumo", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ mensagem: input.value }),
+              body: JSON.stringify({ mensagem: inputEl.value }),
             }).then(r => r.json()).catch(() => ({ resumo: "Sua Jornada" }))
           ]);
 
@@ -1255,23 +1315,22 @@ function iniciarTimerRegressivo(tempoRestanteMS) {
 
           if (typeof fbq === "function") fbq("track", "ViewContent");
 
-          localStorage.setItem("conselho_pendente", resposta.texto);
-          localStorage.setItem("session_id_pendente", sessionIdGlobal);
-          localStorage.setItem("data_sintonizacao", Date.now());
+          // Persiste sessão no localStorage (validade 10 min)
+          localStorage.setItem("conselho_pendente",    resposta.texto);
+          localStorage.setItem("session_id_pendente",  sessionIdGlobal);
+          localStorage.setItem("data_sintonizacao",    Date.now());
           localStorage.removeItem("texto_revelado");
           localStorage.removeItem("guia_pago");
+          localStorage.removeItem("conselho_secreto");
 
-          const barra = document.getElementById("barraUrgencia");
-          if (barra) barra.style.display = "block";
+          exibirBarraUrgencia();
           iniciarTimerRegressivo(10 * 60 * 1000);
 
-          // Marcar último step como done
+          // Marca último step como concluído
           const lastStep = document.getElementById(`lstep-${loadingSteps.length - 1}`);
           if (lastStep) { lastStep.classList.remove("active"); lastStep.classList.add("done"); }
 
-          setTimeout(() => {
-            montarCaixaDeRevelacao(resposta.texto);
-          }, 600);
+          setTimeout(() => montarCaixaDeRevelacao(resposta.texto), 600);
 
         } catch (err) {
           console.error(err);
@@ -1280,36 +1339,44 @@ function iniciarTimerRegressivo(tempoRestanteMS) {
           localStorage.removeItem("data_sintonizacao");
 
           if (sec) { sec.style.display = ""; setTimeout(() => { sec.style.opacity = "1"; }, 50); }
-          btn.disabled = false;
+          btn.disabled  = false;
           btn.innerText = "✦ REVELAR MINHA RESPOSTA";
-
           resultadoDiv.innerHTML = `
-            <div style="text-align:center; padding: 16px 0;">
-              <p style="font-size: 13.5px; color: #6b7280; font-style: italic; line-height: 1.6;">
+            <div style="text-align:center; padding:16px 0;">
+              <p style="font-size:13.5px; color:#6b7280; font-style:italic; line-height:1.6;">
                 Houve uma oscilação na sintonização. Por favor, tente novamente.
               </p>
             </div>`;
+        } finally {
+          _gerandoResposta = false;
         }
       }
 
-      // ── MONTAR CAIXA ──
+
+      /* ══════════════════════════════════════════
+         MONTAR CAIXA DE REVELAÇÃO
+         1ª parte visível + blur na 2ª parte
+         Botão "Revelar" → abre modal de pagamento
+      ══════════════════════════════════════════ */
       function montarCaixaDeRevelacao(textoVindoDaIA) {
         const el = document.getElementById("resultado");
         if (!el) return;
 
-        const partes = textoVindoDaIA.split("...");
-        const textoVisivel = partes[0].trim();
+        const partes         = textoVindoDaIA.split("...");
+        const textoVisivel   = partes[0].trim();
         const fraseTransicao = ". O que o universo quer que você saiba agora — e que mudará a forma como você vê essa situação — é que...";
-        const textoBlur = "Este é o direcionamento que o universo guardou para este momento sagrado da sua jornada. A resposta completa aguarda por você e está pronta para ser revelada agora, com todos os detalhes que você precisa para dar o próximo passo com segurança e clareza.";
 
-        const jaRevelado = localStorage.getItem("texto_revelado") === "sim";
+        // Texto genérico no blur — NUNCA entrega o conteúdo real antes do pagamento
+        const textoBlur = "Este é o direcionamento que estava guardado para este momento da sua jornada. A resposta completa — com os próximos passos, o principal erro a evitar e sua afirmação pessoal — aguarda por você agora.";
+
+        const jaRevelado     = localStorage.getItem("texto_revelado") === "sim";
         const textoRealSalvo = localStorage.getItem("conselho_secreto") || "";
 
-        // Depoimento inline (rotativo por hora)
+        // Depoimento inline rotativo por hora
         const depoimentosInline = [
-          { nome: "Clarice R.", texto: "Parecia que estava escrevendo sobre mim. Li e chorei de alívio." },
-          { nome: "José O.", texto: "Jamais imaginei que uma resposta poderia ser tão certeira." },
-          { nome: "Sônia M.", texto: "Senti um arrepio ao ler. Era exatamente o que eu precisava ouvir." },
+          { nome: "Clarice R.",  texto: "Parecia que estava escrevendo sobre mim. Li e chorei de alívio." },
+          { nome: "José O.",     texto: "Jamais imaginei que uma resposta poderia ser tão certeira." },
+          { nome: "Sônia M.",    texto: "Senti um arrepio ao ler. Era exatamente o que eu precisava ouvir." },
           { nome: "Benedito A.", texto: "Tirei um peso de anos das costas em poucos minutos de leitura." },
         ];
         const dep = depoimentosInline[new Date().getHours() % depoimentosInline.length];
@@ -1319,138 +1386,154 @@ function iniciarTimerRegressivo(tempoRestanteMS) {
             <span class="text-visible">${textoVisivel}${fraseTransicao}</span>
 
             <div class="inline-proof">
-              <div>
-                <div class="inline-proof-quote">"${dep.texto}"</div>
-                <div class="inline-proof-name">— ${dep.nome}, recebeu hoje</div>
-              </div>
+              <div class="inline-proof-quote">"${dep.texto}"</div>
+              <div class="inline-proof-name">— ${dep.nome}, recebeu hoje</div>
             </div>
 
             <div class="blur-zone">
-              <span id="targetBlur" class="${jaRevelado ? 'no-blur' : 'blurred'}">
+              <span id="targetBlur" class="${jaRevelado ? 'no-blur content-unlocked' : 'blurred'}">
                 ${jaRevelado ? (textoRealSalvo || "Carregando...") : textoBlur}
               </span>
 
               ${!jaRevelado ? `
               <div id="revealOverlay">
-                <button id="btnReveal" onclick="verificarFluxoDeRevelacao()">
-                  ✨ Revelar o direcionamento completo
+                <button id="btnReveal" onclick="abrirModalDeCompra()">
+                  🔓 Revelar o direcionamento completo
                 </button>
-                <span class="reveal-hint">Toque para ver o que está guardado para você</span>
-              </div>
-              ` : ""}
+                <span class="reveal-hint">Toque para desbloquear — R$ 19,90 via PIX</span>
+              </div>` : ""}
             </div>
-          </div>
-        `;
+          </div>`;
 
-        if (jaRevelado) renderizarBotoesFinais();
+        // Já pagou em sessão anterior → libera direto
+        if (jaRevelado) liberarConteudoPago(textoRealSalvo);
       }
 
-      function verificarFluxoDeRevelacao() {
-        const textoCompleto = localStorage.getItem("conselho_pendente") || "";
-        const partes = textoCompleto.split("...");
-        const textoReal = partes.length > 1 ? partes.slice(1).join("...").trim() : "O universo está guiando seus passos. Confie na jornada.";
-        liberarConteudo(textoReal);
-      }
 
-      function liberarConteudo(textoReal) {
-        localStorage.setItem("texto_revelado", "sim");
-        localStorage.setItem("conselho_secreto", textoReal);
+      /* ══════════════════════════════════════════
+         ABRIR MODAL DE COMPRA
+         Chamado pelo botão "Revelar"
+         Fluxo: Blur → modal PIX (tensão máxima)
+      ══════════════════════════════════════════ */
+      function abrirModalDeCompra() {
+        const sheet = document.querySelector(".modal-sheet");
+        if (sheet) sheet.setAttribute("data-origin", "reveal");
 
-        const overlay = document.getElementById("revealOverlay");
-        if (overlay) overlay.remove();
-
-        const blurArea = document.getElementById("targetBlur");
-        if (blurArea) {
-          blurArea.innerText = textoReal || localStorage.getItem("conselho_secreto") || "";
-          blurArea.classList.remove("blurred");
-          blurArea.classList.add("no-blur");
+        if (typeof fbq === "function") {
+          fbq("track", "AddToCart",       { value: 19.90, currency: "BRL" });
+          fbq("track", "InitiateCheckout");
         }
 
-        renderizarBotoesFinais();
-      }
-
-      function renderizarBotoesFinais() {
-        const elResultado = document.getElementById("resultado");
-        if (!elResultado || document.getElementById("guia-section")) return;
-
-        const jaPago = localStorage.getItem("guia_pago") === "sim";
-        const revealBox = elResultado.querySelector(".reveal-box");
-
-        const section = document.createElement("div");
-        section.id = "guia-section";
-
-        if (jaPago) {
-          section.innerHTML = `
-            <button class="btn-paid" onclick="window.location.href='https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}'">
-              📄 Ver meu guia personalizado
-            </button>`;
-        } else {
-          section.innerHTML = `
-            <div class="guide-preview" style="margin-top: 24px;">
-              <div class="guide-preview-title">📄 O que está no seu guia personalizado</div>
-              <div class="guide-item">
-                <span class="guide-icon">🔍</span>
-                <span class="guide-item-text"><strong>Diagnóstico da sua situação</strong> — o que está por trás do que você descreveu</span>
-              </div>
-              <div class="guide-item">
-                <span class="guide-icon">🗺️</span>
-                <span class="guide-item-text"><strong>Mapa de ação em 3 passos</strong> — o que fazer nos próximos 7 dias</span>
-              </div>
-              <div class="guide-item">
-                <span class="guide-icon">⚠️</span>
-                <span class="guide-item-text"><strong>O principal erro a evitar</strong> — o que impede a maioria de avançar</span>
-              </div>
-              <div class="guide-item">
-                <span class="guide-icon">💬</span>
-                <span class="guide-item-text"><strong>Afirmação pessoal</strong> — criada especificamente para o que você está vivendo</span>
-              </div>
-              <button class="btn-premium-final" id="btn-guia-pdf" onclick="abrirModalVenda()">
-                ✨ RECEBER MEU GUIA PERSONALIZADO
-              </button>
-              <p style="text-align: center; font-size: 11.5px; color: #9ca3af; margin-top: 10px;">
-                R$ 19,90 · PIX · Liberação imediata após confirmação
-              </p>
-            </div>`;
-        }
-
-        const statusText = document.createElement("p");
-        statusText.id = "status-pagamento-main";
-        statusText.innerText = "Aguardando confirmação do pagamento...";
-        statusText.style.cssText = "text-align:center; font-size:12.5px; color:#6b7280; margin-top:10px; font-style:italic; display:none;";
-
-        if (revealBox) { revealBox.appendChild(section); revealBox.appendChild(statusText); }
-        else { elResultado.appendChild(section); elResultado.appendChild(statusText); }
-      }
-
-      // ── MODAL ──
-      function travarScroll(b) {
-        document.body.style.overflow = b ? "hidden" : "";
-        document.body.style.height = b ? "100vh" : "";
-      }
-
-      function abrirModalVenda() {
-        if (typeof fbq === "function") fbq("track", "InitiateCheckout");
         const m = document.getElementById("paymentModal");
         if (m) m.style.display = "flex";
         travarScroll(true);
+      }
+
+
+      /* ══════════════════════════════════════════
+         LIBERAR CONTEÚDO PÓS PAGAMENTO
+         → remove blur, anima conteúdo, mostra botão PDF
+      ══════════════════════════════════════════ */
+      function liberarConteudoPago(textoReal) {
+        localStorage.setItem("texto_revelado",   "sim");
+        localStorage.setItem("conselho_secreto", textoReal);
+
+        // Fade out do overlay de blur
+        const overlay = document.getElementById("revealOverlay");
+        if (overlay) {
+          overlay.style.transition = "opacity 0.4s";
+          overlay.style.opacity    = "0";
+          setTimeout(() => overlay.remove(), 400);
+        }
+
+        // Remove blur e anima entrada do texto real
+        const blurArea = document.getElementById("targetBlur");
+        if (blurArea) {
+          blurArea.innerText = textoReal;
+          blurArea.classList.remove("blurred");
+          blurArea.classList.add("no-blur", "content-unlocked");
+        }
+
+        renderizarBotaoDownload();
+      }
+
+
+      /* ══════════════════════════════════════════
+         BOTÃO DE DOWNLOAD (pós pagamento)
+      ══════════════════════════════════════════ */
+      function renderizarBotaoDownload() {
+        const elResultado = document.getElementById("resultado");
+        if (!elResultado || document.getElementById("guia-section")) return;
+
+        const revealBox = elResultado.querySelector(".reveal-box");
+        const section   = document.createElement("div");
+        section.id        = "guia-section";
+        section.className = "content-unlocked";
+        section.innerHTML = `
+          <button class="btn-paid"
+            onclick="window.location.href='https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}'">
+            📄 Baixar meu guia personalizado
+          </button>
+          <p style="text-align:center; font-size:11px; color:#9ca3af; margin-top:8px; line-height:1.5;">
+            O PDF foi gerado e está pronto para download.
+          </p>`;
+
+        if (revealBox) revealBox.appendChild(section);
+        else           elResultado.appendChild(section);
+      }
+
+
+      /* ══════════════════════════════════════════
+         CONTROLE DO MODAL
+      ══════════════════════════════════════════ */
+      function travarScroll(travar) {
+        document.body.style.overflow = travar ? "hidden" : "";
+        document.body.style.height   = travar ? "100vh"  : "";
+      }
+
+      function tentarFecharModal() {
+        // Exibe downsell antes de fechar (última tentativa de conversão)
+        const downsell = document.getElementById("downsellOverlay");
+        if (downsell) downsell.style.display = "flex";
+      }
+
+      function fecharDownsellEManter() {
+        // Usuário voltou atrás → fecha downsell, mantém modal aberto
+        const downsell = document.getElementById("downsellOverlay");
+        if (downsell) downsell.style.display = "none";
+      }
+
+      function confirmarFecharModal() {
+        // Usuário confirmou que quer sair
+        const downsell = document.getElementById("downsellOverlay");
+        if (downsell) downsell.style.display = "none";
+        fecharModal();
       }
 
       function fecharModal() {
         const m = document.getElementById("paymentModal");
         if (m) m.style.display = "none";
         travarScroll(false);
+        // Reseta botão do modal para re-abertura
         const btn = document.getElementById("btnCheckoutModal");
-        if (btn) { btn.innerText = "📄 DESBLOQUEAR MEU GUIA — R$ 4,90"; btn.disabled = false; btn.style.opacity = "1"; }
+        if (btn) {
+          btn.innerText     = "🔓 DESBLOQUEAR A CONTINUAÇÃO — R$ 19,90";
+          btn.disabled      = false;
+          btn.style.opacity = "1";
+        }
       }
 
-      // ── PAGAMENTO ──
+
+      /* ══════════════════════════════════════════
+         PAGAMENTO PIX via MercadoPago
+      ══════════════════════════════════════════ */
       async function iniciarPagamentoMercadoPago() {
         const btn = document.getElementById("btnCheckoutModal");
         const box = document.getElementById("boxPagamento");
         if (!btn || !box || btn.disabled) return;
 
-        btn.innerText = "Gerando código PIX...";
-        btn.disabled = true;
+        btn.innerText     = "Gerando código PIX...";
+        btn.disabled      = true;
         btn.style.opacity = "0.7";
 
         try {
@@ -1462,62 +1545,82 @@ function iniciarTimerRegressivo(tempoRestanteMS) {
           const data = await response.json();
 
           if (data.qr_code) {
+            // Bloco de resumo da IA (se disponível)
             const htmlResumo = resumoDaIA ? `
-              <div style="background:#fffbf0; border:1px solid #e8d89a; border-radius:10px; padding:12px 14px; margin-bottom:16px; text-align:center;">
-                <p style="margin:0; font-size:12.5px; color:#5a430e; font-style:italic; line-height:1.5;">"${resumoDaIA}"</p>
+              <div style="background:#fffbf0; border:1px solid #e8d89a; border-radius:9px; padding:10px 13px; margin-bottom:14px; text-align:center;">
+                <p style="margin:0; font-size:12px; color:#5a430e; font-style:italic; line-height:1.5;">"${resumoDaIA}"</p>
               </div>` : "";
 
             box.innerHTML = `
-              <button class="modal-close" onclick="fecharModal()">✕</button>
-              <div class="sheet-handle" style="margin-top: 0;"></div>
+              <button class="modal-close" onclick="tentarFecharModal()">✕</button>
+              <div class="sheet-handle" style="margin-top:0;"></div>
               <p class="modal-eyebrow">✦ Quase lá</p>
-              <h2 class="modal-title" style="font-size:19px;">Escaneie o QR Code ou copie o código PIX</h2>
-              <p style="font-size:13px; color:#6b7280; text-align:center; margin-bottom:16px; line-height:1.5;">Assim que o pagamento for confirmado, seu guia será <strong>liberado automaticamente</strong> nesta tela.</p>
+              <h2 class="modal-title" style="font-size:17px;">Escaneie o QR Code ou copie o código PIX</h2>
+              <p style="font-size:12.5px; color:#6b7280; text-align:center; margin-bottom:14px; line-height:1.5;">
+                Assim que o pagamento for confirmado, sua resposta será
+                <strong>desbloqueada automaticamente</strong> nesta tela.
+              </p>
               ${htmlResumo}
-              <div style="text-align:center; margin-bottom:16px;">
-                <div style="display:inline-block; padding:10px; border-radius:14px; border:1px solid #f3f4f6; background:white;">
-                  <img src="data:image/jpeg;base64,${data.qr_code_base64}" style="width:150px; height:150px; display:block; border-radius:4px;">
+              <div style="text-align:center; margin-bottom:14px;">
+                <div style="display:inline-block; padding:8px; border-radius:12px; border:1px solid #f3f4f6; background:white;">
+                  <img src="data:image/jpeg;base64,${data.qr_code_base64}"
+                    style="width:140px; height:140px; display:block; border-radius:4px;"
+                    alt="QR Code PIX" />
                 </div>
               </div>
-              <div style="background:#f9fafb; padding:14px; border-radius:12px; border:1px solid #f3f4f6; margin-bottom:12px; cursor:pointer;" onclick="copiarPix()">
-                <p style="font-size:10.5px; color:#9ca3af; margin-bottom:6px; font-weight:600; letter-spacing:0.5px;">CÓDIGO PIX COPIA E COLA</p>
+              <div style="background:#f9fafb; padding:12px; border-radius:11px; border:1px solid #f3f4f6; margin-bottom:10px; cursor:pointer;" onclick="copiarPix()">
+                <p style="font-size:10px; color:#9ca3af; margin-bottom:5px; font-weight:600; letter-spacing:0.5px;">CÓDIGO PIX COPIA E COLA</p>
                 <textarea id="pixCode" readonly
-                  style="width:100%; min-height:52px; border:none; background:transparent; font-size:11.5px; color:#4b5563; resize:none; outline:none; text-align:center; font-family:'Courier New',monospace; word-break:break-all; cursor:pointer; display:block;"
+                  style="width:100%; min-height:48px; border:none; background:transparent; font-size:11px; color:#4b5563; resize:none; outline:none; text-align:center; font-family:'Courier New',monospace; word-break:break-all; cursor:pointer; display:block;"
                 >${data.qr_code}</textarea>
               </div>
-              <button onclick="copiarPix()" id="btnCopiar" style="width:100%; background:#16a34a; color:white; border:none; padding:16px; border-radius:50px; font-weight:700; cursor:pointer; font-size:14px; text-transform:uppercase; letter-spacing:0.5px; transition:0.3s; box-shadow:0 4px 12px rgba(22,163,74,0.25); font-family:'Inter',sans-serif;">
+              <button onclick="copiarPix()" id="btnCopiar"
+                style="width:100%; background:#16a34a; color:white; border:none; padding:15px; border-radius:50px; font-weight:700; cursor:pointer; font-size:13.5px; text-transform:uppercase; letter-spacing:0.5px; font-family:'Inter',sans-serif; box-shadow:0 4px 12px rgba(22,163,74,0.22);">
                 COPIAR CÓDIGO PIX
               </button>
-              <p id="statusCheck" style="display:block; font-size:12px; color:#6b7280; margin-top:16px; font-style:italic; text-align:center; animation: blink 1.5s infinite;">
+              <p id="statusCheck"
+                style="display:block; font-size:11.5px; color:#6b7280; margin-top:14px; font-style:italic; text-align:center; animation:blink 1.5s infinite;">
                 ⏳ Aguardando confirmação do pagamento...
+              </p>
+              <p style="text-align:center; font-size:10.5px; color:#9ca3af; margin-top:7px; line-height:1.5;">
+                Se o desbloqueio não ocorrer automaticamente,
+                <a href="https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}&resumo=${encodeURIComponent(resumoDaIA)}"
+                  target="_blank"
+                  style="color:#c9a84c; text-decoration:underline;">clique aqui</a>.
               </p>`;
 
-            const statusMain = document.getElementById("status-pagamento-main");
-            if (statusMain) statusMain.style.display = "block";
             verificarStatus();
 
           } else {
             throw new Error("Erro ao gerar PIX");
           }
+
         } catch (err) {
+          console.error(err);
           alert("Houve uma pequena oscilação. Por favor, tente novamente.");
-          btn.innerText = "📄 DESBLOQUEAR MEU GUIA — R$ 4,90";
-          btn.disabled = false;
+          btn.innerText     = "🔓 DESBLOQUEAR A CONTINUAÇÃO — R$ 19,90";
+          btn.disabled      = false;
           btn.style.opacity = "1";
         }
       }
 
+
+      /* ══════════════════════════════════════════
+         COPIAR PIX
+      ══════════════════════════════════════════ */
       function copiarPix() {
         const text = document.getElementById("pixCode");
         if (!text) return;
         text.select();
         text.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(text.value).catch(() => {});
+        navigator.clipboard.writeText(text.value).catch(() => { document.execCommand("copy"); });
         const btn = document.getElementById("btnCopiar");
         if (btn) { btn.innerText = "✓ CÓDIGO COPIADO!"; btn.style.background = "#15803d"; }
         const pixAlert = document.getElementById("pixInstructionsAlert");
         if (pixAlert) pixAlert.style.display = "flex";
-        setTimeout(() => { if (btn) { btn.innerText = "COPIAR CÓDIGO PIX"; btn.style.background = "#16a34a"; } }, 3000);
+        setTimeout(() => {
+          if (btn) { btn.innerText = "COPIAR CÓDIGO PIX"; btn.style.background = "#16a34a"; }
+        }, 3000);
       }
 
       function fecharAlertaPix() {
@@ -1525,139 +1628,180 @@ function iniciarTimerRegressivo(tempoRestanteMS) {
         if (p) p.style.display = "none";
       }
 
+
+      /* ══════════════════════════════════════════
+         POLLING DE STATUS (verifica pagamento a cada 3s)
+         Confirmado → libera 2ª parte → fecha modal → PDF
+      ══════════════════════════════════════════ */
       function verificarStatus() {
         if (intervaloStatus) clearInterval(intervaloStatus);
         let erros = 0;
 
         intervaloStatus = setInterval(async () => {
           try {
-            const res = await fetch(`https://backfind-production.up.railway.app/api/status?sessionId=${sessionIdGlobal}`);
+            const res  = await fetch(`https://backfind-production.up.railway.app/api/status?sessionId=${sessionIdGlobal}`);
             const data = await res.json();
             erros = 0;
 
             if (data.pago === true) {
               clearInterval(intervaloStatus);
-              if (typeof fbq === "function") fbq("track", "Purchase", { value: 4.90, currency: "BRL" });
+
+              // Pixel Purchase
+              if (typeof fbq === "function") {
+                fbq("track", "Purchase", { value: 19.90, currency: "BRL" });
+              }
               localStorage.setItem("guia_pago", "sim");
 
               const urlPDF = `https://backfind-production.up.railway.app/api/gerar-pdf?sessionId=${sessionIdGlobal}&resumo=${encodeURIComponent(resumoDaIA)}`;
-              const statusMain = document.getElementById("status-pagamento-main");
-              if (statusMain) statusMain.style.display = "none";
 
-              const btnGuia = document.getElementById("btn-guia-pdf");
-              if (btnGuia) { btnGuia.innerHTML = "⏳ GERANDO SEU GUIA..."; btnGuia.style.background = "#d4af37"; btnGuia.disabled = true; btnGuia.style.cursor = "not-allowed"; }
+              // PASSO 1: Extrai 2ª parte do texto salvo e libera na tela
+              const textoCompleto = localStorage.getItem("conselho_pendente") || "";
+              const partesTexto   = textoCompleto.split("...");
+              const textoReal     = partesTexto.length > 1
+                ? partesTexto.slice(1).join("...").trim()
+                : "O universo está guiando seus passos. Confie na jornada.";
 
+              liberarConteudoPago(textoReal);
+
+              // PASSO 2: Feedback visual no modal
               const box = document.getElementById("boxPagamento");
               if (box) {
                 box.innerHTML = `
-                  <div style="text-align:center; padding:40px 10px;">
-                    <div style="width:48px; height:48px; border:3px solid #f3f4f6; border-top:3px solid #c9a84c; border-radius:50%; margin:0 auto 20px; animation:spin 1s linear infinite;"></div>
-                    <h2 style="font-family:'Playfair Display',serif; font-style:italic; font-size:20px; color:#111; margin:0;">Preparando seu guia...</h2>
-                    <p style="color:#6b7280; margin-top:10px; font-size:13.5px; line-height:1.6;">Isso levará cerca de 10–15 segundos. <strong>Não feche esta tela.</strong></p>
-                    <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+                  <div style="text-align:center; padding:36px 10px;">
+                    <div style="font-size:44px; margin-bottom:12px;">✨</div>
+                    <h2 style="font-family:'Playfair Display',serif; font-style:italic; font-size:19px; color:#111; margin:0;">
+                      Pagamento confirmado!
+                    </h2>
+                    <p style="color:#16a34a; margin-top:6px; font-weight:600; font-size:13.5px;">
+                      Sua resposta foi desbloqueada.
+                    </p>
+                    <p style="color:#6b7280; margin-top:10px; font-size:12.5px; line-height:1.6;">
+                      Preparando seu guia em PDF...<br>Isso levará apenas alguns segundos.
+                    </p>
+                    <div style="width:40px; height:40px; border:3px solid #f3f4f6; border-top:3px solid #c9a84c; border-radius:50%; margin:16px auto 0; animation:spin 1s linear infinite;"></div>
                   </div>`;
               }
 
+              // PASSO 3: Fecha modal após 1.2s (usuário lê a revelação desbloqueada)
+              setTimeout(() => fecharModal(), 1200);
+
+              // PASSO 4: Gera e baixa o PDF em background
               try {
                 const pdfResponse = await fetch(urlPDF);
-                if (!pdfResponse.ok) throw new Error("Falha");
+                if (!pdfResponse.ok) throw new Error("Falha no PDF");
                 const blob = await pdfResponse.blob();
                 const link = window.URL.createObjectURL(blob);
 
-                if (box) {
-                  box.innerHTML = `
-                    <div style="text-align:center; padding:40px 10px;">
-                      <div style="font-size:50px; margin-bottom:12px;">✨</div>
-                      <h2 style="font-family:'Playfair Display',serif; font-style:italic; font-size:20px; color:#111; margin:0;">Guia pronto!</h2>
-                      <p style="color:#16a34a; margin-top:8px; font-weight:600; font-size:14px;">O download começou automaticamente.</p>
-                    </div>`;
-                }
-
-                if (btnGuia) {
-                  btnGuia.disabled = false;
-                  btnGuia.innerHTML = "📄 Ver meu guia personalizado";
-                  btnGuia.className = "btn-paid";
-                  btnGuia.onclick = () => { const a = document.createElement("a"); a.href = link; a.download = "Guia_Personalizado.pdf"; a.click(); };
-                }
-
+                // Download automático
                 const a = document.createElement("a");
-                a.href = link; a.download = "Guia_Personalizado.pdf";
-                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                a.href     = link;
+                a.download = "Guia_Personalizado.pdf";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
 
-                setTimeout(() => fecharModal(), 3000);
+                // Atualiza botão com link de re-download
+                const guiaSection = document.getElementById("guia-section");
+                if (guiaSection) {
+                  guiaSection.innerHTML = `
+                    <button class="btn-paid"
+                      onclick="const a=document.createElement('a');a.href='${link}';a.download='Guia_Personalizado.pdf';a.click();">
+                      📄 Baixar meu guia personalizado
+                    </button>
+                    <p style="text-align:center; font-size:11px; color:#9ca3af; margin-top:8px; line-height:1.5;">
+                      Download iniciado ✓ — toque novamente se precisar.
+                    </p>`;
+                }
 
-              } catch (e) {
-                if (box) {
-                  box.innerHTML = `
-                    <div style="text-align:center; padding:40px 10px;">
-                      <div style="font-size:40px; margin-bottom:12px;">❌</div>
-                      <h2 style="color:#dc2626; font-family:'Playfair Display',serif;">Instabilidade momentânea</h2>
-                      <p style="color:#4b5563; margin-top:10px; font-size:13.5px; line-height:1.6;">Seu pagamento foi aprovado! Clique abaixo para gerar o guia novamente.</p>
-                      <button onclick="window.location.reload()" style="margin-top:14px; background:#c9a84c; color:white; border:none; padding:12px 24px; border-radius:8px; font-weight:bold; cursor:pointer; font-family:'DM Sans',sans-serif;">Gerar novamente</button>
-                    </div>`;
+              } catch (pdfErr) {
+                console.warn("PDF auto-download falhou:", pdfErr);
+                // Mostra link de fallback discretamente
+                const guiaSection = document.getElementById("guia-section");
+                if (guiaSection) {
+                  const pLink = document.createElement("p");
+                  pLink.style.cssText = "text-align:center; font-size:11.5px; color:#9ca3af; margin-top:10px;";
+                  pLink.innerHTML = `Seu guia: <a href="${urlPDF}" target="_blank" style="color:#c9a84c; text-decoration:underline;">clique para baixar</a>`;
+                  guiaSection.appendChild(pLink);
                 }
               }
             }
+
           } catch (e) {
             erros++;
-            if (erros >= 20) { clearInterval(intervaloStatus); console.warn("Polling encerrado."); }
+            if (erros >= 20) {
+              clearInterval(intervaloStatus);
+              console.warn("Polling encerrado após muitos erros consecutivos.");
+            }
           }
         }, 3000);
       }
 
-      // ── DEPOIMENTOS ──
+
+      /* ══════════════════════════════════════════
+         DEPOIMENTOS
+         Banco por dia da semana + tempos dinâmicos
+      ══════════════════════════════════════════ */
       function carregarDepoimentos() {
         const container = document.getElementById("testimonial-display");
         if (!container) return;
 
-        const dia = new Date().getDay();
+        const dia  = new Date().getDay(); // 0 = domingo … 6 = sábado
         const banco = [
-          [
-            { nome: "Clarice Rocha", texto: "Pedi um sinal hoje cedo e esse site apareceu pra mim. O que li me deu um arrepio que nunca senti antes. Chorei de alívio.", tempo: 12 },
-            { nome: "José Oliveira", texto: "Parece que o destino me trouxe no momento exato. A resposta tocou em algo que nunca contei a ninguém.", tempo: 34 },
+          /* DOM */ [
+            { nome: "Clarice Rocha",   texto: "Pedi um sinal hoje cedo e esse site apareceu pra mim. O que li me deu um arrepio que nunca senti antes. Chorei de alívio." },
+            { nome: "José Oliveira",   texto: "Parece que o destino me trouxe no momento exato. A resposta tocou em algo que nunca contei a ninguém." },
           ],
-          [
-            { nome: "Geraldo Neto", texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca falei? Me trouxe uma paz que não sentia faz meses.", tempo: 8 },
-            { nome: "Maria Silva", texto: "As palavras me deram a clareza que eu buscava há um ano inteiro. Foi o empurrão que eu precisava para seguir.", tempo: 45 },
+          /* SEG */ [
+            { nome: "Geraldo Neto",    texto: "Fiquei em choque. Como um texto pode ser tão preciso sobre algo que eu nunca falei? Me trouxe uma paz que não sentia faz meses." },
+            { nome: "Maria Silva",     texto: "As palavras me deram a clareza que eu buscava há um ano inteiro. Foi o empurrão que eu precisava para seguir." },
           ],
-          [
-            { nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que realmente nada é por acaso.", tempo: 19 },
-            { nome: "Neuza Ramos", texto: "Achei que era mais uma página qualquer. O que li aqui tocou na ferida e me ajudou de verdade. Pura gratidão.", tempo: 52 },
+          /* TER */ [
+            { nome: "Sônia Magalhães", texto: "Vi um vídeo sobre o site e não acreditei. Agora que recebi minha revelação, entendi que realmente nada é por acaso." },
+            { nome: "Neuza Ramos",     texto: "Achei que era mais uma página qualquer. O que li aqui tocou na ferida e me ajudou de verdade. Pura gratidão." },
           ],
-          [
-            { nome: "Benedito Alves", texto: "Tirei um peso de anos das minhas costas em poucos minutos. Sinto uma leveza que não sentia há muito tempo.", tempo: 7 },
-            { nome: "Antônio Carlos", texto: "Fiquei impressionado com a profundidade. Foi um acolhimento que eu não esperava encontrar hoje.", tempo: 28 },
+          /* QUA */ [
+            { nome: "Benedito Alves",  texto: "Tirei um peso de anos das minhas costas em poucos minutos. Sinto uma leveza que não sentia há muito tempo." },
+            { nome: "Antônio Carlos",  texto: "Fiquei impressionado com a profundidade. Foi um acolhimento que eu não esperava encontrar hoje." },
           ],
-          [
-            { nome: "Tânia Soares", texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente.", tempo: 15 },
-            { nome: "Dona Izabel", texto: "Minha filha me mandou o link e agora entendo por quê. É emocionante ler algo tão verdadeiro sobre a própria alma.", tempo: 41 },
+          /* QUI */ [
+            { nome: "Tânia Soares",    texto: "A resposta foi tão direta que precisei parar tudo para refletir. Minha perspectiva mudou completamente." },
+            { nome: "Dona Izabel",     texto: "Minha filha me mandou o link e agora entendo por quê. É emocionante ler algo tão verdadeiro sobre a própria alma." },
           ],
-          [
-            { nome: "Ricardo Viana", texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um caminho que eu não conseguia ver.", tempo: 23 },
-            { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que se sente perdida.", tempo: 6 },
+          /* SEX */ [
+            { nome: "Ricardo Viana",   texto: "Eu achava que não tinha saída, mas a resposta me abriu os olhos para um caminho que eu não conseguia ver." },
+            { nome: "Margarida Lemos", texto: "Uma experiência profunda e necessária. Recomendo para qualquer pessoa que se sente perdida." },
           ],
-          [
-            { nome: "Helena Faria", texto: "Gostei muito de saber que o site não guarda nada. Me senti segura para desabafar de verdade.", tempo: 38 },
-            { nome: "Roberto Mendes", texto: "Estava muito confuso com minhas decisões. Essa resposta me abriu os olhos numa hora que eu mais precisava.", tempo: 14 },
+          /* SAB */ [
+            { nome: "Helena Faria",    texto: "Gostei muito de saber que o site não guarda nada. Me senti segura para desabafar de verdade." },
+            { nome: "Roberto Mendes",  texto: "Estava muito confuso com minhas decisões. Essa resposta me abriu os olhos numa hora que eu mais precisava." },
           ],
         ];
 
         const selecionados = banco[dia];
+        const tempoA = Math.floor(Math.random() * 28) + 5;
+        const tempoB = tempoA + Math.floor(Math.random() * 20) + 8;
 
         container.innerHTML = `
           <div class="testimonial-header">Relatos de hoje</div>
-          ${selecionados.map(p => `
+          ${selecionados.map((p, i) => `
             <div class="testimonial-card">
               <div class="t-name-row">
                 <span class="t-name">${p.nome}</span>
-                <span class="t-time">há ${p.tempo} min</span>
+                <span class="t-time" data-base="${i === 0 ? tempoA : tempoB}">há ${i === 0 ? tempoA : tempoB} min</span>
               </div>
               <p class="t-text">"${p.texto}"</p>
             </div>
-          `).join("")}
-        `;
-      }
+          `).join("")}`;
 
+        // Incrementa tempos a cada minuto (efeito ao vivo)
+        setInterval(() => {
+          document.querySelectorAll(".t-time").forEach(el => {
+            const n = parseInt(el.dataset.base || "5", 10) + 1;
+            el.dataset.base = n;
+            el.textContent  = `há ${n} min`;
+          });
+        }, 60000);
+      }
     </script>
   </body>
 </html>
