@@ -564,10 +564,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .modal-sheet[data-origin="reveal"] .modal-title-default { display: none; }
-    .modal-sheet[data-origin="reveal"] .modal-title-reveal  { display: block; }
-    .modal-title-reveal { display: none; }
-
     .modal-eyebrow {
       font-size: 10px;
       font-weight: 700;
@@ -594,24 +590,26 @@
       margin-bottom: 12px;
     }
 
-    .modal-items-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .modal-item-card {
-      background: #fafaf8;
-      border: 1px solid #f0e9d0;
-      border-radius: 10px;
-      padding: 10px;
+    /* checklist do modal — mais limpo que a grade de cards */
+    .modal-checklist {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 8px;
+      margin-bottom: 18px;
+      text-align: left;
     }
-    .modal-item-icon  { font-size: 18px; }
-    .modal-item-label { font-size: 12px; font-weight: 600; color: #374151; line-height: 1.3; }
-    .modal-item-desc  { font-size: 11px; color: #9ca3af; line-height: 1.3; }
+    .modal-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 11px;
+      background: #fafaf8;
+      border-radius: 10px;
+      border: 1px solid #f0e9d0;
+    }
+    .modal-check-icon  { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .modal-check-label { font-weight: 600; font-size: 12.5px; color: #1f2937; display: block; margin-bottom: 1px; }
+    .modal-check-desc  { font-size: 11.5px; color: #6b7280; line-height: 1.35; }
 
     .price-block {
       display: flex;
@@ -737,67 +735,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ── DOWNSELL ── */
-    .modal-downsell-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(10,10,10,0.6);
-      backdrop-filter: blur(5px);
-      z-index: 2001;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .modal-downsell-box {
-      background: white;
-      border-radius: 22px;
-      padding: 26px 20px 20px;
-      max-width: 330px;
-      width: 100%;
-      text-align: center;
-      animation: fadeInScale 0.28s ease;
-    }
-    @keyframes fadeInScale {
-      from { opacity: 0; transform: scale(0.93); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-    .downsell-emoji  { font-size: 36px; margin-bottom: 10px; }
-    .downsell-title  { font-family: "Lora", serif; font-size: 18px; font-weight: 700; color: #111; margin-bottom: 8px; line-height: 1.3; }
-    .downsell-body   { font-size: 13px; color: #4b5563; line-height: 1.6; margin-bottom: 14px; }
-    .downsell-timer  {
-      font-family: "Courier New", monospace;
-      font-size: 14px; font-weight: 700;
-      color: #f87171;
-      background: rgba(248,113,113,0.1);
-      padding: 5px 12px;
-      border-radius: 7px;
-      border: 1px solid rgba(248,113,113,0.22);
-      display: inline-block;
-      margin-bottom: 14px;
-    }
-    .btn-downsell-sim {
-      display: block; width: 100%;
-      background: linear-gradient(135deg, #c9a84c 0%, #a8872d 100%);
-      color: white; border: none;
-      border-radius: 13px; padding: 14px;
-      font-size: 13.5px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.7px;
-      cursor: pointer; font-family: "Inter", sans-serif;
-      margin-bottom: 9px;
-      box-shadow: 0 5px 16px rgba(201,168,76,0.28);
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn-downsell-nao {
-      display: block; width: 100%;
-      background: transparent; color: #9ca3af;
-      border: none; padding: 8px; font-size: 12px;
-      cursor: pointer; font-family: "Inter", sans-serif;
-      text-decoration: underline;
-      -webkit-tap-highlight-color: transparent;
-    }
-
     @keyframes blink { 50% { opacity: 0.5; } }
     @keyframes spin   { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
@@ -824,25 +761,6 @@
       <div class="pix-step"><strong>3.</strong> Cole o código e confirme</div>
       <div class="pix-step"><strong>4.</strong> Volte aqui — seu guia será liberado automaticamente</div>
       <button class="btn-entendi" onclick="fecharAlertaPix()">Entendi, vou fazer agora</button>
-    </div>
-  </div>
-
-  <!-- DOWNSELL -->
-  <div id="downsellOverlay" class="modal-downsell-overlay">
-    <div class="modal-downsell-box">
-      <div class="downsell-emoji">⏳</div>
-      <h2 class="downsell-title">Tem certeza que quer sair?</h2>
-      <p class="downsell-body">
-        Sem esse direcionamento, a maioria continua presa no mesmo padrão por meses — sem saber o que está travando o avanço.
-      </p>
-      <div class="downsell-timer" id="downsellTimer">--:--</div>
-      <p style="font-size:11px; color:#9ca3af; margin-bottom:14px;">Seu guia irá sumir para sempre quando o cronômetro zerar</p>
-      <button class="btn-downsell-sim" onclick="fecharDownsellEManter()">
-        🔓 Quero desbloquear — R$ 19,90
-      </button>
-      <button class="btn-downsell-nao" onclick="confirmarFecharModal()">
-        Não, prefiro continuar sem clareza
-      </button>
     </div>
   </div>
 
@@ -902,59 +820,62 @@
   <div id="paymentModal" class="modal-overlay">
     <div class="modal-sheet">
       <div class="sheet-handle"></div>
-      <button class="modal-close" onclick="tentarFecharModal()">✕</button>
+      <button class="modal-close" onclick="fecharModal()">✕</button>
 
       <div id="boxPagamento">
-        <p class="modal-eyebrow">✦ A resposta está aqui</p>
-        <h2 class="modal-title modal-title-default">Você encontrou sua resposta hoje</h2>
-        <!-- FIX 2: título atualizado dinamicamente em abrirModalDeCompra() com resumoDaIA -->
-        <h2 class="modal-title modal-title-reveal">O que vem depois dessas palavras é o que você precisa ouvir</h2>
-        <!-- FIX 1: removido "Contribua com este projeto e" — linguagem transacional -->
-        <p class="modal-sub">Desbloqueie a continuação da sua resposta — com seu guia em PDF personalizado e os próximos passos específicos para o que você descreveu.</p>
+        <!-- eyebrow personalizado com resumoDaIA via JS -->
+        <p class="modal-eyebrow">✦ Sua resposta está pronta</p>
+        <h2 class="modal-title" id="modalTitle">O que vem a seguir vai mudar como você vê essa situação</h2>
+        <p class="modal-sub" id="modalSub">Contribua e receba o direcionamento completo — incluindo o que fazer agora e o que ninguém te disse sobre isso.</p>
 
-        <div class="modal-items-grid">
-          <div class="modal-item-card">
-            <span class="modal-item-icon">📖</span>
-            <span class="modal-item-label">2ª parte revelada</span>
-            <span class="modal-item-desc">O direcionamento completo sobre o que você descreveu</span>
+        <div class="modal-checklist">
+          <div class="modal-check">
+            <span class="modal-check-icon">📖</span>
+            <div>
+              <span class="modal-check-label">A 2ª parte da sua revelação</span>
+              <span class="modal-check-desc">O direcionamento completo sobre o que você descreveu</span>
+            </div>
           </div>
-          <div class="modal-item-card">
-            <span class="modal-item-icon">🗺️</span>
-            <span class="modal-item-label">Mapa em 3 passos</span>
-            <span class="modal-item-desc">O que fazer nos próximos 7 dias</span>
+          <div class="modal-check">
+            <span class="modal-check-icon">🗺️</span>
+            <div>
+              <span class="modal-check-label">O que fazer nos próximos 7 dias</span>
+              <span class="modal-check-desc">3 passos práticos para começar a mudança</span>
+            </div>
           </div>
-          <div class="modal-item-card">
-            <span class="modal-item-icon">⚠️</span>
-            <span class="modal-item-label">Erro a evitar</span>
-            <span class="modal-item-desc">O que trava a maioria das pessoas</span>
+          <div class="modal-check">
+            <span class="modal-check-icon">⚠️</span>
+            <div>
+              <span class="modal-check-label">O erro que trava a maioria</span>
+              <span class="modal-check-desc">O que evitar para não continuar no mesmo lugar</span>
+            </div>
           </div>
-          <div class="modal-item-card">
-            <span class="modal-item-icon">💬</span>
-            <span class="modal-item-label">Afirmação pessoal</span>
-            <span class="modal-item-desc">Criada para o que você está vivendo</span>
+          <div class="modal-check">
+            <span class="modal-check-icon">💬</span>
+            <div>
+              <span class="modal-check-label">Sua afirmação pessoal</span>
+              <span class="modal-check-desc">Criada para o que você está vivendo agora</span>
+            </div>
           </div>
         </div>
 
         <div class="price-block">
           <div class="price-new">
             R$ 19,90
-            <!-- FIX 1: "contribuição sugerida" → "acesso único" -->
-            <small>acesso único · via PIX</small>
+            <small>contribuição · via PIX</small>
           </div>
         </div>
 
         <div class="modal-timer-line">
-          ⚠️ Sua resposta única irá sumir para sempre em <span class="timer-inline" id="modalTimerDisplay">--:--</span>
+          ⚠️ Sua resposta expira em <span class="timer-inline" id="modalTimerDisplay">--:--</span>
         </div>
 
-        <!-- FIX 1: "CONTRIBUIR E RECEBER MEU GUIA" → "DESBLOQUEAR MEU GUIA AGORA" -->
         <button id="btnCheckoutModal" class="modal-cta-btn" onclick="iniciarPagamentoMercadoPago()">
-          💛 DESBLOQUEAR MEU GUIA AGORA — R$ 19,90
+          💛 CONTRIBUIR E RECEBER MEU GUIA — R$ 19,90
         </button>
 
-        <!-- FIX 1: "Contribuição segura" → "Pagamento seguro" -->
         <div class="modal-security">
-          🔒 <span>Pagamento seguro via PIX · Liberação imediata</span>
+          🔒 <span>Contribuição segura via PIX · Liberação imediata</span>
         </div>
       </div>
     </div>
@@ -1146,12 +1067,11 @@
 
     /* ════════════════════════════════════════
        TIMER REGRESSIVO
-       Sincronizado em: barra, modal e downsell
+       Sincronizado em: barra de urgência e modal
     ════════════════════════════════════════ */
     function iniciarTimerRegressivo(tempoRestanteMS) {
       const elBarra    = document.getElementById("timerRegressivo");
       const elModal    = document.getElementById("modalTimerDisplay");
-      const elDownsell = document.getElementById("downsellTimer");
       if (!elBarra) return;
 
       if (window.intervaloUrgencia) clearInterval(window.intervaloUrgencia);
@@ -1173,8 +1093,7 @@
         const s   = Math.floor((restante % 60000) / 1000);
         const str = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
         elBarra.innerText = str;
-        if (elModal)    elModal.textContent    = str;
-        if (elDownsell) elDownsell.textContent = str;
+        if (elModal) elModal.textContent = str;
       }
 
       tick();
@@ -1328,16 +1247,9 @@
 
       const textoVisivel = textoVindoDaIA.trim();
 
-      // FIX 8: frase de transição específica por categoria — aumenta urgência de saber o que vem
-      const fraseTransicaoPorCategoria = {
-        amor:      " — e o que está na raiz do que você sente nessa relação é...",
-        trabalho:  " — e o que está travando seu avanço profissional é...",
-        família:   " — e o que está na raiz da tensão familiar é...",
-        saúde:     " — e o que seu corpo está tentando te dizer é...",
-        propósito: " — e o que está impedindo você de viver seu propósito é...",
-        outro:     " — e o que muda tudo a partir de agora é...",
-      };
-      const fraseTransicao = fraseTransicaoPorCategoria[categoriaSelecionada] || fraseTransicaoPorCategoria.outro;
+      // Frase universal — funciona para qualquer tema, independente da categoria selecionada
+      // Foca em TIMING e relevância pessoal, não no assunto específico
+      const fraseTransicao = " — e o que precisava ser dito a você hoje é...";
 
       const textoBlur = "Este é o direcionamento que estava guardado para este momento da sua jornada. A resposta completa — com os próximos passos, o principal erro a evitar e sua afirmação pessoal — aguarda por você agora.";
 
@@ -1391,23 +1303,18 @@
 
     /* ════════════════════════════════════════
        ABRIR MODAL DE COMPRA
-       FIX 2: personaliza eyebrow, título e sub com resumoDaIA
+       Personaliza eyebrow e título com resumoDaIA
     ════════════════════════════════════════ */
     function abrirModalDeCompra() {
-      const sheet = document.querySelector(".modal-sheet");
-      if (sheet) sheet.setAttribute("data-origin", "reveal");
+      // Personaliza com o resumo gerado pela IA — o usuário vê o próprio contexto refletido
+      const eyebrow = document.querySelector(".modal-eyebrow");
+      const title   = document.getElementById("modalTitle");
+      const sub     = document.getElementById("modalSub");
 
-      // FIX 2: usa resumoDaIA para tornar o modal pessoal — o usuário sai da revelação
-      // personalizada e encontra um checkout que espelha o que acabou de ler
       if (resumoDaIA) {
-        const eyebrow = document.querySelector(".modal-eyebrow");
         if (eyebrow) eyebrow.textContent = `✦ Sobre: ${resumoDaIA}`;
-
-        const titleReveal = document.querySelector(".modal-title-reveal");
-        if (titleReveal) titleReveal.textContent = `O que resolve "${resumoDaIA}" está esperando por você`;
-
-        const sub = document.querySelector(".modal-sub");
-        if (sub) sub.textContent = `Desbloqueie o direcionamento completo — com os próximos passos, o erro a evitar e sua afirmação pessoal para este momento.`;
+        if (title)   title.textContent   = `O que resolve "${resumoDaIA}" está na próxima parte`;
+        if (sub)     sub.textContent     = `Contribua e receba o direcionamento completo — o que fazer agora e o que ninguém te disse ainda sobre isso.`;
       }
 
       if (typeof fbq === "function") {
@@ -1484,18 +1391,6 @@
     }
 
     function tentarFecharModal() {
-      const downsell = document.getElementById("downsellOverlay");
-      if (downsell) downsell.style.display = "flex";
-    }
-
-    function fecharDownsellEManter() {
-      const downsell = document.getElementById("downsellOverlay");
-      if (downsell) downsell.style.display = "none";
-    }
-
-    function confirmarFecharModal() {
-      const downsell = document.getElementById("downsellOverlay");
-      if (downsell) downsell.style.display = "none";
       fecharModal();
     }
 
@@ -1505,8 +1400,7 @@
       travarScroll(false);
       const btn = document.getElementById("btnCheckoutModal");
       if (btn) {
-        // FIX 1: texto do botão atualizado
-        btn.innerText     = "💛 DESBLOQUEAR MEU GUIA AGORA — R$ 19,90";
+        btn.innerText     = "💛 CONTRIBUIR E RECEBER MEU GUIA — R$ 19,90";
         btn.disabled      = false;
         btn.style.opacity = "1";
       }
@@ -1514,7 +1408,6 @@
 
     /* ════════════════════════════════════════
        PAGAMENTO PIX
-       FIX 1: "contribuição" substituído por "pagamento"
     ════════════════════════════════════════ */
     async function iniciarPagamentoMercadoPago() {
       const btn = document.getElementById("btnCheckoutModal");
@@ -1544,7 +1437,7 @@
             + "&resumo="    + encodeURIComponent(resumoDaIA || "");
 
           box.innerHTML = `
-            <button class="modal-close" onclick="tentarFecharModal()">✕</button>
+            <button class="modal-close" onclick="fecharModal()">✕</button>
             <div class="sheet-handle" style="margin-top:0;"></div>
             <p class="modal-eyebrow">✦ Quase lá</p>
             <h2 class="modal-title" style="font-size:17px;">Escaneie o QR Code ou copie o código PIX</h2>
@@ -1589,7 +1482,7 @@
       } catch (err) {
         console.error(err);
         alert("Houve uma pequena oscilação. Por favor, tente novamente.");
-        btn.innerText     = "💛 DESBLOQUEAR MEU GUIA AGORA — R$ 19,90";
+        btn.innerText     = "💛 CONTRIBUIR E RECEBER MEU GUIA — R$ 19,90";
         btn.disabled      = false;
         btn.style.opacity = "1";
       }
@@ -1620,8 +1513,7 @@
 
     /* ════════════════════════════════════════
        POLLING DE STATUS
-       FIX 3: upsell exibido após confirmação de pagamento
-       FIX 1: "Contribuição confirmada!" → "Acesso liberado!"
+       Verifica confirmação do pagamento a cada 3s
     ════════════════════════════════════════ */
     function verificarStatus() {
       if (intervaloStatus) clearInterval(intervaloStatus);
@@ -1651,39 +1543,26 @@
             // Desbloqueia o conteúdo na página imediatamente
             liberarConteudoPago(textoReal);
 
-            // FIX 3: modal mostra confirmação + upsell em vez de fechar automaticamente
-            // O pico de satisfação do usuário é aproveitado com uma oferta complementar
+            // Confirmação limpa no modal — fecha após 1.4s para o usuário ver o conteúdo desbloqueado
             const box = document.getElementById("boxPagamento");
             if (box) {
               box.innerHTML = `
-                <div style="text-align:center; padding:22px 10px 6px;">
-                  <div style="font-size:44px; margin-bottom:10px;">✨</div>
-                  <h2 style="font-family:'Playfair Display',serif; font-style:italic; font-size:19px; color:#111; margin:0;">
-                    Acesso liberado!
+                <div style="text-align:center; padding:36px 10px 28px;">
+                  <div style="font-size:48px; margin-bottom:12px;">✨</div>
+                  <h2 style="font-family:'Playfair Display',serif; font-style:italic; font-size:20px; color:#111; margin:0; line-height:1.3;">
+                    Contribuição confirmada!
                   </h2>
-                  <p style="color:#16a34a; margin-top:6px; font-weight:600; font-size:13px;">
-                    Seu guia está sendo preparado.
+                  <p style="color:#16a34a; margin-top:8px; font-weight:600; font-size:13px;">
+                    Sua resposta foi desbloqueada.
                   </p>
-
-                  <div style="margin-top:18px; background:#fffbf0; border:1px solid #e8d89a; border-radius:14px; padding:16px 14px; text-align:left;">
-                    <p style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:#9a7a2a; margin-bottom:5px; text-align:center;">✦ Oferta exclusiva · apenas agora</p>
-                    <h3 style="font-family:'Lora',serif; font-size:15px; color:#111; margin-bottom:6px; line-height:1.3; text-align:center;">
-                      Mapa Numerológico Pessoal
-                    </h3>
-                    <p style="font-size:12px; color:#4b5563; line-height:1.6; margin-bottom:12px;">
-                      Com base na sua data de nascimento, revela padrões ocultos em amor, finanças e propósito — com uma precisão que vai surpreender você.
-                    </p>
-                    <button onclick="comprarUpsell()"
-                      style="width:100%; background:linear-gradient(135deg,#c9a84c 0%,#a8872d 100%); color:white; border:none; border-radius:13px; padding:14px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; cursor:pointer; font-family:'Inter',sans-serif; box-shadow:0 5px 16px rgba(201,168,76,0.28); margin-bottom:8px; display:block; -webkit-tap-highlight-color:transparent;">
-                      🔮 QUERO MEU MAPA — R$ 9,90
-                    </button>
-                    <button onclick="fecharModal()"
-                      style="background:transparent; color:#9ca3af; border:none; font-size:12px; cursor:pointer; font-family:'Inter',sans-serif; text-decoration:underline; width:100%; padding:6px; display:block; -webkit-tap-highlight-color:transparent;">
-                      Não, obrigado
-                    </button>
-                  </div>
+                  <p style="color:#6b7280; margin-top:10px; font-size:12.5px; line-height:1.6;">
+                    Preparando seu guia em PDF...<br>Isso levará apenas alguns segundos.
+                  </p>
+                  <div style="width:36px; height:36px; border:3px solid #f3f4f6; border-top:3px solid #c9a84c; border-radius:50%; margin:16px auto 0; animation:spin 1s linear infinite;"></div>
                 </div>`;
             }
+
+            setTimeout(() => fecharModal(), 1400);
 
             // Gera e baixa o PDF em background — independente do upsell
             try {
@@ -1731,17 +1610,6 @@
           }
         }
       }, 3000);
-    }
-
-    /* ════════════════════════════════════════
-       UPSELL PÓS-PAGAMENTO
-       FIX 3: função chamada pelo botão de upsell
-       PERSONALIZE: substitua a URL pelo checkout do seu próximo produto
-    ════════════════════════════════════════ */
-    function comprarUpsell() {
-      // Substitua abaixo pela URL do checkout do produto upsell:
-      // window.location.href = "https://seu-checkout.com/mapa-numerologico";
-      fecharModal();
     }
 
     /* ════════════════════════════════════════
