@@ -62,7 +62,7 @@
       src="https://www.facebook.com/tr?id=1369432495165157&ev=PageView&noscript=1" />
   </noscript>
 
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,700;1,400&amp;family=DM+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -720,7 +720,7 @@
       border-radius: 24px 24px 0 0;
       width: 100%;
       max-width: 480px;
-      padding: 16px 18px 0;   /* rodapé zerado — o sticky-footer ocupa esse espaço */
+      padding: 16px 18px 0;
       position: relative;
       max-height: 92vh;
       max-height: 92dvh;
@@ -787,7 +787,7 @@
       line-height: 1.28;
     }
     .modal-sub {
-      display: none; /* redundante com o título — economiza ~40px */
+      display: none;
     }
     .modal-checklist {
       display: flex;
@@ -798,7 +798,7 @@
     }
     .modal-check {
       display: flex;
-      align-items: center;  /* centralizado — sem desc, fica mais compacto */
+      align-items: center;
       gap: 9px;
       padding: 7px 10px;
       background: #fafaf8;
@@ -807,7 +807,7 @@
     }
     .modal-check-icon  { font-size: 14px; flex-shrink: 0; }
     .modal-check-label { font-weight: 600; font-size: 12px; color: #1f2937; display: block; }
-    .modal-check-desc  { display: none; } /* oculto — economiza ~15px por item = ~60px total */
+    .modal-check-desc  { display: none; }
 
     /* ── PREÇO — compacto no modal ── */
     .price-block {
@@ -844,7 +844,7 @@
       font-weight: 400;
       margin-top: 2px;
     }
-    .price-compare { display: none; } /* sem espaço no mobile — a mensagem já está no botão */
+    .price-compare { display: none; }
 
     /* ── GARANTIA — condensada ── */
     .guarantee-box {
@@ -963,6 +963,12 @@
       font-weight: 600;
       color: #374151;
       line-height: 1.25;
+    }
+    .mc-desc {
+      font-size: 9.5px;
+      color: #9ca3af;
+      line-height: 1.3;
+      text-align: center;
     }
 
     /* ══════════════════════════════════════
@@ -1350,7 +1356,7 @@
         <div class="modal-scroll-area">
 
           <p class="modal-eyebrow" id="modalEyebrow">✦ Sua resposta está pronta</p>
-          <h2 class="modal-title" id="modalTitle">O direcionamento completo que faltava está aqui</h2>
+          <h2 class="modal-title" id="modalTitle">A resposta para a sua situação está aqui — completa e só sua.</h2>
           <p class="modal-sub" id="modalSub"></p>
 
           <!-- CHECKLIST EM GRADE — 3 itens, compactos, mesma linha -->
@@ -1358,32 +1364,45 @@
             <div class="mc-item">
               <span class="mc-icon">📖</span>
               <span class="mc-label">Revelação completa</span>
+              <span class="mc-desc">O que está realmente por trás da sua situação</span>
             </div>
             <div class="mc-item">
-              <span class="mc-icon">🗺️</span>
-              <span class="mc-label">Próximos 7 dias</span>
+              <span class="mc-icon">📅</span>
+              <span class="mc-label">Guia de 7 dias</span>
+              <span class="mc-desc">O que fazer exatamente a cada dia</span>
             </div>
             <div class="mc-item">
-              <span class="mc-icon">💬</span>
-              <span class="mc-label">Afirmação + PDF</span>
+              <span class="mc-icon">📄</span>
+              <span class="mc-label">PDF para guardar</span>
+              <span class="mc-desc">Seu material</span>
             </div>
           </div>
 
-          <!-- CARD DE VALOR — preço + ancoragem emocional + garantia + prova social -->
+          <!-- DEPOIMENTO NO MODAL — acima do preço -->
+          <div class="inline-proof" id="modalTestimonial">
+            <div class="inline-proof-quote">"Parece que estava escrevendo sobre mim. Li e chorei de alívio."</div>
+            <div class="inline-proof-name">— Clarice R., recebeu hoje</div>
+          </div>
+
+          <!-- CARD DE VALOR — preço + ancoragem emocional + prova social -->
           <div class="value-card">
             <div class="value-card-top">
               <div class="value-price">
-                <span class="value-label">Contribuição</span>
+                <span class="value-label">Investimento da sua vida</span>
                 <strong class="value-amount">R$&nbsp;19,90</strong>
               </div>
               <div class="value-divider"></div>
-              <p class="value-coffee">☕ Menos que um café para mudar como você vê essa situação.</p>
+              <p class="value-coffee">Menos que uma consulta. <strong>Mais direto ao ponto.</strong></p>
             </div>
             <div class="value-card-bottom">
-              <span>🛡️ <b>Desbloqueio imediato</b> após o PIX</span>
-              <span class="value-dot">·</span>
-              <span>👥 <b id="paySocialCount">213</b> hoje</span>
+              <span>👥 <b id="paySocialCount">213</b> pessoas receberam hoje</span>
             </div>
+          </div>
+
+          <!-- GARANTIA -->
+          <div class="guarantee-box">
+            <span class="guarantee-icon">🔐</span>
+            <span class="guarantee-text"><b>Entrega garantida</b> — você recebe tudo imediatamente após o PIX</span>
           </div>
 
         </div>
@@ -1397,7 +1416,7 @@
             💛 DESBLOQUEAR MINHA RESPOSTA
           </button>
           <div class="modal-security">
-            🔒 <span>PIX seguro · Liberação imediata · 100% anônimo</span>
+            🔒 <span>PIX seguro · Entrega imediata · Privacidade garantida</span>
           </div>
         </div>
       </div>
@@ -1859,23 +1878,10 @@
       const jaRevelado     = localStorage.getItem("texto_revelado") === "sim";
       const textoRealSalvo = localStorage.getItem("conselho_secreto") || "";
 
-      const depoimentosInline = [
-        { nome: "Clarice R.",  texto: "Parecia que estava escrevendo sobre mim. Li e chorei de alívio." },
-        { nome: "José O.",     texto: "Jamais imaginei que uma resposta poderia ser tão certeira." },
-        { nome: "Sônia M.",    texto: "Senti um arrepio ao ler. Era exatamente o que eu precisava ouvir." },
-        { nome: "Benedito A.", texto: "Tirei um peso de anos das costas em poucos minutos de leitura." },
-      ];
-      const dep = depoimentosInline[new Date().getHours() % depoimentosInline.length];
-
       el.innerHTML = `
         <div class="reveal-box">
           <span class="reveal-eyebrow">✦ Sua resposta · parte 1 de 2</span>
           <span class="text-visible">${textoVisivel}${fraseTransicao}</span>
-
-          <div class="inline-proof">
-            <div class="inline-proof-quote">"${dep.texto}"</div>
-            <div class="inline-proof-name">— ${dep.nome}, recebeu hoje</div>
-          </div>
 
           ${!jaRevelado ? `
           <div class="next-teaser">
@@ -1913,13 +1919,26 @@
        Personaliza eyebrow e título com resumoDaIA
     ════════════════════════════════════════ */
     function abrirModalDeCompra() {
-      if (resumoDaIA) {
-        const eyebrow = document.getElementById("modalEyebrow");
-        const title   = document.getElementById("modalTitle");
-        const sub     = document.getElementById("modalSub");
-        if (eyebrow) eyebrow.textContent = `✦ Sobre: ${resumoDaIA}`;
-        if (title)   title.textContent   = `O que resolve "${resumoDaIA}" está na próxima parte`;
-        if (sub)     sub.textContent     = `Você já leu o começo. Agora desbloqueie o direcionamento completo — o que fazer agora e o que ninguém te disse ainda sobre isso.`;
+      const eyebrow = document.getElementById("modalEyebrow");
+      const title   = document.getElementById("modalTitle");
+      if (eyebrow) eyebrow.textContent = resumoDaIA ? `✦ Sobre: ${resumoDaIA}` : "✦ Sua resposta está pronta";
+      if (title)   title.textContent   = resumoDaIA
+        ? `A resposta para "${resumoDaIA}" está aqui — completa e só sua.`
+        : "A resposta para a sua situação está aqui — completa e só sua.";
+
+      // Depoimento rotativo no modal
+      const depoimentosModal = [
+        { nome: "Clarice R.",  texto: "Parece que estava escrevendo sobre mim. Li e chorei de alívio." },
+        { nome: "José O.",     texto: "Jamais imaginei que uma resposta poderia ser tão certeira." },
+        { nome: "Sônia M.",    texto: "Senti um arrepio ao ler. Era exatamente o que eu precisava ouvir." },
+        { nome: "Benedito A.", texto: "Tirei um peso de anos das costas em poucos minutos de leitura." },
+      ];
+      const dep      = depoimentosModal[new Date().getHours() % depoimentosModal.length];
+      const modalDep = document.getElementById("modalTestimonial");
+      if (modalDep && dep) {
+        modalDep.innerHTML = `
+          <div class="inline-proof-quote">"${dep.texto}"</div>
+          <div class="inline-proof-name">— ${dep.nome}, recebeu hoje</div>`;
       }
 
       if (typeof fbq === "function") {
