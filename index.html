@@ -2013,6 +2013,22 @@ localStorage.setItem("texto_persuasivo_modal", textoPersuasivoModal);
     title.textContent = "Sua análise pessoal está pronta.";
   }
 
+
+    // Injeta texto persuasivo personalizado
+const span = document.getElementById("textoPersuasivoSpan");
+if (span) {
+  const texto = textoPersuasivoModal || localStorage.getItem("texto_persuasivo_modal") || "";
+  if (texto) {
+    span.style.opacity = "0";
+    span.style.transition = "opacity 0.4s ease";
+    setTimeout(() => {
+      span.textContent = texto;
+      span.style.opacity = "1";
+    }, 150);
+  }
+}
+    
+
   if (typeof fbq === "function") {
     fbq("track", "AddToCart", { value: 7.90, currency: "BRL" });
     fbq("track", "InitiateCheckout");
