@@ -1395,21 +1395,6 @@
           <h2 class="modal-title" id="modalTitle">A resposta para a sua situação está aqui — completa e só sua.</h2>
           <p class="modal-sub" id="modalSub"></p>
 
-          <!-- PROPOSTA DE VALOR — 1 item principal (o que a pessoa veio buscar)
-               + 2 bônus menores, deixando claro que o produto é a resposta -->
-          <div class="value-main">
-  <span class="value-main-icon">📖</span>
-  <div>
-    <div class="value-main-label">
-      O que realmente está por trás da sua situação
-    </div>
-
-    <div class="value-main-desc">
-      Criada exclusivamente a partir do que você escreveu.
-    </div>
-  </div>
-</div>
-
 <div style="
 margin-top:14px;
 padding:14px;
@@ -1453,7 +1438,7 @@ color:#3b3b3b;
           <!-- GARANTIA -->
           <div class="guarantee-box">
             <span class="guarantee-icon">🔐</span>
-            <span class="guarantee-text"><b>Garantia total</b> — leia toda a sua análise. Se sentir que ela não trouxe valor real para você, devolvemos os R$ 7,90.</span>
+            <span class="guarantee-text"><b>Garantia total</b> — se não encontrar valor real na sua análise, devolvemos seu dinheiro.</span>
           </div>
 
         </div>
@@ -1978,29 +1963,35 @@ color:#3b3b3b;
        ABRIR MODAL DE COMPRA
        Personaliza eyebrow e título com resumoDaIA
     ════════════════════════════════════════ */
-   function abrirModalDeCompra() {
-const eyebrow = document.getElementById("modalEyebrow");
-const title = document.getElementById("modalTitle");
+  function abrirModalDeCompra() {
+  const eyebrow = document.getElementById("modalEyebrow");
+  const title = document.getElementById("modalTitle");
 
-if (eyebrow) {
-eyebrow.textContent = resumoDaIA
-? `✦ Sobre: ${resumoDaIA}`
-: "✦ Sua resposta está pronta";
-}
+  const resumoLimpo =
+    resumoDaIA &&
+    !/não posso|não permitido|não autorizad|violação|pedido rejeitado|não posso atender/i.test(resumoDaIA)
+      ? resumoDaIA
+      : null;
 
-if (title) {
-title.textContent = "Sua análise pessoal está pronta.";
-}
+  if (eyebrow) {
+    eyebrow.textContent = resumoLimpo
+      ? `✦ Sobre: ${resumoLimpo}`
+      : "✦ Sua análise personalizada está pronta";
+  }
 
-if (typeof fbq === "function") {
-fbq("track", "AddToCart", { value: 7.90, currency: "BRL" });
-fbq("track", "InitiateCheckout");
-}
+  if (title) {
+    title.textContent = "Sua análise pessoal está pronta.";
+  }
 
-const m = document.getElementById("paymentModal");
-if (m) m.style.display = "flex";
+  if (typeof fbq === "function") {
+    fbq("track", "AddToCart", { value: 7.90, currency: "BRL" });
+    fbq("track", "InitiateCheckout");
+  }
 
-travarScroll(true);
+  const m = document.getElementById("paymentModal");
+  if (m) m.style.display = "flex";
+
+  travarScroll(true);
 }
 
 
