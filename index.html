@@ -1876,6 +1876,20 @@ Ao desbloquear sua análise:
         resumoDaIA = resumoData.resumo || "Sua Jornada";
         localStorage.setItem("resumo_diagnostico_modal", resumoDaIA);
 
+
+
+        // Gera texto persuasivo do modal com os dois inputs (sequencial intencional)
+const persuasivoData = await fetch(`${API_BASE}/api/gerar-texto-modal`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ mensagem: inputEl.value, textoIA: resposta.texto }),
+}).then(r => r.json()).catch(() => ({ texto: null }));
+
+textoPersuasivoModal = persuasivoData.texto || "";
+localStorage.setItem("texto_persuasivo_modal", textoPersuasivoModal);
+
+        
+
         if (typeof fbq === "function") fbq("track", "ViewContent");
 
         localStorage.setItem("conselho_pendente",   resposta.texto);
@@ -1898,6 +1912,7 @@ Ao desbloquear sua análise:
         localStorage.removeItem("conselho_pendente");
         localStorage.removeItem("session_id_pendente");
         localStorage.removeItem("data_sintonizacao");
+        localStorage.removeItem("texto_persuasivo_modal");
 
         if (sec) { sec.style.display = ""; setTimeout(() => { sec.style.opacity = "1"; }, 50); }
         if (faq) faq.style.display = "flex";
