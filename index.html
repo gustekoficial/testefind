@@ -1425,15 +1425,7 @@ color:#3b3b3b;
 
 <br>
 
-✓ O que tende a acontecer se tudo continuar igual
-
-<br>
-
 ✓ O direcionamento mais importante para os próximos dias
-
-<br>
-
-✓ Uma análise aprofundada escrita para o seu caso
 
 <br>
 
@@ -2006,30 +1998,20 @@ color:#3b3b3b;
        Personaliza eyebrow e título com resumoDaIA
     ════════════════════════════════════════ */
     function abrirModalDeCompra() {
-      const eyebrow = document.getElementById("modalEyebrow");
-      const title   = document.getElementById("modalTitle");
-      if (eyebrow) eyebrow.textContent = resumoDaIA ? `✦ Sobre: ${resumoDaIA}` : "✦ Sua resposta está pronta";
-      if (title)   title.textContent   = resumoDaIA
-        ? `A resposta para "${resumoDaIA}" está aqui — completa e só sua.`
-        : "Você já viu a origem do problema. Agora veja o que ele está tentando mostrar.";
+  const eyebrow = document.getElementById("modalEyebrow");
+  const title   = document.getElementById("modalTitle");
 
-      // Depoimento rotativo no modal
-      const depoimentosModal = [
-        { nome: "Clarice R.",  texto: "Parece que estava escrevendo sobre mim. Li e chorei de alívio." },
-        { nome: "José O.",     texto: "Jamais imaginei que uma resposta poderia ser tão certeira." },
-        { nome: "Sônia M.",    texto: "Senti um arrepio ao ler. Era exatamente o que eu precisava ouvir." },
-        { nome: "Benedito A.", texto: "Tirei um peso de anos das costas em poucos minutos de leitura." },
-      ];
-      const dep      = depoimentosModal[new Date().getHours() % depoimentosModal.length];
-      const modalDep = document.getElementById("modalTestimonial");
-      if (modalDep && dep) {
-        modalDep.innerHTML = `
-          <div class="inline-proof-quote">"${dep.texto}"</div>
-          <div class="inline-proof-name">— ${dep.nome}, recebeu hoje</div>`;
-      }
+  if (eyebrow)
+    eyebrow.textContent = resumoDaIA
+      ? `✦ Sobre: ${resumoDaIA}`
+      : "✦ Sua resposta está pronta";
+
+  if (title)
+    title.textContent = "Sua análise pessoal está pronta.";
+}
 
       if (typeof fbq === "function") {
-        fbq("track", "AddToCart",       { value: 19.90, currency: "BRL" });
+        fbq("track", "AddToCart",       { value: 7.90, currency: "BRL" });
         fbq("track", "InitiateCheckout");
       }
 
