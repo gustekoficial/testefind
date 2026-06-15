@@ -1398,29 +1398,70 @@
           <!-- PROPOSTA DE VALOR — 1 item principal (o que a pessoa veio buscar)
                + 2 bônus menores, deixando claro que o produto é a resposta -->
           <div class="value-main">
-            <span class="value-main-icon">📖</span>
-            <div>
-              <div class="value-main-label">Sua resposta completa</div>
-              <div class="value-main-desc">O que está realmente por trás da sua situação — a parte 2, sem cortes</div>
-            </div>
-          </div>
-          <div class="value-bonus-row">
-            <div class="value-bonus-item">
-              <span class="value-bonus-icon">📅</span>
-              <span class="value-bonus-label">+ Guia de 7 dias</span>
-            </div>
-            <div class="value-bonus-item">
-              <span class="value-bonus-icon">📄</span>
-              <span class="value-bonus-label">+ PDF para guardar</span>
-            </div>
-          </div>
+  <span class="value-main-icon">📖</span>
+  <div>
+    <div class="value-main-label">
+      Sua análise pessoal completa
+    </div>
+
+    <div class="value-main-desc">
+      Criada exclusivamente a partir do que você escreveu.
+    </div>
+  </div>
+</div>
+
+<div style="
+margin-top:14px;
+padding:14px;
+background:#faf8f1;
+border:1px solid #e7dcc0;
+border-radius:14px;
+font-size:14px;
+line-height:1.7;
+color:#3b3b3b;
+">
+
+✓ O que realmente está por trás da sua situação
+
+<br>
+
+✓ O que tende a acontecer se tudo continuar igual
+
+<br>
+
+✓ O direcionamento mais importante para os próximos dias
+
+<br>
+
+✓ Uma análise aprofundada escrita para o seu caso
+
+<br>
+
+✓ Relatório personalizado para consultar sempre que precisar
+
+</div>
 
           <!-- DEPOIMENTO NO MODAL — acima do preço -->
           <div class="inline-proof" id="modalTestimonial">
-            <div class="inline-proof-quote">"Parece que estava escrevendo sobre mim. Li e chorei de alívio."</div>
+            <div class="inline-proof-quote">"Achei que receberia apenas mais um texto. Mas meu Deus, Surpresa!!"</div>
             <div class="inline-proof-name">— Clarice R., recebeu hoje</div>
           </div>
 
+
+          <div
+  style="
+    text-align: center;
+    margin: 12px 0 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b4f00;
+  "
+>
+  📖 Uma análise aprofundada criada exclusivamente para a sua situação.
+</div>
+
+
+          
           <!-- CARD DE VALOR — preço + ancoragem emocional + prova social -->
           <div class="value-card">
             <div class="value-card-top">
@@ -1429,7 +1470,7 @@
                 <strong class="value-amount">R$&nbsp;7,90</strong>
               </div>
               <div class="value-divider"></div>
-              <p class="value-coffee">Menos que uma consulta. <strong>Mais direto ao ponto.</strong></p>
+              <p class="value-coffee">Menos que um café. <strong>Criada exclusivamente para você.</strong></p>
             </div>
             <div class="value-card-bottom">
               <span>👥 <b id="paySocialCount">213</b> pessoas receberam hoje</span>
@@ -1439,18 +1480,18 @@
           <!-- GARANTIA -->
           <div class="guarantee-box">
             <span class="guarantee-icon">🔐</span>
-            <span class="guarantee-text"><b>Entrega garantida</b> — você recebe tudo imediatamente após o PIX. Se não ficar satisfeito, devolvemos os R$ 7,90.</span>
+            <span class="guarantee-text"><b>Garantia total</b> — leia toda a sua análise. Se sentir que ela não trouxe valor real para você, devolvemos os R$ 7,90.</span>
           </div>
 
         </div>
 
         <!-- RODAPÉ FIXO — botão sempre visível -->
         <div class="modal-sticky-footer">
-          <div class="modal-timer-line">
-            ⚠️ Sua resposta some em <span class="timer-inline" id="modalTimerDisplay">--:--</span>
+           <div class="modal-timer-line">
+            🔒 Sua análise foi gerada exclusivamente para esta sessão
           </div>
           <button id="btnCheckoutModal" class="modal-cta-btn" onclick="iniciarPagamentoMercadoPago()">
-            💛 DESBLOQUEAR MINHA RESPOSTA
+            ✨ VER MINHA ANÁLISE COMPLETA
           </button>
           <div class="modal-security">
             🔒 <span>PIX seguro · Entrega imediata · Privacidade garantida</span>
@@ -1970,7 +2011,7 @@
       if (eyebrow) eyebrow.textContent = resumoDaIA ? `✦ Sobre: ${resumoDaIA}` : "✦ Sua resposta está pronta";
       if (title)   title.textContent   = resumoDaIA
         ? `A resposta para "${resumoDaIA}" está aqui — completa e só sua.`
-        : "A resposta para a sua situação está aqui — completa e só sua.";
+        : "Você já viu a origem do problema. Agora veja o que ele está tentando mostrar.";
 
       // Depoimento rotativo no modal
       const depoimentosModal = [
